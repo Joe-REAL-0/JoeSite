@@ -4,7 +4,7 @@
 
 ## 技术栈
 
-- 前端：HTML、CSS
+- 前端：HTML、CSS、JavaScript
 - 后端：Python、Flask
 
 ## 项目结构
@@ -21,7 +21,7 @@ Joe_Site/
 
 1. 安装依赖：
     ```bash
-    pip install flask
+    pip install -r requirements.txt
     ```
 2. 运行项目：
     ```bash
@@ -31,5 +31,8 @@ Joe_Site/
 
 ## 功能介绍
 
-- 纯手写 HTML + CSS 页面
-- 使用 Flask 实现后端路由
+- 可以查看Joe的oc背景介绍
+- 具备注册账号以及登陆的功能
+- 登陆后的用户可以在留言墙上留言
+- 其中有四个个人链接
+- 更多功能有待开发
