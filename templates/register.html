@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/register.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-register.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+
+    <script src="{{ url_for('static', filename='js/register.js')}}"></script>
 </head>
 <body>
     <div class="CenterContainer">
@@ -22,26 +24,5 @@
             <input id="submit_button" type="submit" value="注册">
         </form>
     </div>
-    <script>
-        function sendCode() {
-            var email = document.querySelector('input[name="email"]').value;
-            fetch('/email_sender', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from the server
-                document.getElementById("status").innerText = data.message;
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-        }
-    </script>
 </body>
 </html>

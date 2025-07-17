@@ -75,6 +75,7 @@
             </div>
             <div id="user_info">
                 <a id="login_link" href="{{url_for('login')}}">{{nickname|default('你尚未登录Joe通行证')}} | 点击{{status|default('进行登录')}}</a>
+                <h4 id="login_text">{{signature|default('登录Joe通行证后才可以在留言板留言！')}}</h4>
             </div>
         </div>
     </div>

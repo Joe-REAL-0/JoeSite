@@ -75,7 +75,7 @@ body{
     backdrop-filter: blur(12px) saturate(120%);
     -webkit-backdrop-filter: blur(12px) saturate(120%);
     background-color: rgba(96, 96, 96, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 2px solid rgba(255, 255, 255, 0.18);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -86,7 +86,7 @@ body{
     top: 55%;
     width: 85%;
     max-width: 1000px;
-    border-radius: 5px;
+    border-radius: 10px;
     height: 100%;
     max-height: 75%;
     overflow: hidden;
@@ -123,20 +123,6 @@ body{
     overflow: hidden;
 }
 
-#user_info{
-    position: relative;
-    width: auto;
-    height: auto;
-    min-height: 60px;
-    flex-shrink: 0;
-    opacity: 0;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 10px;
-    background-color: rgba(255,255,255,0.8);
-    animation: fadeIn 0.6s 1.4s forwards;
-}
-
 #link_column{
     position: absolute;
     overflow: hidden;
@@ -145,27 +131,53 @@ body{
     height: 50%;
     max-height: 120px;
     width: auto;
-    background-color: rgba(216, 216, 216, 0.8);
+    background-color: rgb(216, 216, 216);
     border-radius: 10px;
     left: 4%;
     right: 4%;
     bottom: 4%;
 }
 
+#user_info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    width: auto;
+    height: auto;
+    min-height: 60px;
+    flex-shrink: 0;
+    opacity: 0;
+    padding: 15px; /* 增加上下内边距 */
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.8);
+    animation: fadeIn 0.6s 1.4s forwards;
+}
+
 #login_link{
     text-decoration: none;
     font-size: 25px;
-    font-style: bold;
-    position: absolute;
+    font-weight: bold; /* 修正为 font-weight */
+    /* 移除绝对定位相关属性 */
+    /* position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     white-space: nowrap;
     color: gray;
+    margin-bottom: 8px; /* 添加底部间距 */
 }
 
 #login_link:hover{
     color: blue;
+}
+
+#login_text {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+    text-align: left;
 }
 
 .PlateContainer{
