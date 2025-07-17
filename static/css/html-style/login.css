@@ -1,0 +1,100 @@
+body{
+    background-color: black;
+}
+
+#title{
+    color: lightblue;
+    font-family: 'LengKu';
+    width: 0;
+    animation: fold-x 0.8s forwards;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#submit_button{
+    position: absolute;
+    background-color: rgb(104, 217, 255);
+    font-size: 24px;
+    font-family: 'FengHei';
+    border-style: none;
+    cursor: pointer;
+    width: 100px;
+    height: 60px;
+    border-radius: 10px;
+    bottom: 15px;
+    right: 15px;
+}
+
+#submit_button:hover{
+    background-color: deepskyblue;
+    color: white;
+}
+
+#status{
+    position: absolute;
+    color: darkblue;
+    font-size: 16px;
+    left: 15px;
+    bottom: 15px;
+}
+
+#without_account{
+    position: absolute;
+    color: gray;
+    font-size: 16px;
+    left: 20px;
+    bottom: 45px;
+}
+
+#account{
+    position: relative;
+    width: 80%;
+    height: 40px;
+    top: -35px;
+    border: gray 3px solid;
+    border-radius: 20px;
+    padding-left: 25px;
+    background-color: rgb(226, 226, 226);
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#password{
+    position: relative;
+    width: 80%;
+    height: 40px;
+    border: gray 3px solid;
+    top: -30px;
+    margin-top: 15px;
+    border-radius: 20px;
+    padding-left: 25px;
+    background-color: rgb(226, 226, 226);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#login_form{
+    width: 360px;
+    height: 260px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.3s forwards;
+}
+
+.CenterContainer{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -1,0 +1,397 @@
+body{
+    height: 100vh;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+    background-image: url("../../images/background.jpg");
+}
+
+#welcome_message_1{
+    font-size: 48px;
+    width: 0;
+    color: #000;
+    margin-bottom: 0;
+    margin-left: 10px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: 'Technonomicon';
+    animation:fold-x 0.4s 1.5s steps(5) forwards;
+}
+
+#welcome_message_2{
+    font-size: 32px;
+    color: #000;
+    text-align: left;
+    margin-top: 0;
+    margin-left: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: 'ZhouSi';
+    width: 0;
+    animation: fold-x 0.6s 2.0s steps(8) forwards;
+}
+
+#cover {
+    position: fixed;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    animation: fadeOut 0.4s 0.8s forwards;
+}
+
+#title {
+    position: relative;
+    padding: 15px;
+    width: 100%;
+    max-width: 560px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    color: lightblue;
+    text-align: center;
+    white-space: nowrap;
+    font-family: 'valorax';
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 96px;
+    opacity: 0;
+    animation: slideIn 0.4s 0.1s forwards,
+        titleMove 0.5s 0.8s forwards;
+}
+
+#main_screen{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    top: 55%;
+    width: 85%;
+    max-width: 1000px;
+    background-color: rgba(96,96,96,0.3);
+    border-radius: 5px;
+    height: 100%;
+    max-height: 75%;
+    overflow: hidden;
+}
+
+#side_list{
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    max-width: 280px;
+    background-color: rgba(255,255,255,0.75);
+    border-radius: 10px;
+    opacity: 0;
+    animation: fadeIn 0.8s 1.0s forwards;
+}
+
+#info_screen{
+    position: relative;
+    flex: 1;
+    width: auto;
+    padding: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 20px;
+    opacity: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    background-color: rgba(255,255,255,0.5);;
+    border-radius: 10px;
+    animation: fadeIn 0.8s 1.2s forwards;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#user_info{
+    position: relative;
+    width: auto;
+    height: auto;
+    min-height: 60px;
+    flex-shrink: 0;
+    opacity: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.8);
+    animation: fadeIn 0.6s 1.4s forwards;
+}
+
+#link_column{
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    max-height: 120px;
+    width: auto;
+    background-color: rgba(216, 216, 216, 0.8);
+    border-radius: 10px;
+    left: 4%;
+    right: 4%;
+    bottom: 4%;
+}
+
+#login_link{
+    text-decoration: none;
+    font-size: 25px;
+    font-style: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    color: gray;
+}
+
+#login_link:hover{
+    color: blue;
+}
+
+.PlateContainer{
+    width: fit-content;
+}
+
+.CenterContainer{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ButtonContainer{
+    margin: 10px;
+    margin-top: 15px;
+    display: flex;
+    flex: row;
+}
+
+.LinkContainer{
+    margin-top: 25px;
+    margin-left: 15px;
+    text-align: center;
+    width: 100px;
+}
+
+.InfoContainer{
+    position: relative;
+    margin-left: 25px;
+    height: 100%;
+    width: 100%;
+    float: right;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ButtonIcon{
+    text-align: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.ButtonImg{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-70%, -50%);
+    height: 32px;
+    width: 32px;
+}
+
+.LinkIcon{
+    border-radius: 35px;
+    height: 70px;
+    width: 70px;
+}
+
+.LinkIcon:hover{
+    transform: scale(1.2);
+}
+
+.SideButton {
+    text-decoration: none;
+    color: black;
+    float: left;
+    white-space: nowrap;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    font-family: 'LengKu';
+}
+
+.SideButton:hover { 
+    color: deepskyblue;
+    margin-left: 10px;
+}
+
+/* 移动端菜单按钮 */
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hamburger {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 3px 0;
+    transition: 0.3s;
+}
+
+.mobile-menu-btn.active .hamburger:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.mobile-menu-btn.active .hamburger:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active .hamburger:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    #main_screen {
+        flex-direction: column;
+        padding: 10px;
+        width: 95%;
+        height: 90%;
+        max-height: 90vh;
+        align-items: stretch;
+    }
+    
+    #side_list {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.95);
+        z-index: 999;
+        transition: left 0.3s ease;
+        animation: none;
+        padding-top: 80px;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    #side_list.active {
+        left: 0;
+    }
+
+    .InfoContainer {
+        margin-left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #info_screen {
+        flex: 1;
+        padding: 15px;
+        min-height: 0;
+        overflow: hidden;
+    }
+    
+    #user_info {
+        height: auto;
+        min-height: 50px;
+        padding: 10px;
+        flex-shrink: 0;
+    }
+    
+    #welcome_message_1 {
+        font-size: 36px;
+    }
+    
+    #welcome_message_2 {
+        font-size: 24px;
+    }
+    
+    #title {
+        font-size: 60px;
+    }
+    
+    #link_column {
+        flex-direction: column;
+        height: auto;
+        max-height: none;
+        align-items: center;
+    }
+    
+    .LinkContainer {
+        margin: 10px 0;
+        width: 80px;
+    }
+    
+    .LinkIcon {
+        height: 60px;
+        width: 60px;
+    }
+    
+    #login_link {
+        font-size: 18px;
+    }
+    
+    .SideButton {
+        font-size: 20px;
+    }
+}
+
+/* 平板端适配 */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    #main_screen {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    #welcome_message_1 {
+        font-size: 42px;
+    }
+    
+    #welcome_message_2 {
+        font-size: 28px;
+    }
+    
+    #title {
+        font-size: 72px;
+    }
+    
+    .SideButton {
+        font-size: 22px;
+    }
+}

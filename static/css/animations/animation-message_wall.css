@@ -1,0 +1,28 @@
+@keyframes fold-x {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes fold-y {
+  from {
+    height: 0;
+    padding: 0;
+  }
+  to {
+    height: 100%;
+    padding: 15px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

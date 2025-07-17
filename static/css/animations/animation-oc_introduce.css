@@ -1,0 +1,17 @@
+@keyframes fold-x {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes fold-y {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 100%;
+  }
+}

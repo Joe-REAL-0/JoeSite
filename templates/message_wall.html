@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joe的个人小站 | 留言墙</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/message_wall.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-message_wall.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+</head>
+<body>
+    <div class="CenterContainer">
+        <h1 id="title">• 留言墙</h1>
+        <div id="message_list">
+            {% for message in messages %}
+            <div class="Message">
+                <p class="nickname">{{ message[0] }}</p>
+                <p class="date">{{ message[1] }}</p>
+                <p class="content">{{ message[2] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <a id="note_link" href="{{url_for('note')}}">写留言</a>
+    </div>
+</body>
+</html>

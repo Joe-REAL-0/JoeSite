@@ -1,0 +1,99 @@
+body{
+    background-color: rgb(236, 236, 236);
+}
+
+#title{
+    font-size: 64px;
+    font-family: 'LengKu';
+    margin-top: 0;
+    margin-bottom: 5px;
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: fold-x 1.3s 0.3s forwards;
+}
+
+#note_link{
+    position: absolute;
+    background-color: skyblue;
+    text-align: center;
+    text-decoration: none;
+    font-size: 24px;
+    color: black;
+    font-weight: bold;
+    line-height: 40px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 30px;
+    height: 40px;
+    width: 120px;
+    font-family: fantasy;
+    right: 40px;
+    bottom: -80px;
+    opacity: 0;
+    animation: fadeIn 0.3s 1.2s forwards;
+}
+
+#note_link:hover{
+    background-color: deepskyblue;
+    color: white;
+}
+
+#message_list{
+    position: relative;
+    overflow-y: auto;
+    height: 0;
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 2%;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 10px;
+    animation: fold-y 0.8s 0.4s forwards;
+}
+
+.CenterContainer {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 96%;
+    max-width: 1080px;
+    height: 70%;
+}
+
+.Message {
+    position: relative;
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 10px;
+    padding: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.nickname{
+    position: relative;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+
+.date{
+    position: relative;
+    font-size: 16px;
+    color: gray;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.content{
+    position: relative;
+    font-size: 20px;
+    margin-bottom: 15px;
+}

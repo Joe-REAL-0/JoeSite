@@ -1,0 +1,76 @@
+body{
+    background-color: rgb(216, 216, 216);
+}
+
+#title{
+    font-size: 64px;
+    font-family: 'LengKu';
+    margin-top: 0;
+    margin-bottom: 5px;
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: fold-x 2.5s 0.5s forwards;
+}
+
+#sidebar{
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 240px;
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#output{
+    position: relative;
+    overflow-y: auto;
+    top: 0;
+    right: 0;
+    height: auto;
+    padding: 10px;
+    margin-left: 15px;
+    font-size: 18px;
+    width: 80%;
+    font-weight: bold;
+}
+
+.MainContainer{
+    position: relative;
+    display: flex;
+    border-radius: 10px;
+    height: 0;
+    width: auto;
+    background-color: gray;
+    padding: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
+    animation: fold-y 0.8s 0.3s forwards;
+}
+
+.CenterContainer {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 70%;
+    width: 96%;
+    max-width: 1080px;
+}
+
+.TextTitle{
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.TextTitle:hover{
+    color: deepskyblue;
+    padding-left: 15px;
+}

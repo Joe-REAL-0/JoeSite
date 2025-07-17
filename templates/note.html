@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joe的个人小站 | 留言</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/note.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-note.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+</head>
+<body>
+    <div class="CenterContainer">
+        <h1 id="title">• {{nickname}},欢迎留言</h1>
+        <form id="note_form" action="/note_store" method="POST">
+            <textarea id="input_area" name="note" placeholder="在这里输入留言文本..."></textarea>
+            <input id="submit_button" type="submit" value="提交">
+        </form>
+    </div>
+</body>
+</html>
