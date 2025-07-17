@@ -81,11 +81,6 @@ def load_user(email):
     return None
 
 email_dict = {}
-@app.before_request
-def redirect_to_https():
-    if request.url.startswith('http://'):
-        url = request.url.replace('http://', 'https://', 1)
-        return redirect(url, code=301)
 
 @app.route('/')
 def hello():

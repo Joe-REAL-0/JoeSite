@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/index.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-index.css' ) }}">
+
+    <script src="{{ url_for('static', filename='js/index.js')}}"></script>
 </head>
 <body>
     <!-- 移动端菜单按钮 -->
@@ -78,30 +80,30 @@
     </div>
     <div id="cover"></div>
     <h1 id="title">JoE's Site</h1>
-    
+
     <script>
-        function toggleMobileMenu() {
-            const sideList = document.getElementById('side_list');
-            const menuBtn = document.getElementById('mobile_menu_btn');
-            
-            if (sideList.classList.contains('active')) {
-                sideList.classList.remove('active');
-                menuBtn.classList.remove('active');
-            } else {
-                sideList.classList.add('active');
-                menuBtn.classList.add('active');
-            }
-        }
+        // 初始化应用
+        const resourceManager = initializeApp();
         
-        // 点击菜单外部关闭菜单
-        document.addEventListener('click', function(event) {
-            const sideList = document.getElementById('side_list');
-            const menuBtn = document.getElementById('mobile_menu_btn');
-            
-            if (!sideList.contains(event.target) && !menuBtn.contains(event.target)) {
-                sideList.classList.remove('active');
-                menuBtn.classList.remove('active');
-            }
-        });
+        // 设置需要检测的资源列表
+        const requiredResources = [
+            // 图片资源
+            "{{ url_for('static', filename='images/background.jpg') }}",
+            "{{ url_for('static', filename='images/button_image/oc_introduce.png') }}",
+            "{{ url_for('static', filename='images/button_image/diary.png') }}",
+            "{{ url_for('static', filename='images/button_image/CouldStorage.png') }}",
+            "{{ url_for('static', filename='images/button_image/MessageWall.png') }}",
+            "{{ url_for('static', filename='images/link_image/QQ_Icon.jpg') }}",
+            "{{ url_for('static', filename='images/link_image/bilibili_Icon.jpg') }}",
+            "{{ url_for('static', filename='images/link_image/GitHub_Icon.jpg') }}",
+            "{{ url_for('static', filename='images/link_image/Minecraft_Icon.jpg') }}",
+            // 字体资源
+            "{{ url_for('static', filename='font/ZhengQingKeLengKu.ttf') }}",
+            "{{ url_for('static', filename='font/ZiWanZhouSi.ttf') }}",
+            "{{ url_for('static', filename='font/valorax-lg25v.ttf') }}",
+            "{{ url_for('static', filename='font/Technonomicon.ttf') }}"
+        ];
+        
+        resourceManager.setRequiredResources(requiredResources);
     </script>
 </body>
