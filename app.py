@@ -226,4 +226,4 @@ def find_text():
         return jsonify({'text': 'Text file not found'})
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",ssl_context = ('SSL/furryjoe.site.crt','SSL/furryjoe.site.key'),port=30069)
+    app.run(host="0.0.0.0" ,port=30069)
