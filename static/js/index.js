@@ -108,9 +108,13 @@ class ResourceLoadManager {
     triggerAnimation() {
         const title = document.getElementById('title');
         const cover = document.getElementById('cover');
+        const loadingText = document.getElementById('loading_text');
         if (title && cover) {
             title.classList.add('resources-loaded');
             cover.classList.add('resources-loaded');
+        }
+        if (loadingText) {
+            loadingText.classList.add('resources-loaded');
         }
         if (this.onAllResourcesLoaded) {
             this.onAllResourcesLoaded();

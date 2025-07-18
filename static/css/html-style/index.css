@@ -52,14 +52,14 @@ body{
     padding: 15px;
     width: 100%;
     max-width: 560px;
-    border-radius: 5px;
+    border-radius: 25px;
     background-color: rgba(255, 255, 255, 0);
     color: lightblue;
     text-align: center;
     white-space: nowrap;
     font-family: 'valorax';
     top: 50%;
-    left: 50%;
+    left: 48%;
     transform: translate(-50%, -50%);
     font-size: 96px;
     opacity: 0;
@@ -68,7 +68,24 @@ body{
 
 #title.resources-loaded {
     animation: slideIn 0.4s 0.1s forwards,
-        titleMove 0.5s 0.8s forwards;
+        titleMove 0.5s 0.6s forwards;
+}
+
+#loading_text {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: lightblue;
+    opacity: 0;
+    animation: fadeIn 0.4s 0.1s forwards;
+}
+
+#loading_text.resources-loaded {
+    opacity: 1;
+    animation: fadeOut 0.8s 0.5s forwards;
 }
 
 #main_screen {
@@ -86,7 +103,7 @@ body{
     top: 55%;
     width: 85%;
     max-width: 1000px;
-    border-radius: 10px;
+    border-radius: 20px;
     height: 100%;
     max-height: 75%;
     overflow: hidden;
@@ -99,7 +116,7 @@ body{
     width: 100%;
     max-width: 280px;
     background-color: rgba(255,255,255,0.75);
-    border-radius: 10px;
+    border-radius: 20px;
     opacity: 0;
     animation: fadeIn 0.8s 1.0s forwards;
 }
@@ -117,7 +134,7 @@ body{
     left: 0;
     top: 0;
     background-color: rgba(255,255,255,0.3);;
-    border-radius: 10px;
+    border-radius: 20px;
     animation: fadeIn 0.8s 1.2s forwards;
     min-height: 0;
     overflow: hidden;
@@ -132,7 +149,7 @@ body{
     max-height: 120px;
     width: auto;
     background-color: rgb(216, 216, 216);
-    border-radius: 10px;
+    border-radius: 20px;
     left: 4%;
     right: 4%;
     bottom: 4%;
@@ -150,7 +167,7 @@ body{
     flex-shrink: 0;
     opacity: 0;
     padding: 15px; /* 增加上下内边距 */
-    border-radius: 10px;
+    border-radius: 20px;
     background-color: rgba(255,255,255,0.8);
     animation: fadeIn 0.6s 1.4s forwards;
 }
@@ -159,11 +176,6 @@ body{
     text-decoration: none;
     font-size: 25px;
     font-weight: bold; /* 修正为 font-weight */
-    /* 移除绝对定位相关属性 */
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
     white-space: nowrap;
     color: gray;
     margin-bottom: 8px; /* 添加底部间距 */
