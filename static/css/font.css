@@ -9,11 +9,11 @@
 }
 
 @font-face {
-    font-family: 'ZhouSi';
-    src: url('../font/ZiWanZhouSi.ttf');
+    font-family: 'LengKu';
+    src: url('../font/ZhengQingKeLengKu.ttf');
 }
 
 @font-face {
-    font-family: 'LengKu';
-    src: url('../font/ZhengQingKeLengKu.ttf');
+    font-family: 'GunShi';
+    src: url('../font/GunShi.ttf');
 }

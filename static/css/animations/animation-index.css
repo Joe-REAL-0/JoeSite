@@ -7,6 +7,15 @@
     }
 }
 
+@keyframes fold-x-fit-content {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: var(--text-width, 100%);
+    }
+}
+
 @keyframes unfold-x {
     0% {
         width: 100%;
@@ -92,17 +101,20 @@
 
 @keyframes titleMove{
     0% {
-        top: 45%;
+        top: 50%;
+        left: 48%;
         font-size: 96px;
         color: lightblue;
         background-color: rgba(255, 255, 255, 0);
     }80%{
         top: 8%;
+        left: 48%;
         font-size: 64px;
         color: darkblue;
         background-color: rgba(255, 255, 255, 0.6);
     }100%{
         top: 8%;
+        left: 50%;
         font-size: 42px;
         color: black;
         background-color: rgba(255, 255, 255, 1);

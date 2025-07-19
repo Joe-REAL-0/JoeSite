@@ -1,5 +1,6 @@
 <head>
     <title>Joe的个人小站 | 主页</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <link rel="preload" href="{{ url_for('static',filename='images/background.jpg')}}" as="image" type="image/jpg">
     <link rel="preload" href="{{ url_for('static',filename='font/ZhengQingKeLengKu.ttf')}}" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="{{ url_for('static',filename='font/ZiWanZhouSi.ttf')}}" as="font" type="font/ttf" crossorigin>
@@ -47,9 +48,15 @@
             </div>
         </div>
         <div class="InfoContainer">
+            <div class="welcome_messages_container">
+                <div class="PlateContainer">
+                    <p id="welcome_message_1" class="welcome-line">你好！</p>
+                    <p id="welcome_message_2" class="welcome-line">Hello</p>
+                    <p id="welcome_message_3" class="welcome-line">欢迎走进我的世界</p>
+                    <p id="welcome_message_4" class="welcome-line">Welcome to my world</p>
+                </div>
+            </div>
             <div id="info_screen">
-                <div class="PlateContainer"><p id="welcome_message_1">Hello</p></div>
-                <div class="PlateContainer"><p id="welcome_message_2">欢迎走进我的世界</p></div>
                 <div id="link_column">
                     <div class="LinkContainer">
                         <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">
@@ -71,6 +78,12 @@
                             <img title="我运营的Minecraft服务器" class="LinkIcon" src="{{ url_for('static',filename = 'images/link_image/Minecraft_Icon.jpg' ) }}">
                         </a>
                     </div>
+                    <div class="LinkContainer">
+                        <a href="https://joe-real-0.itch.io/">
+                            <img title="itch主页" class="LinkIcon" src="{{ url_for('static',filename = 'images/link_image/itch_Icon.jpg' ) }}">
+                        </a>
+                    </div>
+
                 </div>
             </div>
             <div id="user_info">
@@ -101,9 +114,9 @@
             "{{ url_for('static', filename='images/link_image/Minecraft_Icon.jpg') }}",
             // 字体资源
             "{{ url_for('static', filename='font/ZhengQingKeLengKu.ttf') }}",
-            "{{ url_for('static', filename='font/ZiWanZhouSi.ttf') }}",
             "{{ url_for('static', filename='font/valorax-lg25v.ttf') }}",
-            "{{ url_for('static', filename='font/Technonomicon.ttf') }}"
+            "{{ url_for('static', filename='font/Technonomicon.ttf') }}",
+            "{{ url_for('static', filename='font/GunShi.ttf') }}"
         ];
         
         resourceManager.setRequiredResources(requiredResources);

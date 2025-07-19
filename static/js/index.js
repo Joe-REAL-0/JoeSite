@@ -35,42 +35,95 @@ class ResourceLoadManager {
     setRequiredResources(resources) {
         this.requiredResources = resources;
         this.totalResources = resources.length;
+        
+        // 立即开始加载资源
+        this.loadAllResources();
     }
 
     checkResource(url) {
         return new Promise((resolve, reject) => {
+            // 设置10秒超时
+            const timeout = setTimeout(() => {
+                resolve(url); // 超时也算成功，避免卡住
+            }, 10000);
+
             if (url.endsWith('.ttf') || url.endsWith('.woff') || url.endsWith('.woff2')) {
                 // 字体检测
                 const fontName = this.getFontNameFromUrl(url);
-                if (document.fonts && document.fonts.check) {
-                    const checkFont = () => {
-                        if (document.fonts.check('12px ' + fontName)) {
-                            resolve(url);
-                        } else {
-                            setTimeout(checkFont, 100);
-                        }
-                    };
-                    checkFont();
+                
+                // 改进的字体检测方法
+                if (document.fonts && document.fonts.load) {
+                    // 使用FontFace API加载字体
+                    document.fonts.load(`16px "${fontName}"`).then(() => {
+                        clearTimeout(timeout);
+                        resolve(url);
+                    }).catch(() => {
+                        // 如果FontFace API失败，使用传统检测方法
+                        this.fallbackFontCheck(fontName, url, timeout, resolve);
+                    });
                 } else {
-                    // 降级处理
-                    setTimeout(() => resolve(url), 1000);
+                    // 浏览器不支持FontFace API，使用传统检测方法
+                    this.fallbackFontCheck(fontName, url, timeout, resolve);
                 }
             } else {
                 // 图片检测
                 const img = new Image();
-                img.onload = () => resolve(url);
-                img.onerror = () => reject(url);
+                
+                img.onload = () => {
+                    clearTimeout(timeout);
+                    resolve(url);
+                };
+                
+                img.onerror = (error) => {
+                    clearTimeout(timeout);
+                    resolve(url); // 即使失败也resolve，避免阻塞
+                };
+                
                 img.src = url;
             }
         });
     }
 
+    fallbackFontCheck(fontName, url, timeout, resolve) {
+        if (document.fonts && document.fonts.check) {
+            let checkCount = 0;
+            const maxChecks = 30; // 减少到3秒
+            
+            const checkFont = () => {
+                checkCount++;
+                // 尝试多种字体大小检测
+                const sizes = ['12px', '16px', '20px'];
+                const isLoaded = sizes.some(size => 
+                    document.fonts.check(`${size} "${fontName}"`) ||
+                    document.fonts.check(`${size} ${fontName}`)
+                );
+                
+                if (isLoaded) {
+                    clearTimeout(timeout);
+                    resolve(url);
+                } else if (checkCount >= maxChecks) {
+                    clearTimeout(timeout);
+                    resolve(url);
+                } else {
+                    setTimeout(checkFont, 100);
+                }
+            };
+            checkFont();
+        } else {
+            // 浏览器不支持字体检测，直接等待1秒
+            setTimeout(() => {
+                clearTimeout(timeout);
+                resolve(url);
+            }, 1000);
+        }
+    }
+
     getFontNameFromUrl(url) {
         const fontMap = {
             'ZhengQingKeLengKu.ttf': 'LengKu',
-            'ZiWanZhouSi.ttf': 'ZhouSi',
             'valorax-lg25v.ttf': 'valorax',
-            'Technonomicon.ttf': 'Technonomicon'
+            'Technonomicon.ttf': 'Technonomicon',
+            'GunShi.ttf': 'GunShi'
         };
         
         for (const [file, name] of Object.entries(fontMap)) {
@@ -82,43 +135,123 @@ class ResourceLoadManager {
     }
 
     async loadAllResources() {
-        const promises = this.requiredResources.map(url => 
+        if (this.requiredResources.length === 0) {
+            this.triggerAnimation();
+            return;
+        }
+        
+        let completedCount = 0;
+        const promises = this.requiredResources.map((url, index) => 
             this.checkResource(url).then(
                 (loadedUrl) => {
                     this.loadedResources.add(loadedUrl);
-                    console.log(`资源加载完成: ${loadedUrl}`);
+                    completedCount++;
+                    return loadedUrl;
                 },
                 (failedUrl) => {
-                    console.warn(`资源加载失败: ${failedUrl}`);
+                    completedCount++;
+                    return failedUrl; // 返回失败的URL以继续处理
                 }
-            )
+            ).catch(error => {
+                completedCount++;
+                return url; // 即使异常也返回URL继续处理
+            })
         );
 
         try {
-            await Promise.all(promises);
-            console.log('所有资源加载完成');
+            const results = await Promise.allSettled(promises); // 使用allSettled代替all
+            
+            // 不管成功失败都触发动画
             this.triggerAnimation();
         } catch (error) {
-            console.error('资源加载过程中出现错误:', error);
             // 即使有错误也触发动画，避免永久等待
             setTimeout(() => this.triggerAnimation(), 2000);
         }
+        
+        // 备用机制：如果15秒内没有触发动画，强制触发
+        setTimeout(() => {
+            const title = document.getElementById('title');
+            if (title && !title.classList.contains('resources-loaded')) {
+                this.triggerAnimation();
+            }
+        }, 15000);
     }
 
     triggerAnimation() {
         const title = document.getElementById('title');
         const cover = document.getElementById('cover');
         const loadingText = document.getElementById('loading_text');
-        if (title && cover) {
+        
+        if (title && cover && loadingText) {
             title.classList.add('resources-loaded');
             cover.classList.add('resources-loaded');
-        }
-        if (loadingText) {
             loadingText.classList.add('resources-loaded');
         }
+
+        const mainScreen = document.getElementById('main_screen');
+        const sideList = document.getElementById('side_list');
+        const infoScreen = document.getElementById('info_screen');
+        const linkColumn = document.getElementById('link_column');
+        const userInfo = document.getElementById('user_info');
+
+        if (mainScreen && sideList && infoScreen && linkColumn && userInfo) {
+            mainScreen.classList.add('loaded');
+            sideList.classList.add('loaded');
+            infoScreen.classList.add('loaded');
+            linkColumn.classList.add('loaded');
+            userInfo.classList.add('loaded');
+        }
+
+        setTimeout(() => {
+            this.triggerWelcomeMessages();
+        }, 1200);
+
         if (this.onAllResourcesLoaded) {
             this.onAllResourcesLoaded();
         }
+    }
+
+    triggerWelcomeMessages() {
+        const welcomeMessage1 = document.getElementById('welcome_message_1');
+        const welcomeMessage2 = document.getElementById('welcome_message_2');
+        const welcomeMessage3 = document.getElementById('welcome_message_3');
+        const welcomeMessage4 = document.getElementById('welcome_message_4');
+
+        if (welcomeMessage1 && welcomeMessage2 && welcomeMessage3 && welcomeMessage4) {
+            // 计算每个消息的实际宽度并设置CSS自定义属性
+            this.setMessageWidths([welcomeMessage1, welcomeMessage2, welcomeMessage3, welcomeMessage4]);
+            
+            // 第一组：第1行和第3行同时开始
+            welcomeMessage1.classList.add('welcome-start');
+            welcomeMessage3.classList.add('welcome-start');
+            
+            // 第二组：第2行和第4行稍晚开始（延迟300ms）
+            setTimeout(() => {
+                welcomeMessage2.classList.add('welcome-start');
+                welcomeMessage4.classList.add('welcome-start');
+            }, 800);
+        }
+    }
+
+    setMessageWidths(messages) {
+        messages.forEach(message => {
+            // 创建一个临时的不可见元素来测量文本宽度
+            const tempElement = document.createElement('div');
+            tempElement.style.position = 'absolute';
+            tempElement.style.visibility = 'hidden';
+            tempElement.style.whiteSpace = 'nowrap';
+            tempElement.style.fontSize = window.getComputedStyle(message).fontSize;
+            tempElement.style.fontFamily = window.getComputedStyle(message).fontFamily;
+            tempElement.style.fontWeight = window.getComputedStyle(message).fontWeight;
+            tempElement.textContent = message.textContent;
+            
+            document.body.appendChild(tempElement);
+            const textWidth = tempElement.offsetWidth;
+            document.body.removeChild(tempElement);
+            
+            // 设置CSS自定义属性
+            message.style.setProperty('--text-width', textWidth + 'px');
+        });
     }
 }
 
@@ -140,17 +273,12 @@ function toggleMobileMenu() {
 function initializeApp() {
     const resourceManager = new ResourceLoadManager();
     
-    // 等待DOM加载完成后开始检测资源
-    document.addEventListener('DOMContentLoaded', () => {
-        resourceManager.loadAllResources();
-    });
-    
     // 点击菜单外部关闭菜单
     document.addEventListener('click', function(event) {
         const sideList = document.getElementById('side_list');
         const menuBtn = document.getElementById('mobile_menu_btn');
         
-        if (!sideList.contains(event.target) && !menuBtn.contains(event.target)) {
+        if (sideList && menuBtn && !sideList.contains(event.target) && !menuBtn.contains(event.target)) {
             sideList.classList.remove('active');
             menuBtn.classList.remove('active');
         }
