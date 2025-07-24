@@ -1,3 +1,6 @@
 /.conda
 /.vscode
 /SSL
+/__pycache__
+app.log
+database.db
