@@ -6,9 +6,8 @@ from flask_mail import Mail,Message
 
 from random import choice
 from time import time
-import os,threading
+import os, threading, sys, subprocess
 from datetime import datetime
-
 from Database import Database
 
 class User(UserMixin):
@@ -238,7 +237,25 @@ def find_text():
         print(f"Find text error: {e}")
         return jsonify({'text': 'Error reading file'}), 500
 
+def start_server():
+    """启动服务器的函数，方便重启"""
+    # 检查SSL证书目录是否存在
+    ssl_dir = os.path.join(os.path.dirname(__file__), 'SSL')
+    if not os.path.exists(ssl_dir):
+        ssl_context = None
+    else:
+        crt_path = os.path.join(ssl_dir, 'furryjoe.site.crt')
+        key_path = os.path.join(ssl_dir, 'furryjoe.site.key')
+        if os.path.exists(crt_path) and os.path.exists(key_path):
+            ssl_context = (crt_path, key_path)
+        else:
+            ssl_context = None
+    
+    # 启动服务器
+    app.run(host="0.0.0.0", port=30069, debug=False, threaded=True, ssl_context=ssl_context)
+
 if __name__ == '__main__':
+    
     # 启动定期清理过期验证码的后台任务
     def cleanup_thread():
         while True:
@@ -252,16 +269,11 @@ if __name__ == '__main__':
     cleanup_task.daemon = True
     cleanup_task.start()
     
-    # 检查SSL证书目录是否存在
-    ssl_dir = os.path.join(os.path.dirname(__file__), 'SSL')
-    if not os.path.exists(ssl_dir):
-        ssl_context = None
-    else:
-        crt_path = os.path.join(ssl_dir, 'furryjoe.site.crt')
-        key_path = os.path.join(ssl_dir, 'furryjoe.site.key')
-        if os.path.exists(crt_path) and os.path.exists(key_path):
-            ssl_context = (crt_path, key_path)
-        else:
-            ssl_context = None
-    
-    app.run(host="0.0.0.0", port=30069, debug=False, threaded=True, ssl_context=ssl_context)
+    try:
+        # 启动服务器
+        start_server()
+    except KeyboardInterrupt:
+        # 正常的Ctrl+C中断
+        pass
+    except Exception as e:
+        print(f"Server error: {e}")

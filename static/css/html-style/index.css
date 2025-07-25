@@ -15,10 +15,11 @@ body{
     width: 100%;
     height: 100%;
     background-color: black;
+    z-index: 1000; /* 确保cover覆盖所有元素，包括菜单按钮 */
 }
 
 #cover.resources-loaded {
-    animation: fadeOut 0.4s 0s forwards;
+    animation: fadeOut 0.4s 0.2s forwards;
 }
 
 #title {
@@ -38,11 +39,12 @@ body{
     font-size: 96px;
     opacity: 0;
     animation: slideIn 0.4s 0.1s forwards;
+    z-index: 1001; /* 确保title在cover上面 */
 }
 
 #title.resources-loaded {
     opacity: 1;
-    animation: titleMove 0.5s 0s forwards;
+    animation: titleMove 0.5s 0.2s forwards;
 }
 
 #loading_text {
@@ -55,11 +57,12 @@ body{
     color: lightblue;
     opacity: 0;
     animation: fadeIn 0.4s 0s forwards;
+    z-index: 1001; /* 确保loading_text在cover上面 */
 }
 
 #loading_text.resources-loaded {
     opacity: 1;
-    animation: fadeOut 0.8s 0s forwards;
+    animation: fadeOut 0.8s 0.2s forwards;
 }
 
 #main_screen {
@@ -76,7 +79,7 @@ body{
     padding-right: 50px;
     top: 55%;
     width: 85%;
-    max-width: 1000px;
+    max-width: 1200px;
     border-radius: 20px;
     height: 0;
     max-height: 75%;
@@ -84,7 +87,7 @@ body{
 }
 
 #main_screen.loaded {
-    animation: fold-y 0.4s 0.2s forwards;
+    animation: fold-y 0.4s 0.4s forwards;
 }
 
 #side_list{
@@ -99,7 +102,7 @@ body{
 }
 
 #side_list.loaded{
-    animation: fadeIn 0.6s 0.6s forwards;
+    animation: fadeIn 0.6s 0.8s forwards;
 }
 
 #info_screen{
@@ -121,7 +124,7 @@ body{
 }
 
 #info_screen.loaded{
-    animation: fadeIn 0.8s 1.0s forwards;
+    animation: fadeIn 0.8s 1.2s forwards;
 }
 
 #link_column{
@@ -138,10 +141,11 @@ body{
     left: 4%;
     right: 4%;
     bottom: 4%;
+    z-index: 5;
 }
 
 #link_column.loaded{
-    animation: fadeIn 0.6s 1.2s forwards;
+    animation: fadeIn 0.6s 1.4s forwards;
 }
 
 #user_info{
@@ -155,13 +159,13 @@ body{
     min-height: 60px;
     flex-shrink: 0;
     opacity: 0;
-    padding: 15px; /* 增加上下内边距 */
+    padding: 25px; /* 增加上下内边距 */
     border-radius: 20px;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.6);
 }
 
 #user_info.loaded{
-    animation: fadeIn 0.6s 0.8s forwards;
+    animation: fadeIn 0.6s 1.0s forwards;
 }
 
 #login_link{
@@ -179,7 +183,7 @@ body{
 
 #login_text {
     font-size: 16px;
-    color: #666;
+    color: #222;
     margin: 0;
     text-align: left;
 }
@@ -226,6 +230,7 @@ body{
     background-color: transparent;
     padding: 10px;
     margin: 10px;
+    overflow: hidden;
 }
 
 .welcome-line {
@@ -333,9 +338,9 @@ body{
 .mobile-menu-btn {
     display: none;
     position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
+    top: 5%; /* 与标题对齐 */
+    left: 5%; /* 距离左侧屏幕宽度的5% */
+    z-index: 1003; /* 确保按钮在侧边栏之上 */
     width: 50px;
     height: 50px;
     background-color: rgba(255, 255, 255, 0.9);
@@ -372,33 +377,57 @@ body{
 @media screen and (max-width: 768px) {
     .mobile-menu-btn {
         display: flex;
+        z-index: 999; /* 初始z-index低于cover */
+    }
+    
+    /* 当资源加载完成后，让菜单按钮显示在cover上面 */
+    .mobile-menu-btn.resources-loaded {
+        z-index: 1003; /* 确保按钮在所有内容之上，包括侧边栏 */
     }
     
     #main_screen {
         flex-direction: column;
         padding: 10px;
-        width: 95%;
-        height: 90%;
-        max-height: 90vh;
+        width: 90%;
+        max-width: 1200px;
+        height: 80%;
+        max-height: 80vh;
         align-items: stretch;
     }
     
     #side_list {
-        position: fixed;
+        position: absolute; /* 改为绝对定位，相对于main_screen */
         top: 0;
-        left: -100%;
-        width: 280px;
-        height: 100vh;
-        background-color: rgba(255, 255, 255, 0.95);
-        z-index: 999;
-        transition: left 0.3s ease;
+        left: 0;
+        width: 100%;
+        height: 0; /* 高度为0，通过动画展开 */
+        max-height: 100%;
+        max-width: 100%;
+        background-color: #ffffff6d;
+        z-index: 1002; /* 提高z-index，确保覆盖其他内容 */
         animation: none;
-        padding-top: 80px;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        padding-top: 0; /* 初始无内边距 */
+        padding-bottom: 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden; /* 隐藏溢出内容 */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* 使内容居中 */
+        border-radius: 20px; /* 保持与main_screen相同的圆角 */
+        transition: none;
     }
     
     #side_list.active {
-        left: 0;
+        height: 100%; /* 展开到全高 */
+        padding-top: 80px;
+        padding-bottom: 30px;
+        opacity: 1;
+        overflow-y: auto; /* 允许内容滚动 */
+        animation: mobileSideListExpand 0.3s forwards;
+    }
+    
+    #side_list.closing {
+        animation: mobileSideListCollapse 0.3s forwards;
     }
 
     .InfoContainer {
@@ -407,65 +436,97 @@ body{
         height: 100%;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
+        position: relative;
     }
 
     .welcome_messages_container{
-        position: relative;
-        top: 0;
-        left: 0;
-        margin-bottom: 10px;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        margin-bottom: 0;
+        width: calc(100% - 30px);
+        z-index: 5;
     }
     
     #info_screen {
         flex: 1;
         padding: 15px;
-        min-height: 0;
+        min-height: 250px;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
     }
     
     #user_info {
         height: auto;
         min-height: 50px;
-        padding: 10px;
+        padding: 12px;
         flex-shrink: 0;
+        margin-bottom: 10px;
+        width: auto;
     }
     
     #welcome_message_1 {
-        font-size: 36px;
+        font-size: 32px;
     }
     
     #welcome_message_2 {
-        font-size: 24px;
+        font-size: 22px;
     }
     
     #welcome_message_3 {
-        font-size: 28px;
+        font-size: 26px;
     }
     
     #welcome_message_4 {
-        font-size: 20px;
+        font-size: 18px;
     }
     
     #title {
-        font-size: 60px;
+        font-size: 56px;
+        left: 45%;
+        top: 45%;
+        width: 80%;
+        max-width: 80%;
+    }
+    
+    #title.resources-loaded {
+        animation: titleMoveMobile 0.5s 0.2s forwards;
+        transform-origin: right top; /* 确保动画更平滑地向右上角移动 */
+        text-align: right; /* 文本右对齐 */
+    }
+
+    #loading_text {
+        top: 50%;
+        font-size: 18px;
     }
     
     #link_column {
-        flex-direction: column;
+        position: relative;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
         height: auto;
         max-height: none;
         align-items: center;
+        margin-top: auto;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        padding-top: 25px;
+        padding-bottom: 25px;
     }
     
     .LinkContainer {
-        margin: 10px 0;
-        width: 80px;
+        margin: 8px;
+        width: 70px;
     }
     
     .LinkIcon {
-        height: 60px;
-        width: 60px;
+        height: 55px;
+        width: 55px;
     }
     
     #login_link {
@@ -474,6 +535,22 @@ body{
     
     .SideButton {
         font-size: 20px;
+        float: none;
+        text-align: center;
+        padding-left: 0;
+        width: 100%;
+    }
+    
+    .ButtonContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60%; /* 缩小宽度使按钮更集中 */
+    }
+    
+    .ButtonIcon {
+        width: 65px;
+        height: 65px;
     }
 }
 
@@ -481,6 +558,7 @@ body{
 @media screen and (max-width: 1024px) and (min-width: 769px) {
     #main_screen {
         width: 90%;
+        max-width: 1200px;
         padding: 15px;
     }
     

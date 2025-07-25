@@ -5,7 +5,6 @@
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <link rel="preload" href="{{ url_for('static',filename='images/background.jpg')}}" as="image" type="image/jpg">
     <link rel="preload" href="{{ url_for('static',filename='font/ZhengQingKeLengKu.ttf')}}" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="{{ url_for('static',filename='font/ZiWanZhouSi.ttf')}}" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="{{ url_for('static',filename='font/valorax-lg25v.ttf')}}" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="{{ url_for('static',filename='font/Technonomicon.ttf')}}" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
@@ -16,7 +15,7 @@
 </head>
 <body>
     <!-- 移动端菜单按钮 -->
-    <button id="mobile_menu_btn" class="mobile-menu-btn" onclick="toggleMobileMenu()">
+    <button id="mobile_menu_btn" class="mobile-menu-btn" onclick="toggleMobileMenu(event)">
         <div class="hamburger"></div>
         <div class="hamburger"></div>
         <div class="hamburger"></div>
@@ -50,15 +49,13 @@
             </div>
         </div>
         <div class="InfoContainer">
-            <div class="welcome_messages_container">
-                <div class="PlateContainer">
+            <div id="info_screen">
+                <div class="welcome_messages_container">
                     <p id="welcome_message_1" class="welcome-line">你好！</p>
                     <p id="welcome_message_2" class="welcome-line">Hello</p>
                     <p id="welcome_message_3" class="welcome-line">欢迎走进我的世界</p>
                     <p id="welcome_message_4" class="welcome-line">Welcome to my world</p>
                 </div>
-            </div>
-            <div id="info_screen">
                 <div id="link_column">
                     <div class="LinkContainer">
                         <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">

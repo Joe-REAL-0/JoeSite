@@ -181,11 +181,19 @@ class ResourceLoadManager {
         const title = document.getElementById('title');
         const cover = document.getElementById('cover');
         const loadingText = document.getElementById('loading_text');
+        const mobileMenuBtn = document.getElementById('mobile_menu_btn');
         
         if (title && cover && loadingText) {
             title.classList.add('resources-loaded');
             cover.classList.add('resources-loaded');
             loadingText.classList.add('resources-loaded');
+            
+            // 资源加载完成后，将菜单按钮的z-index提高
+            if (mobileMenuBtn) {
+                setTimeout(() => {
+                    mobileMenuBtn.classList.add('resources-loaded');
+                }, 400); // 等待cover动画完成后再添加类
+            }
         }
 
         const mainScreen = document.getElementById('main_screen');
@@ -256,16 +264,39 @@ class ResourceLoadManager {
 }
 
 // 移动端菜单功能
-function toggleMobileMenu() {
+function toggleMobileMenu(event) {
     const sideList = document.getElementById('side_list');
     const menuBtn = document.getElementById('mobile_menu_btn');
+    const infoScreen = document.getElementById('info_screen');
+    const userInfo = document.getElementById('user_info');
     
     if (sideList.classList.contains('active')) {
-        sideList.classList.remove('active');
+        // 添加关闭动画类
+        sideList.classList.add('closing');
         menuBtn.classList.remove('active');
+        
+        // 恢复其他元素的可见性
+        if (infoScreen) infoScreen.style.visibility = '';
+        if (userInfo) userInfo.style.visibility = '';
+        
+        // 等待动画结束后移除活动类
+        setTimeout(() => {
+            sideList.classList.remove('active');
+            sideList.classList.remove('closing');
+        }, 300); // 时间与动画持续时间一致
     } else {
+        // 隐藏其他元素，但不隐藏main_screen
+        if (infoScreen) infoScreen.style.visibility = 'hidden';
+        if (userInfo) userInfo.style.visibility = 'hidden';
+        
+        // 激活侧边栏
         sideList.classList.add('active');
         menuBtn.classList.add('active');
+    }
+    
+    // 阻止事件冒泡，避免点击按钮时触发document的click事件
+    if (event) {
+        event.stopPropagation();
     }
 }
 
@@ -277,10 +308,23 @@ function initializeApp() {
     document.addEventListener('click', function(event) {
         const sideList = document.getElementById('side_list');
         const menuBtn = document.getElementById('mobile_menu_btn');
+        const infoScreen = document.getElementById('info_screen');
+        const userInfo = document.getElementById('user_info');
         
-        if (sideList && menuBtn && !sideList.contains(event.target) && !menuBtn.contains(event.target)) {
-            sideList.classList.remove('active');
+        if (sideList && menuBtn && sideList.classList.contains('active') && !sideList.contains(event.target) && !menuBtn.contains(event.target)) {
+            // 添加关闭动画类
+            sideList.classList.add('closing');
             menuBtn.classList.remove('active');
+            
+            // 恢复其他元素的可见性
+            if (infoScreen) infoScreen.style.visibility = '';
+            if (userInfo) userInfo.style.visibility = '';
+            
+            // 等待动画结束后移除活动类
+            setTimeout(() => {
+                sideList.classList.remove('active');
+                sideList.classList.remove('closing');
+            }, 300); // 时间与动画持续时间一致
         }
     });
     
