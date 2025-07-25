@@ -101,7 +101,7 @@
 
 @keyframes titleMove{
     0% {
-        top: 50%;
+        top: 45%;
         left: 48%;
         font-size: 96px;
         color: lightblue;
@@ -109,7 +109,7 @@
         max-width: 560px;
         width: 100%;
     }80%{
-        top: 8%;
+        top: 6%;
         left: 48%;
         font-size: 64px;
         color: darkblue;
@@ -117,7 +117,7 @@
         max-width: 560px;
         width: 80%;
     }100%{
-        top: 8%;
+        top: 6%;
         left: 50%;
         font-size: 42px;
         color: black;
@@ -130,36 +130,30 @@
 /* 移动端标题动画 */
 @keyframes titleMoveMobile{
     0% {
-        top: 45%;
-        left: 45%;
+        top: 40%;
+        left: 40vw;
         transform: translate(-50%, -50%);
-        font-size: 56px;
+        font-size: 48px;
         color: lightblue;
         background-color: rgba(255, 255, 255, 0);
         max-width: 560px;
         width: 100%;
     }80%{
-        top: 4%;
+        top: 5%; /* 与菜单按钮顶部对齐 */
         left: calc(100% - 5%); /* 距离右侧屏幕宽度的5% */
-        transform: translateX(-100%); /* 右对齐 */
-        font-size: 48px;
+        transform: translateX(-100%) translateY(0); /* 水平右对齐，垂直不变 */
+        font-size: 32px;
         color: darkblue;
         background-color: rgba(255, 255, 255, 0.6);
-        max-width: 70%;
-        width: auto;
-        padding-left: 20px;
-        padding-right: 20px;
+        margin-top: 0; /* 确保没有上边距 */
     }100%{
-        top: 4%;
+        top: 5%; /* 菜单按钮的顶部位置 */
         left: calc(100% - 5%); /* 距离右侧屏幕宽度的5% */
-        transform: translateX(-100%); /* 使用transform使标题右对齐 */
+        transform: translateX(-100%) translateY(0); /* 水平右对齐，垂直不变 */
         font-size: 28px;
         color: black;
         background-color: rgba(255, 255, 255, 1);
-        max-width: 60%;
-        width: auto;
-        padding-left: 20px;
-        padding-right: 20px;
+        margin-top: 0; /* 确保没有上边距 */
     }
 }
 

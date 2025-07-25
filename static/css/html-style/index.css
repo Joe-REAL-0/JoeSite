@@ -23,7 +23,7 @@ body{
 }
 
 #title {
-    position: relative;
+    position: fixed; /* 修改为固定定位，使其跟随视窗滚动 */
     padding: 15px;
     width: 100%;
     max-width: 560px;
@@ -33,7 +33,7 @@ body{
     text-align: center;
     white-space: nowrap;
     font-family: 'valorax';
-    top: 50%;
+    top: 45%;
     left: 48%;
     transform: translate(-50%, -50%);
     font-size: 96px;
@@ -45,6 +45,7 @@ body{
 #title.resources-loaded {
     opacity: 1;
     animation: titleMove 0.5s 0.2s forwards;
+    position: fixed; /* 确保动画结束后保持固定位置 */
 }
 
 #loading_text {
@@ -53,6 +54,8 @@ body{
     left: 50%;
     text-align: center;
     transform: translate(-50%, -50%);
+    overflow: hidden;
+    white-space: nowrap;
     font-size: 24px;
     color: lightblue;
     opacity: 0;
@@ -338,7 +341,7 @@ body{
 .mobile-menu-btn {
     display: none;
     position: fixed;
-    top: 5%; /* 与标题对齐 */
+    top: calc(5% + 4px); /* 调整垂直位置，使其与标题文字中心线对齐 */
     left: 5%; /* 距离左侧屏幕宽度的5% */
     z-index: 1003; /* 确保按钮在侧边栏之上 */
     width: 50px;
@@ -485,21 +488,24 @@ body{
     }
     
     #title {
-        font-size: 56px;
-        left: 45%;
-        top: 45%;
+        font-size: 48px;
+        left: 40vw;
+        top: 40%;
         width: 80%;
-        max-width: 80%;
+        max-width: 60%;
     }
     
     #title.resources-loaded {
         animation: titleMoveMobile 0.5s 0.2s forwards;
         transform-origin: right top; /* 确保动画更平滑地向右上角移动 */
         text-align: right; /* 文本右对齐 */
+        position: fixed; /* 确保在动画后保持固定位置 */
+        padding-top: 10px; /* 减小上内边距，与动画最终状态一致 */
+        padding-bottom: 10px; /* 减小下内边距，与动画最终状态一致 */
     }
 
     #loading_text {
-        top: 50%;
+        top: 55%;
         font-size: 14px;
     }
     
