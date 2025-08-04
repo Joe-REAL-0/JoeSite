@@ -150,6 +150,7 @@
         top: 5%; /* 菜单按钮的顶部位置 */
         left: calc(100% - 5%); /* 距离右侧屏幕宽度的5% */
         transform: translateX(-100%) translateY(0); /* 水平右对齐，垂直不变 */
+        position : fixed; /* 确保在动画后保持固定位置 */
         font-size: 28px;
         color: black;
         background-color: rgba(255, 255, 255, 1);

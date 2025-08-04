@@ -499,9 +499,6 @@ body{
         animation: titleMoveMobile 0.5s 0.2s forwards;
         transform-origin: right top; /* 确保动画更平滑地向右上角移动 */
         text-align: right; /* 文本右对齐 */
-        position: fixed; /* 确保在动画后保持固定位置 */
-        padding-top: 10px; /* 减小上内边距，与动画最终状态一致 */
-        padding-bottom: 10px; /* 减小下内边距，与动画最终状态一致 */
     }
 
     #loading_text {
