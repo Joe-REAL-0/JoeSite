@@ -129,5 +129,23 @@ class Database:
     def __enter__(self):
         return self
         
+    def fetch_friend_links(self, page=0, per_page=10):
+        try:
+            offset = page * per_page
+            self.cur.execute("SELECT nickname, avatar, friend_link FROM users WHERE friend_link != '' AND friend_link IS NOT NULL LIMIT ? OFFSET ?", 
+                            (per_page, offset))
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_friend_links error: {e}")
+            return []
+            
+    def count_friend_links(self):
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM users WHERE friend_link != '' AND friend_link IS NOT NULL")
+            return self.cur.fetchone()[0]
+        except Exception as e:
+            print(f"Database count_friend_links error: {e}")
+            return 0
+            
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()

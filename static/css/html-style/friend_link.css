@@ -1,0 +1,301 @@
+/* 基础样式设置 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Custom-CN-Bold", "Arial", sans-serif;
+    height: 100vh;
+    background: url('../../images/background3.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: white;
+}
+
+.CenterContainer {
+    width: 100%;
+    height: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* 毛玻璃效果 */
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+#title {
+    margin-bottom: 30px;
+    color: white;
+    font-size: 3em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    animation: fadeIn 1.2s ease-in-out;
+    position: absolute;
+    top: 50px;
+    z-index: 1;
+}
+
+/* 友链面板样式 */
+#friend_link_panel {
+    width: 600px;
+    height: 500px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#friend_link_container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+}
+
+/* 自定义滚动条样式 */
+#friend_link_container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#friend_link_container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#friend_link_container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+
+.FriendLink {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.FriendLink:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.FriendLink img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.FriendLink .info {
+    flex: 1;
+}
+
+.FriendLink .nickname {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin: 0 0 5px 0;
+    color: gray;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.FriendLink .link {
+    font-size: 0.9em;
+    margin: 0;
+    word-break: break-all;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.FriendLink .link a {
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.FriendLink .link a:hover {
+    color: lightblue;
+    text-decoration: underline;
+}
+
+/* 添加友链按钮 */
+#add_link_button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    z-index: 10;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#add_link_button:hover {
+    transform: scale(1.1);
+    background-color: #2980b9;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+.no-links {
+    text-align: center;
+    padding: 40px 20px;
+    color: white;
+    font-size: 1.1em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 加载动画 */
+#loading {
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        padding: 20px 0;
+    }
+    
+    .CenterContainer {
+        justify-content: flex-start;
+        padding-top: 60px;
+    }
+    
+    #title {
+        font-size: 2em;
+        margin-bottom: 20px;
+        top: 20px;
+        position: fixed;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 5px 15px;
+        border-radius: 10px;
+        width: auto;
+    }
+    
+    #friend_link_panel {
+        width: 90%;
+        height: 70vh;
+        max-height: calc(100vh - 140px);
+        margin: 0 auto;
+        margin-top: 60px;
+    }
+    
+    .FriendLink {
+        flex-direction: row;
+        align-items: center;
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .FriendLink img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    
+    .FriendLink .nickname {
+        font-size: 1em;
+    }
+    
+    .FriendLink .link {
+        font-size: 0.8em;
+    }
+    
+    #add_link_button {
+        width: 40px;
+        height: 40px;
+        bottom: 15px;
+        right: 15px;
+        font-size: 20px;
+    }
+    
+    #loading {
+        padding: 10px;
+    }
+    
+    .spinner {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* 小屏幕手机适配 */
+@media (max-width: 480px) {
+    #title {
+        font-size: 1.8em;
+    }
+    
+    #friend_link_panel {
+        width: 95%;
+        height: 65vh;
+    }
+    
+    .FriendLink {
+        padding: 10px;
+    }
+    
+    .FriendLink img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .FriendLink .nickname {
+        font-size: 0.9em;
+        margin-bottom: 3px;
+    }
+    
+    .FriendLink .link {
+        font-size: 0.75em;
+    }
+}

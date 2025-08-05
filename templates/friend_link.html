@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Joe的个人小站 | 友情链接</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/friend_link.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-friend_link.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+    <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+    <script src="{{ url_for('static', filename='js/friend_link.js')}}"></script>
+</head>
+<body>
+    <div class="CenterContainer">
+        <h1 id="title">友情链接</h1>
+        <div id="friend_link_panel" class="glassmorphism">
+            <div id="friend_link_container">
+                {% if friend_links %}
+                    {% for link in friend_links %}
+                    <div class="FriendLink">
+                        <img src="{{ url_for('static', filename='images/avatars/' + link[1]) }}" alt="{{ link[0] }}的头像">
+                        <div class="info">
+                            <p class="nickname">{{ link[0] }}</p>
+                            <p class="link">
+                                {% if link[2].startswith('http://') or link[2].startswith('https://') %}
+                                <a href="{{ link[2] }}" target="_blank">{{ link[2] }}</a>
+                                {% else %}
+                                <a href="https://{{ link[2] }}" target="_blank">{{ link[2] }}</a>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-links">
+                        <p>尚未添加友情链接</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            {% if has_more %}
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>加载中...</p>
+            </div>
+            {% endif %}
+            
+            <a id="add_link_button" href="{{url_for('user_info')}}" title="添加友链">
+                <span>+</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 将Flask变量作为data属性传递给DOM元素 -->
+    <div id="flask-data" 
+         data-page="{{ page }}" 
+         data-has-more="{{ 'true' if has_more else 'false' }}">
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从DOM元素读取Flask变量
+            const flaskData = document.getElementById('flask-data');
+            const page = parseInt(flaskData.getAttribute('data-page'));
+            const hasMore = flaskData.getAttribute('data-has-more') === 'true';
+            
+            // 设置变量
+            window.currentPage = page;
+            window.hasMore = hasMore;
+        });
+    </script>
+</body>
+</html>

@@ -226,40 +226,16 @@ class ResourceLoadManager {
         const welcomeMessage4 = document.getElementById('welcome_message_4');
 
         if (welcomeMessage1 && welcomeMessage2 && welcomeMessage3 && welcomeMessage4) {
-            // 计算每个消息的实际宽度并设置CSS自定义属性
-            this.setMessageWidths([welcomeMessage1, welcomeMessage2, welcomeMessage3, welcomeMessage4]);
-            
             // 第一组：第1行和第3行同时开始
             welcomeMessage1.classList.add('welcome-start');
             welcomeMessage3.classList.add('welcome-start');
             
-            // 第二组：第2行和第4行稍晚开始（延迟300ms）
+            // 第二组：第2行和第4行稍晚开始（延迟800ms）
             setTimeout(() => {
                 welcomeMessage2.classList.add('welcome-start');
                 welcomeMessage4.classList.add('welcome-start');
             }, 800);
         }
-    }
-
-    setMessageWidths(messages) {
-        messages.forEach(message => {
-            // 创建一个临时的不可见元素来测量文本宽度
-            const tempElement = document.createElement('div');
-            tempElement.style.position = 'absolute';
-            tempElement.style.visibility = 'hidden';
-            tempElement.style.whiteSpace = 'nowrap';
-            tempElement.style.fontSize = window.getComputedStyle(message).fontSize;
-            tempElement.style.fontFamily = window.getComputedStyle(message).fontFamily;
-            tempElement.style.fontWeight = window.getComputedStyle(message).fontWeight;
-            tempElement.textContent = message.textContent;
-            
-            document.body.appendChild(tempElement);
-            const textWidth = tempElement.offsetWidth;
-            document.body.removeChild(tempElement);
-            
-            // 设置CSS自定义属性
-            message.style.setProperty('--text-width', textWidth + 'px');
-        });
     }
 }
 

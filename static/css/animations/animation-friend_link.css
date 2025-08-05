@@ -1,0 +1,102 @@
+/* 基础动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* 标题动画 */
+#title {
+    animation: fadeIn 1.5s ease-in-out, float 6s ease-in-out infinite;
+    animation-delay: 0s, 1.5s;
+}
+
+/* 面板动画 */
+#friend_link_panel {
+    animation: scaleIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) 0.2s both;
+    transform-origin: center;
+}
+
+/* 每个友情链接项目的动画 */
+.FriendLink {
+    animation: fadeIn 0.8s ease-in-out;
+    animation-fill-mode: both;
+}
+
+/* 为每个友情链接添加不同的延迟，使其依次显示 */
+.FriendLink:nth-child(1) { animation-delay: 0.4s; }
+.FriendLink:nth-child(2) { animation-delay: 0.5s; }
+.FriendLink:nth-child(3) { animation-delay: 0.6s; }
+.FriendLink:nth-child(4) { animation-delay: 0.7s; }
+.FriendLink:nth-child(5) { animation-delay: 0.8s; }
+.FriendLink:nth-child(6) { animation-delay: 0.9s; }
+.FriendLink:nth-child(7) { animation-delay: 1.0s; }
+.FriendLink:nth-child(8) { animation-delay: 1.1s; }
+.FriendLink:nth-child(9) { animation-delay: 1.2s; }
+.FriendLink:nth-child(10) { animation-delay: 1.3s; }
+
+/* 添加链接按钮的动画 */
+#add_link_button {
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.5s both;
+}
+
+#add_link_button:hover span {
+    animation: rotateIn 0.3s ease-in-out forwards;
+}
+
+@keyframes rotateIn {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(90deg);
+    }
+}
+
+/* 加载动画 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.spinner {
+    animation: spin 0.8s linear infinite;
+}
+
+/* 新加载的友链项的动画 */
+.FriendLink.new-item {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* 没有链接时的消息动画 */
+.no-links {
+    animation: fadeIn 1s ease-in-out 0.8s both;
+}

@@ -1,0 +1,82 @@
+/* 移动设备适配通用样式 */
+
+/* 针对移动设备的触摸反馈 */
+.mobile-device .FriendLink:active {
+    background-color: rgba(220, 220, 220, 0.8);
+    transform: scale(0.98);
+}
+
+.mobile-device a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* 移动设备的滚动优化 */
+.mobile-device {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* 防止输入缩放问题 */
+.mobile-device input,
+.mobile-device textarea,
+.mobile-device select {
+    font-size: 16px;
+}
+
+/* 移动设备方向适配 */
+@media (orientation: portrait) and (max-width: 768px) {
+    /* 竖屏时的样式 */
+    .mobile-device #title {
+        width: 80%;
+        text-align: center;
+        left: 10%;
+    }
+}
+
+@media (orientation: landscape) and (max-width: 768px) {
+    /* 横屏时的样式 */
+    .mobile-device #friend_link_panel {
+        height: 60vh;
+        margin-top: 50px;
+    }
+    
+    .mobile-device #title {
+        top: 10px;
+    }
+}
+
+/* 确保页面内容不会被系统UI遮挡 (特别是在iOS的PWA模式下) */
+.mobile-device {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* 提升移动设备上的滚动性能 */
+.mobile-device #friend_link_container {
+    -webkit-overflow-scrolling: touch;
+    will-change: transform;
+}
+
+/* 针对小屏幕设备的额外优化 */
+@media (max-width: 320px) {
+    .mobile-device #title {
+        font-size: 1.5em;
+    }
+    
+    .mobile-device .FriendLink .nickname {
+        font-size: 0.85em;
+    }
+    
+    .mobile-device .FriendLink .link {
+        font-size: 0.7em;
+    }
+}
+
+/* 针对平板设备的适配 */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .mobile-device #friend_link_panel {
+        width: 80%;
+    }
+}

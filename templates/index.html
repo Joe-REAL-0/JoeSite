@@ -27,26 +27,37 @@
                 <div class="ButtonIcon" style="background-color: gray;">
                     <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/oc_introduce.png' ) }}">
                 </div>
-                <a class="SideButton" href="{{ url_for('introduce') }}" >设定背景介绍</a>
+                <a class="SideButton" href="{{ url_for('introduce') }}" >角色介绍</a>
             </div>
+
             <div class="ButtonContainer">
                 <div class="ButtonIcon" style="background-color: gray;">
                     <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/diary.png' ) }}">
                 </div>
                 <a class="SideButton">日常笔记</a>
             </div>
+
             <div class="ButtonContainer">
                 <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/CouldStorage.png' ) }}">
+                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
                 </div>
-                <a class="SideButton" >私人云盘</a>
+                <a class="SideButton" >私人网盘</a>
             </div>
+            
             <div class="ButtonContainer">
                 <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/MessageWall.png' ) }}">
+                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/friend_link.png' ) }}">
+                </div>
+                <a class="SideButton" href="{{ url_for('friend_link') }}">友情链接</a>
+            </div>
+
+            <div class="ButtonContainer">
+                <div class="ButtonIcon" style="background-color: gray;">
+                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/message_wall.png' ) }}">
                 </div>
                 <a class="SideButton" href="{{ url_for('message') }}">留言墙</a>
             </div>
+            
         </div>
         <div class="InfoContainer">
             <div id="info_screen">

@@ -17,3 +17,8 @@
     font-family: 'GunShi';
     src: url('../font/GunShi.ttf');
 }
+
+@font-face {
+    font-family: 'YuanTi';
+    src: url('../font/yuanti.ttf');
+}

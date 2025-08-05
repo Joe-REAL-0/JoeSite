@@ -144,7 +144,7 @@ body{
     left: 4%;
     right: 4%;
     bottom: 4%;
-    z-index: 5;
+    z-index: 15;
 }
 
 #link_column.loaded{
@@ -267,7 +267,8 @@ body{
 }
 
 #welcome_message_1.welcome-start{
-    animation: fold-x-fit-content 0.4s 0s steps(3) forwards;
+    animation: fold-x 0.4s 0s forwards;
+    width: auto;
 }
 
 #welcome_message_2{
@@ -280,7 +281,8 @@ body{
 }
 
 #welcome_message_2.welcome-start{
-    animation: fold-x-fit-content 0.4s 0s steps(5) forwards;
+    animation: fold-x 0.4s 0s forwards;
+    width: auto;
 }
 
 #welcome_message_3{
@@ -293,7 +295,8 @@ body{
 }
 
 #welcome_message_3.welcome-start{
-    animation: fold-x-fit-content 0.5s 0s steps(8) forwards;
+    animation: fold-x 0.5s 0s forwards;
+    width: auto;
 }
 
 #welcome_message_4{
@@ -306,7 +309,8 @@ body{
 }
 
 #welcome_message_4.welcome-start{
-    animation: fold-x-fit-content 0.5s 0s steps(18) forwards;
+    animation: fold-x 0.5s 0s forwards;
+    width: auto;
 }
 
 .ButtonIcon{
@@ -345,7 +349,7 @@ body{
     padding-bottom: 10px;
     font-size: 24px;
     cursor: pointer;
-    font-family: 'LengKu';
+    font-family: 'YuanTi';
 }
 
 .SideButton:hover { 
@@ -536,6 +540,7 @@ body{
         right: auto;
         padding-top: 25px;
         padding-bottom: 25px;
+        z-index: 15;
     }
     
     .LinkContainer {

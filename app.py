@@ -7,7 +7,7 @@ from flask_mail import Mail,Message
 from random import choice
 from time import time
 import os, threading, sys, subprocess, uuid
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from werkzeug.utils import secure_filename
 from Database import Database
 
@@ -90,6 +90,38 @@ def message():
     except Exception as e:
         print(f"Error in message_wall: {e}")
         return render_template('message_wall.html',messages=[])
+        
+@app.route('/friend_link')
+def friend_link():
+    try:
+        page = request.args.get('page', 0, type=int)
+        with Database('./database.db') as db:
+            friend_links = db.fetch_friend_links(page=page)
+            friend_links = [list(link) for link in friend_links]
+            total_links = db.count_friend_links()
+            has_more = (page + 1) * 10 < total_links
+            return render_template('friend_link.html', friend_links=friend_links, 
+                                  page=page, has_more=has_more)
+    except Exception as e:
+        print(f"Error in friend_link: {e}")
+        return render_template('friend_link.html', friend_links=[], page=0, has_more=False)
+        
+@app.route('/api/friend_links')
+def api_friend_links():
+    try:
+        page = request.args.get('page', 0, type=int)
+        with Database('./database.db') as db:
+            friend_links = db.fetch_friend_links(page=page)
+            friend_links = [{"nickname": link[0], "avatar": link[1], "url": link[2]} for link in friend_links]
+            total_links = db.count_friend_links()
+            has_more = (page + 1) * 10 < total_links
+            return jsonify({
+                "friend_links": friend_links,
+                "has_more": has_more
+            })
+    except Exception as e:
+        print(f"Error in api_friend_links: {e}")
+        return jsonify({"friend_links": [], "has_more": False})
 
 @app.route('/note')
 @login_required
@@ -392,7 +424,10 @@ def send_email():
 def note_store():
     try:
         with Database('./database.db') as db:
-            current_time = datetime.now().strftime("%Y年%m月%d日 %H:%M")
+            # 创建东八区时区对象（UTC+8）
+            china_timezone = timezone(timedelta(hours=8))
+            # 获取东八区当前时间
+            current_time = datetime.now(china_timezone).strftime("%Y年%m月%d日 %H:%M")
             db.insert_message(session.get('nickname'),current_time,request.form.get('note'))
             return redirect(url_for('message'))
     except Exception as e:
@@ -416,21 +451,8 @@ def find_text():
         return jsonify({'text': 'Error reading file'}), 500
 
 def start_server():
-    """启动服务器的函数，方便重启"""
-    # 检查SSL证书目录是否存在
-    ssl_dir = os.path.join(os.path.dirname(__file__), 'SSL')
-    if not os.path.exists(ssl_dir):
-        ssl_context = None
-    else:
-        crt_path = os.path.join(ssl_dir, 'furryjoe.site.crt')
-        key_path = os.path.join(ssl_dir, 'furryjoe.site.key')
-        if os.path.exists(crt_path) and os.path.exists(key_path):
-            ssl_context = (crt_path, key_path)
-        else:
-            ssl_context = None
-    
     # 启动服务器
-    app.run(host="0.0.0.0", port=30069, debug=False, threaded=True, ssl_context=ssl_context)
+    app.run(host="0.0.0.0", port=30069, debug=False, threaded=True)
 
 if __name__ == '__main__':
     
