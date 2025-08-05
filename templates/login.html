@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/login.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-login.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </head>
 <body>
+    <div id="cover"></div>
     <div class="CenterContainer">
-        <h1 id="title">• 使用Joe通行证登录</h1>
         <form id="login_form" action="/login_checker" method="POST">
+            <h1 id="title">使用Joe通行证登录</h1>
             <input placeholder="昵称/邮箱" type="text" id="account" name="account" value="{{info[0]}}" required>
             <input placeholder="密码" type="password" id="password" name="password" value="{{info[1]}}" required>
             <p id="without_account">没有Joe通行证？<a href="{{url_for('register')}}">立即注册</a></p>

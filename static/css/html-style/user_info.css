@@ -1,0 +1,490 @@
+body{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-image: url("../../images/background3.jpg");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#cover{
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    animation: cover-show 1.2s forwards;
+    z-index: 1;
+}
+
+#title{
+    position: relative;
+    color: rgb(0, 0, 0);
+    font-size: 36px;
+    margin-top: 45px;
+    margin-bottom: 20px; /* 减小底部边距 */
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#change_password_title{
+    position: relative;
+    color: rgb(0, 0, 0);
+    font-family: 'LengKu';
+    font-size: 28px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#submit_button{
+    position: relative;
+    background-color: rgb(104, 217, 255);
+    font-size: 24px;
+    font-family: 'FengHei';
+    border-style: none;
+    cursor: pointer;
+    width: 140px;
+    height: 60px;
+    border-radius: 25px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#submit_button:hover{
+    background-color: darkblue;
+    color: white;
+}
+
+#back_button{
+    position: relative;
+    background-color: rgb(196, 196, 196);
+    font-size: 24px;
+    font-family: 'FengHei';
+    text-align: center;
+    line-height: 60px;
+    text-decoration: none;
+    color: black;
+    width: 140px;
+    height: 60px;
+    border-radius: 25px;
+    margin-top: auto;
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#back_button:hover{
+    background-color: darkgray;
+    color: white;
+}
+
+#status{
+    position: relative;
+    color: darkblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.info_row{
+    position: relative;
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+}
+
+.info_row label{
+    width: 80px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
+}
+
+.info_row span{
+    flex: 1;
+    font-size: 20px;
+    color: #555;
+    padding: 10px;
+    background-color: rgba(188, 188, 188, 0.8);
+    border-radius: 10px;
+}
+
+#current_password, #new_password, #confirm_password{
+    position: relative;
+    width: 80%;
+    height: 50px;
+    border: rgb(196,196,196) 3px solid;
+    font-size: 20px;
+    border-radius: 25px;
+    padding-left: 35px;
+    background-color: rgba(188, 188, 188, 0.8);
+    margin: 15px auto;
+    display: block;
+    box-sizing: border-box;
+}
+
+#panels_container {
+    width: 960px;
+    height: 70vh;
+    min-height: 700px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+#settings_panel {
+    width: 45%;
+    min-width: 460px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#password_panel {
+    width: 100%;
+    height: 55%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#friend_link_panel {
+    width: 100%;
+    margin-top: 25px;
+    height: auto;
+    border: 2px solid rgba(96, 96, 96, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.32);
+    border-radius: 25px;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.panel {
+    width: 45%;
+    min-width: 460px;
+    height: 100%;
+    border: 2px solid rgba(96, 96, 96, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.32);
+    border-radius: 25px;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.CenterContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    z-index: 2;
+}
+
+#avatar_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+#user_avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+#avatar_form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+#avatar_upload_label {
+    background-color: rgb(196, 196, 196);
+    color: black;
+    padding: 8px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#avatar_upload_label:hover {
+    background-color: darkgray;
+    color: white;
+}
+
+#avatar_submit {
+    background-color: rgb(104, 217, 255);
+    color: black;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#avatar_submit:hover {
+    background-color: darkblue;
+    color: white;
+}
+
+/* 响应式设计 - 在移动设备上垂直排列 */
+@media (max-width: 1024px) {
+    .CenterContainer {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+    }
+    
+    #panels_container {
+        width: 100%;
+        max-width: 480px;
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .panel {
+        width: 100%;
+        min-width: unset;
+        height: auto;
+        min-height: 400px;
+        padding: 20px 0 20px 0;
+        margin-bottom: 20px;
+        position: relative;
+    }
+    
+    #settings_panel {
+        width: 100%;
+        min-width: auto;
+    }
+    
+#password_panel, #friend_link_panel {
+    height: auto;
+    min-height: 400px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}    #cover {
+        display: none;
+    }
+}
+
+/* Friend link styles */
+#friend_link_input {
+    position: relative;
+    width: 80%;
+    height: 50px;
+    border: rgb(196,196,196) 3px solid;
+    font-size: 20px;
+    border-radius: 25px;
+    padding-left: 35px;
+    background-color: rgba(188, 188, 188, 0.8);
+    margin: 15px auto;
+    display: block;
+    box-sizing: border-box;
+}
+
+#add_friend_link_title {
+    position: relative;
+    color: rgb(0, 0, 0);
+    font-family: 'LengKu';
+    font-size: 28px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#friend_link_disclaimer {
+    width: 80%;
+    margin: 10px auto;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+}
+
+#friend_link_status {
+    width: 80%;
+    margin: 10px auto;
+    font-size: 16px;
+    color: darkblue;
+    text-align: center;
+    min-height: 20px;
+}
+
+#friend_link_submit {
+    position: relative;
+    background-color: rgb(104, 217, 255);
+    font-size: 24px;
+    font-family: 'FengHei';
+    border-style: none;
+    cursor: pointer;
+    width: 140px;
+    height: 60px;
+    border-radius: 25px;
+    margin-top: auto;
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#friend_link_submit:hover {
+    background-color: darkblue;
+    color: white;
+}
+
+@media (max-width: 1200px) {
+    #cover {
+        display: none;
+        animation: none;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        height: auto;
+        padding: 20px 0;
+    }
+    
+    .CenterContainer {
+        position: static;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 95%;
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    #title {
+        font-size: 24px;
+        left: 0;
+        margin-left: 0;
+        margin-right: 0;
+        text-align: center;
+        width: auto;
+    }
+    
+    .info_row {
+        width: 90%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .info_row label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .info_row span {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    #current_password, #new_password, #confirm_password, #friend_link_input {
+        width: 90%;
+        font-size: 16px;
+        padding-left: 20px;
+    }
+    
+    #status {
+        position: relative;
+        left: 0;
+        bottom: auto;
+        margin-top: 10px;
+        margin-bottom: 60px;
+        text-align: center;
+        width: 100%;
+    }
+    
+    #submit_button, #back_button, #friend_link_submit {
+        position: relative;
+        margin-top: 20px;
+        margin-bottom: 25px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+    
+    #friend_link_disclaimer {
+        width: 90%;
+    }
+    
+    /* 移动端头像上传优化 */
+    #avatar_container {
+        margin-bottom: 30px;
+    }
+    
+    #user_avatar {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 15px;
+    }
+    
+    #avatar_form {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    #avatar_upload_label, #avatar_submit {
+        width: 140px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 22px;
+        /* 增大点击区域 */
+        touch-action: manipulation;
+    }
+}

@@ -6,10 +6,17 @@
     }
 }
 
-@keyframes fadeIn{
-    from{
-        opacity: 0;
-    }to{
-        opacity: 1;
+@keyframes cover-show {
+    0% {
+        background: black;
+        width: 100%;
+    }
+    80% {
+        background: white;
+        width: 35%;
+    }
+    100% {
+        background: rgba(255, 255, 255, 0.8);
+        width: 35%;
     }
 }

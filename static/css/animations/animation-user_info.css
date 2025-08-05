@@ -1,0 +1,14 @@
+@keyframes cover-show {
+    0% {
+        background: black;
+        width: 100%;
+    }
+    40% {
+        background: rgb(255，255，255);
+        width: 100%; /* 调整为适应中央面板容器 */
+    }
+    100% {
+        background: rgba(255, 255, 255, 0.4);
+        width: 80%;
+    }
+}

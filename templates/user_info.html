@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <title>Joe的个人小站 | 用户信息</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/user_info.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-user_info.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <script src="{{ url_for('static',filename = 'js/user_info.js' ) }}"></script>
+</head>
+<body>
+    <div id="cover"></div>
+    <div class="CenterContainer">
+        <div id="panels_container">
+            <div id="user_info_panel" class="panel">
+                <h1 id="title">用户信息</h1>
+                <!-- 头像区域 -->
+                <div id="avatar_container">
+                    <img id="user_avatar" src="{{ url_for('static', filename='images/avatars/' + avatar) }}" alt="用户头像">
+                    <form id="avatar_form" action="/update_avatar" method="POST" enctype="multipart/form-data">
+                        <label for="avatar_upload" id="avatar_upload_label">更换头像</label>
+                        <input type="file" id="avatar_upload" name="avatar" accept="image/*" capture="user" style="display: none;">
+                        <button type="submit" id="avatar_submit">上传头像</button>
+                    </form>
+                </div>
+                <div class="info_row">
+                    <label>邮箱:</label>
+                    <span id="email">{{ user_data[0] }}</span>
+                </div>
+                <div class="info_row">
+                    <label>昵称:</label>
+                    <span id="nickname">{{ user_data[1] }}</span>
+                </div>
+                <div class="info_row">
+                    <label>注册时间:</label>
+                    <span id="register_time">{{ register_time }}</span>
+                </div>
+                <div class="info_row">
+                    <label>友链:</label>
+                    <span id="friend_link">{{ friend_link }}</span>
+                </div>
+                <a href="{{ url_for('hello') }}" id="back_button">返回首页</a>
+            </div>
+            <div id="settings_panel">
+                <div id="password_panel" class="panel">
+                    <form id="password_form" action="/update_password" method="POST">
+                        <h2 id="change_password_title">修改密码</h2>
+                        <input placeholder="当前密码" type="password" id="current_password" name="current_password" required>
+                        <input placeholder="新密码" type="password" id="new_password" name="new_password" required>
+                        <input placeholder="确认新密码" type="password" id="confirm_password" name="confirm_password" required>
+                        <p id="status">{{ status }}</p>
+                        <input id="submit_button" type="submit" value="确认修改">
+                    </form>
+                </div>
+                <div id="friend_link_panel" class="panel">    
+                    <form id="friend_link_form" action="/add_friend_link" method="POST">
+                        <h2 id="add_friend_link_title">友情链接</h2>
+                        <input placeholder="请输入友链地址" type="url" id="friend_link_input" name="friend_link" required>
+                        <p id="friend_link_status">{{ friend_link_status }}</p>
+                        <p id="friend_link_disclaimer">
+                            免责声明：您填写的链接如果包含任何非法要素，导致任何违法行为，均与本站及站长无关，责任由用户自行承担，本站会积极配合相关部门进行调查。
+                        </p>
+                        <input id="friend_link_submit" type="submit" value="保存友链">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

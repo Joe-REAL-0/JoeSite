@@ -88,6 +88,9 @@
             <div id="user_info">
                 <a id="login_link" href="{{url_for('login')}}">{{nickname|default('你尚未登录Joe通行证')}} | 点击{{status|default('进行登录')}}</a>
                 <h4 id="login_text">{{signature|default('登录Joe通行证后才可以在留言板留言！')}}</h4>
+                {% if session.get('nickname') %}
+                <a id="user_info_link" href="{{url_for('user_info')}}">查看/修改个人信息</a>
+                {% endif %}
             </div>
         </div>
     </div>
