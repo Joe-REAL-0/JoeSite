@@ -264,10 +264,15 @@ def update_password():
 
 @app.route('/login')
 def login():
-    if request.referrer and ('login' not in request.referrer or 'register' not in request.referrer):
+    # 如果是从注册页面过来的，始终重定向到首页
+    if session.get('from_register'):
+        session['next'] = url_for('hello')
+        session.pop('from_register')
+    elif request.referrer and ('login' not in request.referrer and 'register' not in request.referrer):
         session['next'] = request.referrer
     else:
         session['next'] = url_for('hello')
+    
     if (session.get('nickname')):
         logout_user()
         session.pop('nickname')
@@ -340,6 +345,7 @@ def register_checker():
                     db.update_avatar(email, "default_avatar.png")
                     email_dict.pop(email, None)
                     session['info']=[nickname,password]
+                    session['from_register'] = True
                     return redirect(url_for('login'))
         except Exception as e:
             print(f"Register checker error: {e}")
