@@ -2,7 +2,31 @@
 /.vscode
 /SSL
 /__pycache__
-app.log
+
+# 数据库文件
 database.db
-UpdateSSL.bat
+*.db
+*.sqlite
+*.sqlite3
+
+# 日志文件
+app.log
+*.log
+logs/
+
+# Python生成的文件
 *.pyc
+*.pyo
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+venv/
+env/
+ENV/
+
+# 其他
+UpdateSSL.bat
+.env
+.DS_Store
