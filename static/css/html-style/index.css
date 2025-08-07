@@ -517,8 +517,10 @@ body{
     
     #title.resources-loaded {
         animation: titleMoveMobile 0.5s 0.2s forwards;
-        transform-origin: right top; /* 确保动画更平滑地向右上角移动 */
+        /* 删除transform-origin，避免iOS上的不一致表现 */
         text-align: right; /* 文本右对齐 */
+        -webkit-animation-fill-mode: forwards; /* 确保iOS上的动画结束状态保持 */
+        animation-fill-mode: forwards;
     }
 
     #loading_text {

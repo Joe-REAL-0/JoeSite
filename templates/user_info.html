@@ -21,7 +21,7 @@
                     <img id="user_avatar" src="{{ url_for('static', filename='images/avatars/' + avatar) }}" alt="用户头像">
                     <form id="avatar_form" action="/update_avatar" method="POST" enctype="multipart/form-data">
                         <label for="avatar_upload" id="avatar_upload_label">更换头像</label>
-                        <input type="file" id="avatar_upload" name="avatar" accept="image/*" capture="user" style="display: none;">
+                        <input type="file" id="avatar_upload" name="avatar" accept="image/*" style="display: none;">
                         <button type="submit" id="avatar_submit">上传头像</button>
                     </form>
                 </div>

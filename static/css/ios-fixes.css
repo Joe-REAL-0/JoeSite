@@ -1,0 +1,45 @@
+/* iOS 设备特定样式修复 */
+
+/* 针对iOS设备的标题动画修复 */
+.ios-device #title.resources-loaded {
+    /* 确保iOS设备上的动画表现一致 */
+    -webkit-transform: none !important;
+    transform: none !important;
+    position: fixed !important;
+    
+    /* 确保动画结束状态正确保持 */
+    -webkit-animation-fill-mode: forwards !important;
+    animation-fill-mode: forwards !important;
+}
+
+/* 为iOS设备特别定制的动画 */
+@supports (-webkit-touch-callout: none) {
+    @keyframes titleMoveMobileIOS {
+        0% {
+            top: 40%;
+            right: auto;
+            left: 40vw;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: lightblue;
+            background-color: rgba(255, 255, 255, 0);
+            width: 80%;
+            max-width: 60%;
+        }
+        100% {
+            top: 5%;
+            right: 5%;
+            left: auto;
+            transform: none;
+            font-size: 28px;
+            color: black;
+            background-color: rgba(255, 255, 255, 1);
+            text-align: right;
+        }
+    }
+    
+    /* 针对iOS应用特殊动画 */
+    .ios-device #title.resources-loaded {
+        animation-name: titleMoveMobileIOS;
+    }
+}

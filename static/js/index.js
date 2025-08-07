@@ -183,7 +183,17 @@ class ResourceLoadManager {
         const loadingText = document.getElementById('loading_text');
         const mobileMenuBtn = document.getElementById('mobile_menu_btn');
         
+        // 检测是否为iOS设备
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        
         if (title && cover && loadingText) {
+            // 如果是iOS设备，添加特殊类
+            if (isIOS) {
+                title.classList.add('ios-device');
+                document.body.classList.add('ios-device');
+            }
+            
             title.classList.add('resources-loaded');
             cover.classList.add('resources-loaded');
             loadingText.classList.add('resources-loaded');

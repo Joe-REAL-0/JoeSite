@@ -80,3 +80,15 @@
         width: 80%;
     }
 }
+
+/* iOS设备特定修复 */
+@supports (-webkit-touch-callout: none) {
+    /* 针对iOS设备的特殊处理 */
+    #title.resources-loaded {
+        transform: none !important; /* 确保不使用transform */
+        -webkit-backface-visibility: hidden; /* 减少iOS上的渲染问题 */
+        backface-visibility: hidden;
+        -webkit-perspective: 1000; /* 提高iOS上的动画性能 */
+        perspective: 1000;
+    }
+}
