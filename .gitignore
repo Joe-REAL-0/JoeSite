@@ -31,6 +31,7 @@ ENV/
 /db_control/
 UpdateSSL.bat
 UpdateDB.bat
+UpdateEnv.bat
 create_admin.py
 
 .env
