@@ -3,43 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Joe的个人小站 | 档案馆</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/oc_introduce.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-oc_introduce.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
     <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+    <script src="{{ url_for('static', filename='js/oc_introduce.js')}}"></script>
 </head>
 <body>
     <div class="CenterContainer">
-        <h1 id="title">• 档案馆</h1>
-        <div class="MainContainer">
+        <h1 id="title">档案馆</h1>
+        <button id="sidebar-toggle" aria-label="切换侧边栏">
+            ☰
+        </button>
+        <div id="oc_introduce_panel" class="glassmorphism">
             <div id="sidebar">
-                <ul>
+                <ul id="title-list">
                     {% for title in titleList %}
-                    <li class="TextTitle" onclick="showInfo('{{loop.index}} {{title}}')">{{title}}</li>
+                    <li class="TextTitle" data-title="{{loop.index}} {{title}}">{{title}}</li>
                     {% endfor %}
                 </ul>
             </div>
-            <div id="output"></div>
+            <div id="content-container">
+                <div id="output"></div>
+            </div>
         </div>
     </div>
-    <script>
-        function showInfo(item) {
-            fetch('/find_text', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ textType:'oc_introduce',title : item })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('output').innerText = data.text;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
 </body>
 </html>

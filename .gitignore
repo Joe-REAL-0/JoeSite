@@ -27,6 +27,11 @@ env/
 ENV/
 
 # 其他
+/db_backup/
+/db_control/
 UpdateSSL.bat
+UpdateDB.bat
+create_admin.py
+
 .env
 .DS_Store

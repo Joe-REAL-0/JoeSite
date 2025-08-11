@@ -18,6 +18,7 @@ class Database:
             self.cur = self.conn.cursor()
             self.cur.execute("CREATE TABLE IF NOT EXISTS users (email TEXT,nickname TEXT,password TEXT,avatar TEXT,friend_link TEXT)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS messages (nickname TEXT,time TEXT,content TEXT,UNIQUE(nickname,time))")
+            self.cur.execute("CREATE TABLE IF NOT EXISTS oc_introduces (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, order_id INTEGER, UNIQUE(title))")
             # 检查并升级现有的用户表，添加avatar列
             try:
                 self.cur.execute("SELECT avatar FROM users LIMIT 1")
@@ -146,6 +147,107 @@ class Database:
         except Exception as e:
             print(f"Database count_friend_links error: {e}")
             return 0
+    
+    def insert_oc_introduce(self, title, content, order_id):
+        try:
+            self.cur.execute("INSERT OR REPLACE INTO oc_introduces (title, content, order_id) VALUES (?, ?, ?)",
+                          (title, content, order_id))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database insert_oc_introduce error: {e}")
+            self.conn.rollback()
+            return False
+            
+    def fetch_oc_introduces(self):
+        try:
+            self.cur.execute("SELECT title, order_id FROM oc_introduces ORDER BY order_id")
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_oc_introduces error: {e}")
+            return []
+            
+    def fetch_oc_introduce_by_title(self, title):
+        try:
+            self.cur.execute("SELECT content FROM oc_introduces WHERE title=?", (title,))
+            result = self.cur.fetchone()
+            if result:
+                return result[0]
+            return None
+        except Exception as e:
+            print(f"Database fetch_oc_introduce_by_title error: {e}")
+            return None
             
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
+        
+    # 管理模块所需的方法
+    def fetch_all_users(self):
+        """获取所有用户信息"""
+        try:
+            self.cur.execute("SELECT email, nickname, avatar, friend_link FROM users")
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_all_users error: {e}")
+            return []
+            
+    def delete_user(self, email):
+        """删除指定用户"""
+        try:
+            self.cur.execute("DELETE FROM users WHERE email=?", (email,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database delete_user error: {e}")
+            self.conn.rollback()
+            return False
+            
+    def update_user_info(self, email, nickname):
+        """更新用户信息"""
+        try:
+            self.cur.execute("UPDATE users SET nickname=? WHERE email=?", (nickname, email))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database update_user_info error: {e}")
+            self.conn.rollback()
+            return False
+            
+    def fetch_all_messages(self):
+        """获取所有留言"""
+        try:
+            # 为管理目的，我们需要一个唯一标识符，因此我们使用ROWID
+            self.cur.execute("SELECT ROWID, nickname, time, content FROM messages ORDER BY time DESC")
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_all_messages error: {e}")
+            return []
+            
+    def delete_message(self, message_id):
+        """删除指定留言"""
+        try:
+            self.cur.execute("DELETE FROM messages WHERE ROWID=?", (message_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database delete_message error: {e}")
+            self.conn.rollback()
+            return False
+            
+    def count_users(self):
+        """统计用户数量"""
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM users")
+            return self.cur.fetchone()[0]
+        except Exception as e:
+            print(f"Database count_users error: {e}")
+            return 0
+            
+    def count_messages(self):
+        """统计留言数量"""
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM messages")
+            return self.cur.fetchone()[0]
+        except Exception as e:
+            print(f"Database count_messages error: {e}")
+            return 0

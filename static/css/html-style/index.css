@@ -22,50 +22,66 @@ body{
     animation: fadeOut 0.4s 0.2s forwards;
 }
 
+#title_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 垂直居中排列子元素 */
+    align-items: center; /* 水平居中排列子元素 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: auto;
+    min-height: 120px; /* 确保容器有足够高度容纳两个元素 */
+    z-index: 1001;
+    opacity: 0;
+    animation: slideIn 0.5s forwards; /* 添加动画效果 */
+}
+
 #title {
-    position: fixed; /* 修改为固定定位，使其跟随视窗滚动 */
+    position: relative; /* 修改为相对定位，使其能够正确响应flex布局 */
     padding: 15px;
     width: 100%;
-    max-width: 560px;
+    max-width: 640px;
     border-radius: 25px;
     background-color: rgba(255, 255, 255, 0);
     color: lightblue;
     text-align: center;
     white-space: nowrap;
     font-family: 'valorax';
-    top: 45%;
-    left: 48%;
-    transform: translate(-50%, -50%);
     font-size: 96px;
-    opacity: 0;
-    animation: slideIn 0.4s 0.1s forwards;
+    margin: 0;
     z-index: 1001; /* 确保title在cover上面 */
+}
+
+#loading_text {
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 24px;
+    max-height: 30px;
+    width: 100%;
+    color: lightblue;
+    opacity: 0;
+    animation: fadeIn 0.3s 0.5s forwards;
+    z-index: 1001; /* 确保loading_text在cover上面 */
 }
 
 #title.resources-loaded {
     opacity: 1;
-    animation: titleMove 0.5s 0.2s forwards;
-    position: fixed; /* 确保动画结束后保持固定位置 */
+    animation: titleZoom 0.5s 0.2s forwards;
 }
 
-#loading_text {
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    text-align: center;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 24px;
-    color: lightblue;
-    opacity: 0;
-    animation: fadeIn 0.4s 0s forwards;
-    z-index: 1001; /* 确保loading_text在cover上面 */
+#title_container.resources-loaded {
+    opacity: 1;
+    animation: titleMove 0.4s 0.2s forwards;
 }
 
 #loading_text.resources-loaded {
     opacity: 1;
-    animation: fadeOut 0.8s 0.2s forwards;
+    animation: fadeOut 0.2s 0s forwards;
 }
 
 #main_screen {
@@ -361,8 +377,8 @@ body{
 .mobile-menu-btn {
     display: none;
     position: fixed;
-    top: calc(5% + 4px); /* 调整垂直位置，使其与标题文字中心线对齐 */
-    left: 5%; /* 距离左侧屏幕宽度的5% */
+    top: 6%;
+    left: 12%; /* 距离左侧屏幕宽度的5% */
     z-index: 1003; /* 确保按钮在侧边栏之上 */
     width: 50px;
     height: 50px;
@@ -400,6 +416,7 @@ body{
 @media screen and (max-width: 768px) {
     .mobile-menu-btn {
         display: flex;
+        transform: translate(-50%, -50%);
         z-index: 999; /* 初始z-index低于cover */
     }
     
@@ -506,25 +523,23 @@ body{
     #welcome_message_4 {
         font-size: 18px;
     }
-    
+
     #title {
         font-size: 48px;
-        left: 40vw;
-        top: 40%;
-        width: 80%;
-        max-width: 60%;
+        width: 100%;
+        padding: 10px 25px;
+        text-align: center;
     }
     
     #title.resources-loaded {
-        animation: titleMoveMobile 0.5s 0.2s forwards;
-        /* 删除transform-origin，避免iOS上的不一致表现 */
-        text-align: right; /* 文本右对齐 */
-        -webkit-animation-fill-mode: forwards; /* 确保iOS上的动画结束状态保持 */
-        animation-fill-mode: forwards;
+        animation: titleZoomMobile 0.5s 0.2s forwards;
+    }
+
+    #title_container.resources-loaded {
+        animation: titleMoveMobile 0.4s 0.2s forwards;
     }
 
     #loading_text {
-        top: 55%;
         font-size: 14px;
     }
     

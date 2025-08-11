@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Joe的个人小站 | 管理面板</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/manage.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-manage.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+    <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+    <script src="{{ url_for('static', filename='js/manage.js')}}"></script>
+</head>
+<body>
+    <div class="CenterContainer">
+        <h1 id="title">管理面板</h1>
+        <button id="sidebar-toggle" aria-label="切换侧边栏">
+            ☰
+        </button>
+        <div id="manage_panel" class="glassmorphism">
+            <div id="sidebar">
+                <ul id="section-list">
+                    <li class="SectionTitle" data-section="users">用户管理 <span class="count">({{ users_count }})</span></li>
+                    <li class="SectionTitle" data-section="messages">留言管理 <span class="count">({{ messages_count }})</span></li>
+                    <li class="SectionTitle" data-section="oc_introduces">档案馆管理</li>
+                </ul>
+            </div>
+            <div id="content-container">
+                <!-- 用户管理区域 -->
+                <div id="users-section" class="section-content">
+                    <h2>用户管理</h2>
+                    <div class="search-box">
+                        <input type="text" id="user-search" placeholder="搜索用户...">
+                    </div>
+                    <div class="table-container">
+                        <table id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>昵称</th>
+                                    <th>头像</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 将由JavaScript填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 用户留言管理区域 -->
+                <div id="messages-section" class="section-content">
+                    <h2>留言管理</h2>
+                    <div class="search-box">
+                        <input type="text" id="message-search" placeholder="搜索留言...">
+                    </div>
+                    <div class="table-container">
+                        <table id="messages-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>昵称</th>
+                                    <th>时间</th>
+                                    <th>内容</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 将由JavaScript填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 档案馆管理区域 -->
+                <div id="oc_introduces-section" class="section-content">
+                    <h2>档案馆管理</h2>
+                    <div class="actions">
+                        <button id="add-oc" class="action-button">添加新条目</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="oc-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>标题</th>
+                                    <th>排序</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 将由JavaScript填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 编辑用户模态框 -->
+    <div id="edit-user-modal" class="modal">
+        <div class="modal-content glassmorphism">
+            <span class="close">&times;</span>
+            <h2>编辑用户</h2>
+            <form id="edit-user-form">
+                <input type="hidden" id="edit-user-email">
+                <div class="form-group">
+                    <label for="edit-user-nickname">昵称</label>
+                    <input type="text" id="edit-user-nickname" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">保存</button>
+                </div>
+            </form>
+            <h3>用户留言</h3>
+            <div class="user-messages-container">
+                <table id="user-messages-table">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>内容</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 将由JavaScript填充 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 编辑档案馆条目模态框 -->
+    <div id="edit-oc-modal" class="modal">
+        <div class="modal-content glassmorphism">
+            <span class="close">&times;</span>
+            <h2 id="oc-modal-title">编辑档案馆条目</h2>
+            <form id="edit-oc-form">
+                <input type="hidden" id="edit-oc-id">
+                <div class="form-group">
+                    <label for="edit-oc-title">标题</label>
+                    <input type="text" id="edit-oc-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-oc-order">排序序号</label>
+                    <input type="number" id="edit-oc-order" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="edit-oc-content">内容</label>
+                    <textarea id="edit-oc-content" rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

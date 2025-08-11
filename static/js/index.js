@@ -178,6 +178,7 @@ class ResourceLoadManager {
     }
 
     triggerAnimation() {
+        const title_container = document.getElementById('title_container');
         const title = document.getElementById('title');
         const cover = document.getElementById('cover');
         const loadingText = document.getElementById('loading_text');
@@ -193,7 +194,8 @@ class ResourceLoadManager {
                 title.classList.add('ios-device');
                 document.body.classList.add('ios-device');
             }
-            
+
+            title_container.classList.add('resources-loaded');
             title.classList.add('resources-loaded');
             cover.classList.add('resources-loaded');
             loadingText.classList.add('resources-loaded');

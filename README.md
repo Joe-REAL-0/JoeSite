@@ -1,6 +1,6 @@
 # Joe_Site
 
-这是我的个人网站项目，前端使用 HTML 和 CSS 从零开始开发，后端采用 Python 的 Flask 框架进行路由配置。
+这是我的个人网站项目，前端使用 HTML 和 CSS + JavaScript，从零开始开发，后端采用 Python 的 Flask 框架进行路由配置。
 
 ## 技术栈
 
@@ -25,14 +25,22 @@ Joe_Site/
     ```
 2. 运行项目：
     ```bash
-    python app.py
+    python app.py 
     ```
-3. 在浏览器访问 `http://localhost:30069`
+
+    或者
+    ```bash
+    python wsgi.py 
+    ```
+3. 在浏览器访问 
+- 主程序:`http://localhost:30069`
+- wsgi:`http://localhost:5000`
 
 ## 功能介绍
 
 - 可以查看Joe的oc背景介绍
 - 具备注册账号以及登陆的功能
+- 用户可以上传头像以及自助添加友情链接
 - 登陆后的用户可以在留言墙上留言
-- 其中有四个个人链接
+- 其中有五个个人链接
 - 更多功能有待开发

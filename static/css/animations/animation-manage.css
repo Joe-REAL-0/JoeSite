@@ -1,0 +1,103 @@
+/* 动画效果定义 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 为各个元素应用动画 */
+#title {
+    animation: fadeIn 1s ease-out;
+}
+
+#manage_panel {
+    animation: fadeIn 1.5s ease-out;
+}
+
+.section-content {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.section-content.active {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 表格行的进入动画 */
+tbody tr {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* 为不同行设置不同的动画延迟，创建连续进入效果 */
+tbody tr:nth-child(1) { animation-delay: 0.1s; }
+tbody tr:nth-child(2) { animation-delay: 0.2s; }
+tbody tr:nth-child(3) { animation-delay: 0.3s; }
+tbody tr:nth-child(4) { animation-delay: 0.4s; }
+tbody tr:nth-child(5) { animation-delay: 0.5s; }
+tbody tr:nth-child(6) { animation-delay: 0.6s; }
+tbody tr:nth-child(7) { animation-delay: 0.7s; }
+tbody tr:nth-child(8) { animation-delay: 0.8s; }
+tbody tr:nth-child(9) { animation-delay: 0.9s; }
+tbody tr:nth-child(10) { animation-delay: 1s; }
+
+/* 按钮悬停效果 */
+.action-btn, .submit-btn, .action-button {
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover, .submit-btn:hover, .action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 侧边栏选项的动画效果 */
+.SectionTitle {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.SectionTitle:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #7df9ff;
+    transition: width 0.3s ease;
+}
+
+.SectionTitle:hover:after {
+    width: 100%;
+}
