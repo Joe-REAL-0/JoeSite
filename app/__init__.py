@@ -2,6 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 import os
+from dotenv import load_dotenv
 
 from app.auth import auth as auth_blueprint
 from app.main import main as main_blueprint
@@ -11,6 +12,9 @@ from app.manage import manage as manage_blueprint
 
 from app.auth import email_dict, legal_characters
 from app.auth import User, load_user
+
+# Load environment variables from a .env file
+load_dotenv()
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.secret_key = 'ThisIsJoeSite'
@@ -23,8 +27,8 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 # 配置邮件服务
 app.config['MAIL_SERVER'] = 'smtp.qq.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = '2018168257@qq.com'
-app.config['MAIL_PASSWORD'] = 'qtseurfshczydiid'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USE_TLS'] = False
 mail = Mail(app)

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, jsonif
 from flask_login import login_required, current_user
 from database import Database
 from functools import wraps
+import os
 
 manage = Blueprint('manage', __name__)
 
@@ -10,7 +11,7 @@ def admin_required(f):
     @wraps(f)
     @login_required  # 确保用户已经登录
     def decorated_function(*args, **kwargs):
-        if current_user.email != "2018168257@qq.com":
+        if current_user.email != os.getenv('ADMIN_EMAIL'):
             return redirect(url_for('main.hello'))
         return f(*args, **kwargs)
     return decorated_function
