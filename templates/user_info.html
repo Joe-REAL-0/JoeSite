@@ -3,67 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Joe的个人小站">
+    <meta name="format-detection" content="telephone=no">
     <title>Joe的个人小站 | 用户信息</title>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/user_info.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-user_info.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
-    <script src="{{ url_for('static',filename = 'js/user_info.js' ) }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+    <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+    <script src="{{ url_for('static', filename='js/user_info.js')}}"></script>
 </head>
 <body>
-    <div id="cover"></div>
     <div class="CenterContainer">
-        <div id="panels_container">
-            <div id="user_info_panel" class="panel">
-                <h1 id="title">用户信息</h1>
-                <!-- 头像区域 -->
-                <div id="avatar_container">
-                    <img id="user_avatar" src="{{ url_for('static', filename='images/avatars/' + avatar) }}" alt="用户头像">
-                    <form id="avatar_form" action="/update_avatar" method="POST" enctype="multipart/form-data">
-                        <label for="avatar_upload" id="avatar_upload_label">更换头像</label>
-                        <input type="file" id="avatar_upload" name="avatar" accept="image/*" style="display: none;">
-                        <button type="submit" id="avatar_submit">上传头像</button>
-                    </form>
+        <h1 id="title">用户中心</h1>
+        <button id="sidebar-toggle" aria-label="切换侧边栏" aria-expanded="false" aria-controls="sidebar">
+            ☰
+        </button>
+        <div id="user_panel" class="glassmorphism">
+            <div id="sidebar" role="navigation" aria-label="用户设置导航">
+                <ul id="section-list" role="menubar">
+                    <li class="SectionTitle" data-section="profile" role="menuitem" tabindex="0">个人信息</li>
+                    <li class="SectionTitle" data-section="avatar" role="menuitem" tabindex="0">更换头像</li>
+                    <li class="SectionTitle" data-section="password" role="menuitem" tabindex="0">修改密码</li>
+                    <li class="SectionTitle" data-section="nickname" role="menuitem" tabindex="0">修改昵称</li>
+                    <li class="SectionTitle" data-section="email" role="menuitem" tabindex="0">修改邮箱</li>
+                    <li class="SectionTitle" data-section="friendlink" role="menuitem" tabindex="0">友情链接</li>
+                </ul>
+                <div class="sidebar-footer">
+                    <a href="{{ url_for('main.hello') }}" id="back_button">返回首页</a>
                 </div>
-                <div class="info_row">
-                    <label>邮箱:</label>
-                    <span id="email">{{ user_data[0] }}</span>
-                </div>
-                <div class="info_row">
-                    <label>昵称:</label>
-                    <span id="nickname">{{ user_data[1] }}</span>
-                </div>
-                <div class="info_row">
-                    <label>注册时间:</label>
-                    <span id="register_time">{{ register_time }}</span>
-                </div>
-                <div class="info_row">
-                    <label>友链:</label>
-                    <span id="friend_link">{{ friend_link }}</span>
-                </div>
-                <a href="{{ url_for('main.hello') }}" id="back_button">返回首页</a>
             </div>
-            <div id="settings_panel">
-                <div id="password_panel" class="panel">
+            <div id="content-container">
+                <!-- 个人信息区域 -->
+                <div id="profile-section" class="section-content">
+                    <h2>个人信息</h2>
+                    <div class="profile-info-container">
+                        <div class="profile-avatar">
+                            <img id="profile_avatar" src="{{ url_for('static', filename='images/avatars/' + current_user.avatar) }}" alt="用户头像">
+                        </div>
+                        <div class="profile-details">
+                            <div class="info-item">
+                                <label>邮箱:</label>
+                                <span id="profile-email">{{ current_user.email }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>昵称:</label>
+                                <span id="profile-nickname">{{ current_user.nickname }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>注册时间:</label>
+                                <span id="profile-register-time">{{ current_user.register_time }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>友情链接:</label>
+                                <span id="profile-friend-link">{{ current_user.friend_link }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 修改密码区域 -->
+                <div id="password-section" class="section-content">
+                    <h2>修改密码</h2>
                     <form id="password_form" action="/update_password" method="POST">
-                        <h2 id="change_password_title">修改密码</h2>
-                        <input placeholder="当前密码" type="password" id="current_password" name="current_password" required>
-                        <input placeholder="新密码" type="password" id="new_password" name="new_password" required>
-                        <input placeholder="确认新密码" type="password" id="confirm_password" name="confirm_password" required>
-                        <p id="status">{{ status }}</p>
-                        <input id="submit_button" type="submit" value="确认修改">
+                        <div class="form-group">
+                            <label for="current_password">当前密码</label>
+                            <input type="password" id="current_password" name="current_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password">新密码</label>
+                            <input type="password" id="new_password" name="new_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">确认新密码</label>
+                            <input type="password" id="confirm_password" name="confirm_password" required>
+                        </div>
+                        <div id="password-status" class="status-message">{{ status }}</div>
+                        <div class="form-group">
+                            <button type="submit" class="submit-btn">修改密码</button>
+                        </div>
                     </form>
                 </div>
-                <div id="friend_link_panel" class="panel">    
-                    <form id="friend_link_form" action="/add_friend_link" method="POST">
-                        <h2 id="add_friend_link_title">友情链接</h2>
-                        <input placeholder="请输入友链地址" type="url" id="friend_link_input" name="friend_link" required>
-                        <p id="friend_link_status">{{ friend_link_status }}</p>
-                        <p id="friend_link_disclaimer">
-                            免责声明：您填写的链接如果包含任何非法要素，导致任何违法行为，均与本站及站长无关，责任由用户自行承担，本站会积极配合相关部门进行调查。
-                        </p>
-                        <input id="friend_link_submit" type="submit" value="保存友链">
+                
+                <!-- 修改昵称区域 -->
+                <div id="nickname-section" class="section-content">
+                    <h2>修改昵称</h2>
+                    <form id="nickname_form" action="/update_nickname" method="POST">
+                        <div class="form-group">
+                            <label for="current_nickname">当前昵称</label>
+                            <input type="text" id="current_nickname" value="{{ current_user.nickname }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_nickname">新昵称</label>
+                            <input type="text" id="new_nickname" name="new_nickname" required>
+                        </div>
+                        <div id="nickname-status" class="status-message"></div>
+                        <div class="form-group">
+                            <button type="submit" class="submit-btn">修改昵称</button>
+                        </div>
                     </form>
+                </div>
+                
+                <!-- 修改邮箱区域 -->
+                <div id="email-section" class="section-content">
+                    <h2>修改邮箱</h2>
+                    <form id="email_form" action="/update_email" method="POST">
+                        <div class="form-group">
+                            <label for="current_email">当前邮箱</label>
+                            <input type="email" id="current_email" value="{{ current_user.email }}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_email">新邮箱</label>
+                            <input type="email" id="new_email" name="new_email" required>
+                        </div>
+                        <div class="form-group verification-group">
+                            <label for="verification_code">验证码</label>
+                            <div class="code-input-container">
+                                <input type="text" id="verification_code" name="verification_code" required>
+                                <button type="button" id="send_code_btn" class="code-btn">获取验证码</button>
+                            </div>
+                            <div class="verification-tip">验证码将发送至新邮箱，请确保您能访问该邮箱</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password_for_email">当前密码</label>
+                            <input type="password" id="password_for_email" name="password" required>
+                        </div>
+                        <div id="email-status" class="status-message">{{ email_status }}</div>
+                        <div class="form-group">
+                            <button type="submit" class="submit-btn">修改邮箱</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- 友情链接区域 -->
+                <div id="friendlink-section" class="section-content">
+                    <h2>友情链接</h2>
+                    <form id="friend_link_form" action="/add_friend_link" method="POST">
+                        <div class="form-group">
+                            <label for="friend_link_input">友链地址</label>
+                            <input type="url" id="friend_link_input" name="friend_link" value="{{ current_user.friend_link }}" required>
+                        </div>
+                        <div id="friend-link-status" class="status-message">{{ friend_link_status }}</div>
+                        <div class="disclaimer">
+                            <p>免责声明：您填写的链接如果包含任何非法要素，导致任何违法行为，均与本站及站长无关，责任由用户自行承担，本站会积极配合相关部门进行调查。</p>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="submit-btn">保存友链</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- 更换头像区域 -->
+                <div id="avatar-section" class="section-content">
+                    <h2>更换头像</h2>
+                    <div class="avatar-container">
+                        <div class="current-avatar">
+                            <img id="user_avatar" src="{{ url_for('static', filename='images/avatars/' + avatar) }}" alt="用户头像">
+                        </div>
+                        <form id="avatar_form" action="/update_avatar" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="avatar_upload" id="avatar_upload_label" class="file-upload-btn">选择新头像</label>
+                                <input type="file" id="avatar_upload" name="avatar" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" capture="environment" style="display: none;">
+                                <span id="file-selected">未选择文件</span>
+                            </div>
+                            <div id="avatar-status" class="status-message"></div>
+                            <div class="form-group">
+                                <button type="submit" id="avatar_submit" class="submit-btn">上传头像</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,25 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Joe的个人小站 | 留言墙</title>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/message_wall.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-message_wall.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
     <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+    <script src="{{ url_for('static', filename='js/message_wall.js')}}"></script>
 </head>
 <body>
     <div class="CenterContainer">
-        <h1 id="title">• 留言墙</h1>
-        <div id="message_list">
-            {% for message in messages %}
-            <div class="Message">
-                <p class="nickname">{{ message[0] }}</p>
-                <p class="date">{{ message[1] }}</p>
-                <p class="content">{{ message[2] }}</p>
+        <h1 id="title">留言墙</h1>
+        <div id="message_wall_panel" class="glassmorphism">
+            <div id="user_avatar_bar">
+                {% if users %}
+                    {% for user in users %}
+                    <div class="UserAvatar {% if loop.first %}active{% endif %}" data-username="{{ user[0] }}">
+                        <img src="{{ url_for('static', filename='images/avatars/' + user[1]) }}" alt="{{ user[0] }}的头像">
+                        <span class="username">{{ user[0] }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-users">
+                        <p>暂无留言用户</p>
+                    </div>
+                {% endif %}
             </div>
-            {% endfor %}
+            
+            <div id="message_container">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="Message" data-username="{{ message[0] }}" data-time="{{ message[1] }}" {% if users and users|length > 0 and message[0] != users[0][0] %}style="display: none;"{% endif %}>
+                            <div class="message-header">
+                                <p class="date">{{ message[1] }}</p>
+                            </div>
+                            <p class="content">{{ message[2] }}</p>
+                            <div class="message-actions">
+                                <button class="like-button {% if message[5] %}liked{% endif %}" data-message-id="{{ loop.index }}" data-nickname="{{ message[0] }}" data-time="{{ message[1] }}">
+                                    <span class="like-icon">❤</span>
+                                    <span class="like-count">{{ message[3] }}</span>
+                                </button>
+                                <button class="comment-button" data-message-id="{{ loop.index }}" data-nickname="{{ message[0] }}" data-time="{{ message[1] }}">
+                                    <span class="comment-icon">💬</span>
+                                    <span class="comment-count">{{ message[4] }}</span>
+                                </button>
+                                {% if is_logged_in and current_user.nickname == message[0] %}
+                                <button class="delete-button" data-message-id="{{ loop.index }}" data-nickname="{{ message[0] }}" data-time="{{ message[1] }}">
+                                    <span class="delete-icon">🗑️</span>
+                                    <span>删除</span>
+                                </button>
+                                {% endif %}
+                            </div>
+                            <div class="comments-container" id="comments-{{ loop.index }}">
+                                <!-- 评论将通过JavaScript动态添加 -->
+                            </div>
+                            <div class="comment-form" id="comment-form-{{ loop.index }}">
+                                <input type="text" class="comment-input" placeholder="写下你的评论...">
+                                <button class="submit-comment" data-nickname="{{ message[0] }}" data-time="{{ message[1] }}">发送</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-messages">
+                        <p>尚未有留言</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <a id="add_message_button" href="{{url_for('main.note')}}" title="写留言">
+                <span>+</span>
+            </a>
         </div>
-        <a id="note_link" href="{{url_for('main.note')}}">写留言</a>
+    </div>
+    
+    <!-- 将Flask变量作为data属性传递给DOM元素 -->
+    <div id="flask-data" 
+         data-messages='{{ messages|tojson|safe }}' 
+         data-users='{{ users|tojson|safe if users else "[]" }}'
+         data-is-logged-in='{{ is_logged_in|tojson|safe }}'>
+    </div>
+    
+    <!-- 登录提示模态框 -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content glassmorphism">
+            <h2>请先登录</h2>
+            <p>您需要登录后才能进行点赞和评论操作</p>
+            <div class="modal-buttons">
+                <a href="{{ url_for('auth.login') }}" class="login-btn">去登录</a>
+                <button class="cancel-btn">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 删除确认模态框 -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content glassmorphism">
+            <h2>确认删除</h2>
+            <p>您确定要删除这条留言吗？删除后将无法恢复。</p>
+            <div class="modal-buttons">
+                <button class="confirm-delete-btn">删除</button>
+                <button class="cancel-delete-btn">取消</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>

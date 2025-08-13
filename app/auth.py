@@ -20,10 +20,13 @@ legal_characters = ['A', 'B', 'C', 'D',
 ]
 
 class User(UserMixin):
-    def __init__(self, email, nickname, password):
+    def __init__(self, email, nickname, password, register_time=None, avatar=None, friend_link=None):
         self.email = email
         self.nickname = nickname
         self.password = password
+        self.register_time = register_time
+        self.avatar = avatar or "default_avatar.png"
+        self.friend_link = friend_link or "尚未添加友链"
     
     def get_id(self):
         return self.email
@@ -32,7 +35,11 @@ def load_user(email):
     with Database('./database.db') as db:
         userData = db.fetch(email)
         if userData:
-            return User(userData[0], userData[1], userData[2])
+            # 注意: userData[5] 是 register_time 字段 (email, nickname, password, avatar, friend_link, register_time)
+            register_time = userData[5] if len(userData) > 5 else None
+            avatar = userData[3] if len(userData) > 3 and userData[3] else "default_avatar.png"
+            friend_link = userData[4] if len(userData) > 4 and userData[4] else ""
+            return User(userData[0], userData[1], userData[2], register_time, avatar, friend_link)
     return None
 
 # 清理过期验证码
@@ -119,8 +126,10 @@ def register_checker():
                 elif db.fetch(nickname):
                     status="昵称已被注册"
                 else:
-                    # 添加用户
-                    db.insert(email, password, nickname)
+                    # 添加用户，记录东八区（UTC+8）的注册时间
+                    from app.utils import get_china_time
+                    register_time = get_china_time()
+                    db.insert(email, password, nickname, register_time)
                     # 更新头像字段
                     db.update_avatar(email, "default_avatar.png")
                     email_dict.pop(email, None)

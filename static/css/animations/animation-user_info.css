@@ -1,14 +1,44 @@
-@keyframes cover-show {
+@keyframes fadeIn {
     0% {
-        background: black;
-        width: 100%;
-    }
-    40% {
-        background: rgb(255，255，255);
-        width: 100%; /* 调整为适应中央面板容器 */
+        opacity: 0;
+        transform: translateY(20px);
     }
     100% {
-        background: rgba(255, 255, 255, 0.4);
-        width: 80%;
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
     }
 }

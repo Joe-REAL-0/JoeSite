@@ -3,19 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <title>Joe的个人小站 | 留言</title>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/note.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-note.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+
+    <script src="{{ url_for('static', filename='js/note.js') }}"></script>
 </head>
 <body>
     <div class="CenterContainer">
-        <h1 id="title">• {{nickname}},欢迎留言</h1>
-        <form id="note_form" action="/note_store" method="POST">
-            <textarea id="input_area" name="note" placeholder="在这里输入留言文本..."></textarea>
-            <input id="submit_button" type="submit" value="提交">
-        </form>
+        <h1 id="title">{{nickname}},欢迎留言</h1>
+        <div id="note_panel" class="glassmorphism">
+            <div id="user_message_count">
+                <p>你已经发表了 
+                    <span id="user_message_count_value">0</span>/5 条留言</p>
+                <p>请注意，超出限制的留言不会被记录</p>
+            </div>
+            <form id="note_form" action="/note_store" method="POST">
+                <textarea id="input_area" name="note" placeholder="在这里输入留言文本..." maxlength="200"></textarea>
+                <div class="char-counter">
+                    <span id="char_count">0</span>/200
+                </div>
+                <input id="submit_button" type="submit" value="提交留言">
+            </form>
+            <a href="{{url_for('message.message_wall')}}" id="back_button" title="返回留言墙">
+                <span>←</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 将用户消息数据作为data属性传递给DOM元素 -->
+    <div id="flask-data" 
+         data-user-message-count="{{ user_message_count }}">
     </div>
 </body>
 </html>

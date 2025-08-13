@@ -73,7 +73,9 @@ def diary():
 @main.route('/note')
 @login_required
 def note():
-    return render_template('note.html', nickname=session.get('nickname'))
+    db = Database('./database.db')
+    nickname = session.get('nickname')
+    return render_template('note.html', nickname=nickname, user_message_count=db.count_user_messages(nickname))
 
 @main.route('/find_text', methods=['POST'])
 def find_text():

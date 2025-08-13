@@ -29,6 +29,7 @@ ENV/
 # 其他
 /db_backup/
 /db_control/
+/static/images/avatars
 UpdateSSL.bat
 UpdateDB.bat
 UpdateEnv.bat

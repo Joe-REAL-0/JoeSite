@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
+from dotenv import load_dotenv
 from flask_login import login_required, current_user
 from database import Database
 from functools import wraps
 import os
 
 manage = Blueprint('manage', __name__)
+load_dotenv()
 
 # 装饰器：检查当前用户是否是管理员账号
 def admin_required(f):

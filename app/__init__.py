@@ -13,7 +13,6 @@ from app.manage import manage as manage_blueprint
 from app.auth import email_dict, legal_characters
 from app.auth import User, load_user
 
-# Load environment variables from a .env file
 load_dotenv()
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
