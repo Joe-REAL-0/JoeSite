@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.error('删除留言失败:', data.error);
                         alert('删除留言失败: ' + data.error);
                     }
+                    window.location.reload();
                 })
                 .catch(error => {
                     console.error('删除留言请求错误:', error);
