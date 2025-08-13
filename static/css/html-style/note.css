@@ -199,12 +199,11 @@ body {
     }
     
     #note_panel {
-        width: 95%;
+        width: 90%;
         padding: 15px;
     }
     
     #submit_button {
-        width: 100%;
         padding: 10px;
     }
     
