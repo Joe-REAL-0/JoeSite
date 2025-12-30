@@ -46,10 +46,12 @@ body {
     z-index: 1;
 }
 
-/* 页面头部样式 */
 .page-header {
+    margin-top: 30px;
+    -webkit-transform-origin-y: top;
     position: absolute;
-    top: 120px;
+    left: 13%;
+    top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,7 +60,7 @@ body {
 }
 
 .back-home-btn {
-    padding: 10px 20px;
+    padding: 10px 50px;
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -247,6 +249,16 @@ body {
     
     #title {
         font-size: 2em;
-        top: 30px;
+        top: 100px;
+    }
+
+    .back-home-btn{
+        padding: 10px 20px;
+    }
+
+    .page-header {
+        right: 0;
+        left: auto;
+        top: -10px;
     }
 }

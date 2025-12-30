@@ -48,7 +48,7 @@ body {
 /* 页面头部样式 */
 .page-header {
     position: absolute;
-    top: 18%;
+    bottom: 12%;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -591,7 +591,11 @@ body{
     
     .ButtonIcon {
         width: 65px;
-        height: 65px;
+        height: 55px;
+    }
+
+    .ButtonImg {
+        transform: translate(-80%, -50%);
     }
 }
 
