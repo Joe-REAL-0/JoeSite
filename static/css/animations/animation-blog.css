@@ -1,0 +1,249 @@
+/* animation-blog.css - 博客页面动画效果 */
+
+/* 页面淡入动画 */
+.CenterContainer {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 标题动画 */
+#title {
+    animation: fadeIn 1.2s ease-in-out, float 6s ease-in-out infinite 1.5s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* 博客卡片依次出现动画 */
+.blog-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.blog-card:nth-child(1) { animation-delay: 0.1s; }
+.blog-card:nth-child(2) { animation-delay: 0.2s; }
+.blog-card:nth-child(3) { animation-delay: 0.3s; }
+.blog-card:nth-child(4) { animation-delay: 0.4s; }
+.blog-card:nth-child(5) { animation-delay: 0.5s; }
+.blog-card:nth-child(n+6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 博客详情页内容渐入 */
+.blog-detail-container {
+    animation: scaleIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 按钮悬停波纹效果 */
+.action-btn, .page-btn, .back-home-btn, .back-btn, .new-blog-btn, .action-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.action-btn::before, .page-btn::before, 
+.back-home-btn::before, .back-btn::before, .new-blog-btn::before, .action-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.action-btn:hover::before, .page-btn:hover::before,
+.back-home-btn:hover::before, .back-btn:hover::before, .new-blog-btn:hover::before, .action-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* 卡片悬停提升效果 */
+.blog-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 头部区域淡入 */
+.blog-header {
+    animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+/* 分页淡入 */
+.pagination {
+    animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+/* 模态框动画 */
+.modal {
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    animation: modalSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px) scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* 加载脉冲动画 */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 标题下划线动画 */
+.blog-title a::after {
+    transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 徽章弹出动画 */
+.draft-badge {
+    animation: badgePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
+}
+
+@keyframes badgePop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 无内容提示动画 */
+.no-blogs, .no-messages {
+    animation: fadeIn 1s ease-in-out 0.5s both;
+}
+
+/* Markdown内容逐渐显示 */
+.markdown-body {
+    animation: fadeIn 1s ease-out 0.3s both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+    animation: slideInRight 0.6s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 表格行悬停高亮 */
+.markdown-body table tr {
+    transition: background 0.3s ease;
+}
+
+/* 图片加载淡入 */
+.markdown-body img {
+    animation: imageLoad 0.6s ease-out;
+}
+
+@keyframes imageLoad {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 链接悬停效果 */
+.markdown-body a {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 代码块淡入 */
+.markdown-body pre,
+.markdown-body blockquote {
+    animation: fadeInLeft 0.6s ease-out;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

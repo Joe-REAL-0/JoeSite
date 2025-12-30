@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <title>{{ blog.title }} | Joe的博客</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_detail.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+    
+    <!-- 代码高亮样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <div class="CenterContainer">
+        <div class="blog-detail-container glassmorphism">
+            <div class="blog-header">
+                <h1 class="blog-title">{{ blog.title }}</h1>
+                
+                <div class="blog-meta">
+                    <span class="blog-date">发布于: {{ blog.created_time }}</span>
+                    {% if blog.updated_time and blog.updated_time != blog.created_time %}
+                    <span class="blog-updated">更新于: {{ blog.updated_time }}</span>
+                    {% endif %}
+                    <span class="blog-views">📖 {{ blog.view_count }} 次阅读</span>
+                    {% if not blog.is_published %}
+                    <span class="blog-draft">草稿</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="blog-content markdown-body">
+                {{ blog.content | safe }}
+            </div>
+            
+            <div class="blog-footer">
+                <a href="{{ url_for('blog.blog_list') }}" class="back-btn">← 返回博客列表</a>
+                {% if is_admin %}
+                <a href="{{ url_for('blog.blog_edit', blog_id=blog.id) }}" class="edit-btn">编辑文章</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- 代码高亮JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="{{ url_for('static', filename='js/blog_detail.js') }}"></script>
+</body>
+</html>

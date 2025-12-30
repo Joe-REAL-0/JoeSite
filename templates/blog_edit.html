@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <title>{% if mode == 'create' %}写博客{% else %}编辑博客{% endif %} | Joe的博客</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_edit.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+</head>
+<body>
+    <div class="CenterContainer">
+        <div class="blog-edit-container glassmorphism">
+            <h1 id="title">{% if mode == 'create' %}写博客{% else %}编辑博客{% endif %}</h1>
+            
+            <form id="blog-form">
+                <div class="form-group">
+                    <label for="blog-title">标题 *</label>
+                    <input type="text" id="blog-title" name="title" 
+                           placeholder="输入博客标题..." 
+                           value="{% if blog %}{{ blog.title }}{% endif %}" 
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="blog-content">内容 * (支持Markdown)</label>
+                    <div class="editor-container">
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" data-action="bold" title="粗体">
+                                <strong>B</strong>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="italic" title="斜体">
+                                <em>I</em>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="link" title="链接">
+                                🔗
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="code" title="代码">
+                                &lt;/&gt;
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="heading" title="标题">
+                                H
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="list" title="列表">
+                                ≡
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="preview" title="预览">
+                                👁️
+                            </button>
+                        </div>
+                        <textarea id="blog-content" name="content" 
+                                  placeholder="在这里使用Markdown格式书写你的博客..." 
+                                  rows="20" required>{% if blog %}{{ blog.content }}{% endif %}</textarea>
+                    </div>
+                    <div class="char-counter">
+                        <span id="char-count">0</span> 字
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="save-draft-btn" id="save-draft-btn">
+                        💾 保存草稿
+                    </button>
+                    <button type="button" class="publish-btn" id="publish-btn">
+                        🚀 {% if blog and blog.is_published %}更新并保持发布{% else %}发布{% endif %}
+                    </button>
+                    <a href="{{ url_for('blog.blog_manage') }}" class="cancel-btn">取消</a>
+                    {% if mode == 'edit' and blog %}
+                    <button type="button" class="delete-btn" id="delete-btn" data-blog-id="{{ blog.id }}">
+                        删除文章
+                    </button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        
+        <!-- Markdown预览模态框 -->
+        <div id="preview-modal" class="modal" style="display: none;">
+            <div class="modal-content glassmorphism">
+                <div class="modal-header">
+                    <h2>Markdown预览</h2>
+                    <button type="button" class="close-modal">×</button>
+                </div>
+                <div class="modal-body markdown-body" id="preview-content">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 传递数据给JS -->
+    <div id="flask-data" 
+         data-mode="{{ mode }}"
+         {% if blog %}data-blog-id="{{ blog.id }}"{% endif %}>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/blog_edit.js') }}"></script>
+</body>
+</html>

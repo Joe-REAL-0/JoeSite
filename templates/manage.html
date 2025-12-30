@@ -25,6 +25,7 @@
                 <ul id="section-list">
                     <li class="SectionTitle" data-section="users">用户管理 <span class="count">({{ users_count }})</span></li>
                     <li class="SectionTitle" data-section="messages">留言管理 <span class="count">({{ messages_count }})</span></li>
+                    <li class="SectionTitle" data-section="blogs">博客管理</li>
                     <li class="SectionTitle" data-section="oc_introduces">档案馆管理</li>
                 </ul>
             </div>
@@ -97,6 +98,16 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                
+                <!-- 博客管理区域 -->
+                <div id="blogs-section" class="section-content">
+                    <h2>博客管理</h2>
+                    <div class="actions">
+                        <a href="{{ url_for('blog.blog_write') }}" class="action-button">写新文章</a>
+                        <a href="{{ url_for('blog.blog_manage') }}" class="action-button">查看所有博客</a>
+                    </div>
+                    <p style="margin-top: 20px;">点击上方按钮进入完整的博客管理页面</p>
                 </div>
             </div>
         </div>

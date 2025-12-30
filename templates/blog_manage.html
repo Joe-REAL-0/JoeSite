@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <title>博客管理 | Joe的博客</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+</head>
+<body>
+    <div class="CenterContainer">
+        <h1 id="title">博客管理</h1>
+        
+        <div class="blog-header">
+            <p class="blog-count">共 {{ total_count }} 篇文章</p>
+            <div class="header-actions">
+                <a href="{{ url_for('blog.blog_write') }}" class="new-blog-btn">✏️ 写新文章</a>
+                <a href="{{ url_for('manage.manage_page') }}" class="back-btn">返回管理后台</a>
+            </div>
+        </div>
+        
+        <div class="blog-list-container">
+            {% if blogs %}
+                {% for blog in blogs %}
+                <div class="blog-card glassmorphism" data-blog-id="{{ blog[0] }}">
+                    <div class="blog-card-header">
+                        <h2 class="blog-title">
+                            <a href="{{ url_for('blog.blog_detail', blog_id=blog[0]) }}" target="_blank">
+                                {{ blog[1] }}
+                            </a>
+                            {% if not blog[4] %}
+                            <span class="draft-badge">草稿</span>
+                            {% endif %}
+                        </h2>
+                        <span class="blog-date">{{ blog[2] }}</span>
+                    </div>
+                    
+                    {% if blog[1] %}
+                    <p class="blog-summary">{{ blog[1] }}</p>
+                    {% endif %}
+                    
+                    <div class="blog-meta">
+                        <span class="blog-views">📖 {{ blog[5] }} 次阅读</span>
+                        {% if blog[3] and blog[3] != blog[2] %}
+                        <span class="blog-updated">最后更新: {{ blog[3] }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="blog-actions">
+                        <a href="{{ url_for('blog.blog_edit', blog_id=blog[0]) }}" class="action-btn edit-btn">
+                            编辑
+                        </a>
+                        <button class="action-btn publish-btn" data-blog-id="{{ blog[0] }}" data-published="{{ blog[4] }}">
+                            {% if blog[4] %}取消发布{% else %}发布{% endif %}
+                        </button>
+                        <button class="action-btn delete-btn" data-blog-id="{{ blog[0] }}">
+                            删除
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-blogs glassmorphism">
+                    <p>暂无博客文章</p>
+                    <a href="{{ url_for('blog.blog_write') }}" class="new-blog-link">立即创建第一篇文章</a>
+                </div>
+            {% endif %}
+        </div>
+        
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('blog.blog_manage', page=page-1) }}" class="page-btn">上一页</a>
+            {% endif %}
+            
+            <span class="page-info">第 {{ page }} / {{ total_pages }} 页</span>
+            
+            {% if page < total_pages %}
+            <a href="{{ url_for('blog.blog_manage', page=page+1) }}" class="page-btn">下一页</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        // 发布/取消发布功能
+        document.querySelectorAll('.publish-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const blogId = this.dataset.blogId;
+                const isPublished = this.dataset.published === 'True';
+                
+                if (!confirm(`确定要${isPublished ? '取消发布' : '发布'}这篇文章吗？`)) {
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/blog/publish/${blogId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('操作失败: ' + data.message);
+                    }
+                } catch (error) {
+                    alert('操作失败: ' + error.message);
+                }
+            });
+        });
+        
+        // 删除功能
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const blogId = this.dataset.blogId;
+                
+                if (!confirm('确定要删除这篇文章吗？此操作不可恢复！')) {
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/blog/delete/${blogId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('删除失败: ' + data.message);
+                    }
+                } catch (error) {
+                    alert('删除失败: ' + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

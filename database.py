@@ -21,6 +21,7 @@ class Database:
             self.cur.execute("CREATE TABLE IF NOT EXISTS oc_introduces (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, order_id INTEGER, UNIQUE(title))")
             self.cur.execute("CREATE TABLE IF NOT EXISTS message_likes (id INTEGER PRIMARY KEY AUTOINCREMENT, message_nickname TEXT, message_time TEXT, liker_email TEXT, UNIQUE(message_nickname, message_time, liker_email))")
             self.cur.execute("CREATE TABLE IF NOT EXISTS message_comments (id INTEGER PRIMARY KEY AUTOINCREMENT, message_nickname TEXT, message_time TEXT, commenter_email TEXT, commenter_nickname TEXT, comment_content TEXT, comment_time TEXT)")
+            self.cur.execute("CREATE TABLE IF NOT EXISTS blogs (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, summary TEXT, created_time TEXT NOT NULL, updated_time TEXT, author_email TEXT NOT NULL, is_published INTEGER DEFAULT 0, view_count INTEGER DEFAULT 0)")
             # 检查并升级现有的用户表，添加avatar列
             try:
                 self.cur.execute("SELECT avatar FROM users LIMIT 1")
@@ -427,3 +428,114 @@ class Database:
             print(f"Database delete_message_by_nickname_time error: {e}")
             self.conn.rollback()
             return False
+    
+    # 博客相关方法
+    def insert_blog(self, title, content, summary, created_time, author_email, is_published=0):
+        """创建博客文章"""
+        try:
+            self.cur.execute("INSERT INTO blogs (title, content, summary, created_time, updated_time, author_email, is_published, view_count) VALUES (?, ?, ?, ?, ?, ?, ?, 0)",
+                            (title, content, summary, created_time, created_time, author_email, is_published))
+            self.conn.commit()
+            return self.cur.lastrowid
+        except Exception as e:
+            print(f"Database insert_blog error: {e}")
+            self.conn.rollback()
+            return None
+    
+    def update_blog(self, blog_id, title, content, summary, updated_time):
+        """更新博客文章"""
+        try:
+            self.cur.execute("UPDATE blogs SET title=?, content=?, summary=?, updated_time=? WHERE id=?",
+                            (title, content, summary, updated_time, blog_id))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database update_blog error: {e}")
+            self.conn.rollback()
+            return False
+    
+    def delete_blog(self, blog_id):
+        """删除博客文章"""
+        try:
+            self.cur.execute("DELETE FROM blogs WHERE id=?", (blog_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database delete_blog error: {e}")
+            self.conn.rollback()
+            return False
+    
+    def fetch_blog_by_id(self, blog_id):
+        """获取单篇博客文章"""
+        try:
+            self.cur.execute("SELECT id, title, content, summary, created_time, updated_time, author_email, is_published, view_count FROM blogs WHERE id=?", (blog_id,))
+            return self.cur.fetchone()
+        except Exception as e:
+            print(f"Database fetch_blog_by_id error: {e}")
+            return None
+    
+    def fetch_all_blogs(self, limit=None, offset=0):
+        """获取所有博客文章（用于管理后台）"""
+        try:
+            if limit:
+                self.cur.execute("SELECT id, title, summary, created_time, updated_time, is_published, view_count FROM blogs ORDER BY created_time DESC LIMIT ? OFFSET ?", 
+                                (limit, offset))
+            else:
+                self.cur.execute("SELECT id, title, summary, created_time, updated_time, is_published, view_count FROM blogs ORDER BY created_time DESC")
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_all_blogs error: {e}")
+            return []
+    
+    def fetch_published_blogs(self, limit=None, offset=0):
+        """获取已发布的博客文章（用于前台展示）"""
+        try:
+            if limit:
+                self.cur.execute("SELECT id, title, summary, created_time, updated_time, view_count FROM blogs WHERE is_published=1 ORDER BY created_time DESC LIMIT ? OFFSET ?", 
+                                (limit, offset))
+            else:
+                self.cur.execute("SELECT id, title, summary, created_time, updated_time, view_count FROM blogs WHERE is_published=1 ORDER BY created_time DESC")
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_published_blogs error: {e}")
+            return []
+    
+    def increment_view_count(self, blog_id):
+        """增加博客阅读次数"""
+        try:
+            self.cur.execute("UPDATE blogs SET view_count = view_count + 1 WHERE id=?", (blog_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database increment_view_count error: {e}")
+            self.conn.rollback()
+            return False
+    
+    def toggle_blog_publish(self, blog_id):
+        """切换博客发布状态"""
+        try:
+            self.cur.execute("UPDATE blogs SET is_published = 1 - is_published WHERE id=?", (blog_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database toggle_blog_publish error: {e}")
+            self.conn.rollback()
+            return False
+    
+    def count_blogs(self):
+        """统计博客总数"""
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM blogs")
+            return self.cur.fetchone()[0]
+        except Exception as e:
+            print(f"Database count_blogs error: {e}")
+            return 0
+    
+    def count_published_blogs(self):
+        """统计已发布博客数"""
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM blogs WHERE is_published=1")
+            return self.cur.fetchone()[0]
+        except Exception as e:
+            print(f"Database count_published_blogs error: {e}")
+            return 0

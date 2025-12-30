@@ -1,0 +1,366 @@
+/* blog_detail.css - 博客详情页样式 */
+
+/* 基础样式设置 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Custom-CN-Bold", "Arial", sans-serif;
+    min-height: 100vh;
+    background: url('../../images/background5.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    overflow-x: hidden;
+}
+
+.CenterContainer {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 80px 20px 60px;
+    min-height: 100vh;
+}
+
+/* 毛玻璃效果 */
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* 基础容器 */
+.blog-detail-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 20px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* 博客头部 */
+.blog-header {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 25px;
+    margin-bottom: 35px;
+}
+
+.blog-title {
+    font-size: 2.8em;
+    margin: 0 0 25px 0;
+    line-height: 1.3;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.blog-meta {
+    display: flex;
+    gap: 25px;
+    font-size: 0.95em;
+    color: rgba(255, 255, 255, 0.8);
+    flex-wrap: wrap;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.blog-date, .blog-updated, .blog-views {
+    display: inline-block;
+    padding: 5px 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+}
+
+.blog-draft {
+    background: rgba(241, 196, 15, 0.9);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Markdown内容样式 */
+.markdown-body {
+    line-height: 1.8;
+    font-size: 1.05em;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    margin-top: 35px;
+    margin-bottom: 18px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.markdown-body h1 {
+    font-size: 2.2em;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 12px;
+}
+
+.markdown-body h2 {
+    font-size: 1.85em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 10px;
+}
+
+.markdown-body h3 {
+    font-size: 1.6em;
+}
+
+.markdown-body p {
+    margin: 18px 0;
+    line-height: 1.8;
+}
+
+.markdown-body a {
+    color: #3498db;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-body a:hover {
+    border-bottom-color: #3498db;
+    color: #5dade2;
+}
+
+.markdown-body code {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95em;
+    color: #f1c40f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.markdown-body pre {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 25px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-body pre code {
+    background: none;
+    padding: 0;
+    border: none;
+    color: #ecf0f1;
+}
+
+.markdown-body blockquote {
+    border-left: 4px solid #3498db;
+    padding-left: 25px;
+    padding: 15px 15px 15px 25px;
+    margin: 25px 0;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 0 8px 8px 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+    padding-left: 35px;
+    margin: 18px 0;
+}
+
+.markdown-body li {
+    margin: 10px 0;
+    line-height: 1.7;
+}
+
+.markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.markdown-body table th {
+    background: rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+    color: white;
+}
+
+.markdown-body table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.markdown-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 25px 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.markdown-body hr {
+    border: none;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    margin: 35px 0;
+}
+
+/* 代码高亮 */
+.highlight {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 25px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 博客底部 */
+.blog-footer {
+    margin-top: 50px;
+    padding-top: 25px;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.back-btn, .edit-btn {
+    padding: 12px 25px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.back-btn:hover, .edit-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.edit-btn {
+    border-color: #3498db;
+    background: rgba(52, 152, 219, 0.2);
+}
+
+.edit-btn:hover {
+    background: rgba(52, 152, 219, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .CenterContainer {
+        padding: 60px 15px 40px;
+    }
+    
+    .blog-detail-container {
+        max-width: 80%;
+        padding: 25px;
+        margin: 0;
+    }
+    
+    .blog-title {
+        font-size: 2em;
+    }
+    
+    .markdown-body {
+        font-size: 1em;
+    }
+    
+    .markdown-body h1 {
+        font-size: 1.8em;
+    }
+    
+    .markdown-body h2 {
+        font-size: 1.5em;
+    }
+    
+    .markdown-body h3 {
+        font-size: 1.3em;
+    }
+    
+    .blog-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .back-btn, .edit-btn {
+        text-align: center;
+        width: 85%;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-detail-container {
+        padding: 20px;
+    }
+    
+    .blog-title {
+        font-size: 1.6em;
+    }
+    
+    .blog-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .markdown-body pre {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

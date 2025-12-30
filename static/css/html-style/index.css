@@ -274,7 +274,7 @@ body{
 }
 
 #welcome_message_1{
-    font-size: 56px;
+    font-size: 48px;
     color: #000;
     font-family: 'GunShi';
     width: 0;
@@ -288,7 +288,7 @@ body{
 }
 
 #welcome_message_2{
-    font-size: 28px;
+    font-size: 22px;
     color: #222;
     font-family: 'valorax';
     width: 0;
@@ -302,7 +302,7 @@ body{
 }
 
 #welcome_message_3{
-    font-size: 56px;
+    font-size: 48px;
     color: #000;
     font-family: 'GunShi';
     width: 0;
@@ -316,7 +316,7 @@ body{
 }
 
 #welcome_message_4{
-    font-size: 28px;
+    font-size: 22px;
     color: #222;
     font-family: 'valorax';
     width: 0;

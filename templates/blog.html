@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <title>Joe的个人小站 | 博客</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+</head>
+<body>
+    <div class="CenterContainer">
+        <h1 id="title">Joe的博客</h1>
+        
+        <div class="blog-header">
+            <p class="blog-count">共 {{ total_count }} 篇文章</p>
+            <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
+        </div>
+        
+        <div class="blog-list-container">
+            {% if blogs %}
+                {% for blog in blogs %}
+                <div class="blog-item-wrapper">
+                    <!-- 左侧博客卡片 -->
+                    <a href="{{ url_for('blog.blog_detail', blog_id=blog[0]) }}" class="blog-card-link">
+                        <div class="blog-card glassmorphism">
+                            <div class="blog-card-header">
+                                <h2 class="blog-title">{{ blog[1] }}</h2>
+                            </div>
+                            
+                            {% if blog[2] %}
+                            <p class="blog-summary">{{ blog[2] }}</p>
+                            {% endif %}
+                            
+                            <div class="blog-meta">
+                                <span class="blog-views">📖 {{ blog[5] }} 次阅读</span>
+                                {% if blog[4] and blog[4] != blog[3] %}
+                                <span class="blog-updated">🔄 最后更新: {{ blog[4] }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 右侧时间轴 -->
+                    <div class="timeline-section">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">{{ blog[3] }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-blogs glassmorphism">
+                    <p>暂无博客文章</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('blog.blog_list', page=page-1) }}" class="page-btn">上一页</a>
+            {% endif %}
+            
+            <span class="page-info">第 {{ page }} / {{ total_pages }} 页</span>
+            
+            {% if page < total_pages %}
+            <a href="{{ url_for('blog.blog_list', page=page+1) }}" class="page-btn">下一页</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/blog.js') }}"></script>
+</body>
+</html>
