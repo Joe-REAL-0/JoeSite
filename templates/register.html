@@ -12,6 +12,7 @@
     <script src="{{ url_for('static', filename='js/register.js')}}"></script>
 </head>
 <body>
+    <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
     <div id="cover"></div>
     <div class="CenterContainer">
         <form id="register_form" action="/register_checker" method="POST">

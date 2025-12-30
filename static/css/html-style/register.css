@@ -169,6 +169,31 @@ body{
     box-sizing: border-box;
 }
 
+/* 返回主页按钮样式 */
+.back-home-btn {
+    z-index: 10;
+    font-size: 24px;
+    bottom: 10%;
+    left: 10%;
+    position: fixed;
+    padding: 20px 40px;
+    background: rgba(104, 217, 255, 0.8);
+    border: 1px solid rgba(104, 217, 255, 0.3);
+    border-radius: 50px;
+    text-decoration: none;
+    color: white;
+    font-family: 'FengHei';
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.back-home-btn:hover {
+    background: rgba(104, 217, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
 /* 响应式设计 - 在移动设备上居中显示 */
 @media (max-width: 768px) {
     .CenterContainer {
@@ -242,5 +267,11 @@ body{
     #cover {
         display: none;
         animation: none;
+    }
+
+    .back-home-btn {
+        left: 50%;
+        bottom: 5%;
+        transform: translateX(-50%);
     }
 }

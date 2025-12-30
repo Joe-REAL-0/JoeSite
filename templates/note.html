@@ -18,6 +18,9 @@
 <body>
     <div class="CenterContainer">
         <h1 id="title">{{nickname}},欢迎留言</h1>
+        <div class="page-header">
+            <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
+        </div>
         <div id="note_panel" class="glassmorphism">
             <div id="user_message_count">
                 <p>你已经发表了 

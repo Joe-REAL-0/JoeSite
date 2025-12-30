@@ -12,6 +12,7 @@
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </head>
 <body>
+    <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
     <div id="cover"></div>
     <div class="CenterContainer">
         <form id="login_form" action="/login_checker" method="POST">
