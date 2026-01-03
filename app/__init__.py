@@ -10,6 +10,7 @@ from app.user import user as user_blueprint
 from app.message import message as message_blueprint
 from app.manage import manage as manage_blueprint
 from app.blog import blog as blog_blueprint
+from app.seo import seo as seo_blueprint
 
 from app.auth import email_dict, legal_characters
 from app.auth import User, load_user
@@ -44,6 +45,7 @@ app.register_blueprint(user_blueprint)
 app.register_blueprint(message_blueprint)
 app.register_blueprint(manage_blueprint)
 app.register_blueprint(blog_blueprint)
+app.register_blueprint(seo_blueprint)
 
 # 设置用户加载函数
 login_manager.user_loader(load_user)

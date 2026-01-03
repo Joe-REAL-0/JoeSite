@@ -1,18 +1,58 @@
+<html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="欢迎来到Joe的个人网站！这里有角色介绍、技术博客、个人笔记、友情链接和留言墙。探索Joe的创作世界。">
+    <meta name="keywords" content="Joe, Furry, 个人网站, 博客, Blog, OC介绍, 技术分享, 留言墙, 友情链接">
+    <meta name="author" content="Joe">
+    <link rel="canonical" href="{{ request.url }}">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Joe的个人小站 | 主页">
+    <meta property="og:description" content="欢迎来到Joe的个人网站！这里有角色介绍、技术博客、个人笔记、友情链接和留言墙。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:site_name" content="Joe的个人小站">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Joe的个人小站 | 主页">
+    <meta name="twitter:description" content="欢迎来到Joe的个人网站！这里有角色介绍、技术博客、个人笔记、友情链接和留言墙。">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Joe的个人小站",
+      "description": "Joe的个人网站 - 角色介绍、技术博客、笔记分享",
+      "url": "{{ request.url_root }}",
+      "author": {
+        "@type": "Person",
+        "name": "Joe"
+      }
+    }
+    </script>
+
     <title>Joe的个人小站 | 主页</title>
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <link rel="preload" href="{{ url_for('static',filename='images/background.jpg')}}" as="image" type="image/jpg">
-    <link rel="preload" href="{{ url_for('static',filename='font/ZhengQingKeLengKu.ttf')}}" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="{{ url_for('static',filename='font/valorax-lg25v.ttf')}}" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="{{ url_for('static',filename='font/Technonomicon.ttf')}}" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="{{ url_for('static',filename='font/ZhengQingKeLengKu.ttf')}}" as="font" type="font/ttf"
+        crossorigin>
+    <link rel="preload" href="{{ url_for('static',filename='font/valorax-lg25v.ttf')}}" as="font" type="font/ttf"
+        crossorigin>
+    <link rel="preload" href="{{ url_for('static',filename='font/Technonomicon.ttf')}}" as="font" type="font/ttf"
+        crossorigin>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/index.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-index.css' ) }}">
 
     <script src="{{ url_for('static', filename='js/index.js')}}"></script>
 </head>
+
 <body>
     <!-- 移动端菜单按钮 -->
     <button id="mobile_menu_btn" class="mobile-menu-btn" onclick="toggleMobileMenu(event)">
@@ -20,14 +60,15 @@
         <div class="hamburger"></div>
         <div class="hamburger"></div>
     </button>
-    
+
     <div class="CenterContainer" id="main_screen">
         <div id="side_list" class="side-menu">
             <div class="ButtonContainer">
                 <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/oc_introduce.png' ) }}">
+                    <img class="ButtonImg"
+                        src="{{ url_for('static',filename = 'images/button_image/oc_introduce.png' ) }}">
                 </div>
-                <a class="SideButton" href="{{ url_for('main.introduce') }}" >角色介绍</a>
+                <a class="SideButton" href="{{ url_for('main.introduce') }}">角色介绍</a>
             </div>
 
             <div class="ButtonContainer">
@@ -39,25 +80,28 @@
 
             <div class="ButtonContainer">
                 <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
+                    <img class="ButtonImg"
+                        src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
                 </div>
                 <a class="SideButton" href="https://cloud.furryjoe.site">私人网盘</a>
             </div>
-            
+
             <div class="ButtonContainer">
                 <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/friend_link.png' ) }}">
+                    <img class="ButtonImg"
+                        src="{{ url_for('static',filename = 'images/button_image/friend_link.png' ) }}">
                 </div>
                 <a class="SideButton" href="{{ url_for('message.friend_link') }}">友情链接</a>
             </div>
 
             <div class="ButtonContainer">
                 <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/message_wall.png' ) }}">
+                    <img class="ButtonImg"
+                        src="{{ url_for('static',filename = 'images/button_image/message_wall.png' ) }}">
                 </div>
                 <a class="SideButton" href="{{ url_for('message.message_wall') }}">留言墙</a>
             </div>
-            
+
         </div>
         <div class="InfoContainer">
             <div id="info_screen">
@@ -69,35 +113,42 @@
                 </div>
                 <div id="link_column">
                     <div class="LinkContainer">
-                        <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">
-                            <img title="点击加入我的QQ聊天群" class="LinkIcon" src="{{ url_for('static',filename = 'images/link_image/QQ_Icon.jpg' ) }}">
+                        <a
+                            href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">
+                            <img title="点击加入我的QQ聊天群" class="LinkIcon"
+                                src="{{ url_for('static',filename = 'images/link_image/QQ_Icon.jpg' ) }}">
                         </a>
                     </div>
                     <div class="LinkContainer">
                         <a href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0">
-                            <img title="很没有意思的B站主页" class="LinkIcon" src="{{ url_for('static',filename = 'images/link_image/bilibili_Icon.jpg' ) }}">
+                            <img title="很没有意思的B站主页" class="LinkIcon"
+                                src="{{ url_for('static',filename = 'images/link_image/bilibili_Icon.jpg' ) }}">
                         </a>
                     </div>
                     <div class="LinkContainer">
                         <a href="https://github.com/Joe-REAL-0/">
-                            <img title="乱糟糟很丢人的GitHub主页" class="LinkIcon" src="{{ url_for('static',filename = 'images/link_image/GitHub_Icon.jpg' ) }}">
+                            <img title="乱糟糟很丢人的GitHub主页" class="LinkIcon"
+                                src="{{ url_for('static',filename = 'images/link_image/GitHub_Icon.jpg' ) }}">
                         </a>
-                        </div>
+                    </div>
                     <div class="LinkContainer">
                         <a href="https://play.mcmod.cn/sv20187377.html">
-                            <img title="我运营的Minecraft服务器" class="LinkIcon" src="{{ url_for('static',filename = 'images/link_image/Minecraft_Icon.jpg' ) }}">
+                            <img title="我运营的Minecraft服务器" class="LinkIcon"
+                                src="{{ url_for('static',filename = 'images/link_image/Minecraft_Icon.jpg' ) }}">
                         </a>
                     </div>
                     <div class="LinkContainer">
                         <a href="https://joe-real-0.itch.io/">
-                            <img title="itch主页" class="LinkIcon" src="{{ url_for('static',filename = 'images/link_image/itch_Icon.jpg' ) }}">
+                            <img title="itch主页" class="LinkIcon"
+                                src="{{ url_for('static',filename = 'images/link_image/itch_Icon.jpg' ) }}">
                         </a>
                     </div>
 
                 </div>
             </div>
             <div id="user_info">
-                <a id="login_link" href="{{url_for('auth.login')}}">{{nickname|default('你尚未登录Joe通行证')}} | 点击{{status|default('进行登录')}}</a>
+                <a id="login_link" href="{{url_for('auth.login')}}">{{nickname|default('你尚未登录Joe通行证')}} |
+                    点击{{status|default('进行登录')}}</a>
                 <h4 id="login_text">{{signature|default('登录Joe通行证后才可以在留言板留言！')}}</h4>
                 {% if session.get('nickname') %}
                 <a id="user_info_link" href="{{url_for('user.user_info')}}">查看/修改个人信息</a>
@@ -114,19 +165,19 @@
     <script>
         // 初始化应用
         const resourceManager = initializeApp();
-        
+
         // 动态加载所有资源
         async function loadAllResources() {
             try {
                 // 从后端获取所有资源文件列表
                 const response = await fetch('{{ url_for("main.get_resources") }}');
                 const resourcePaths = await response.json();
-                
+
                 // 将资源路径转换为完整URL
                 const requiredResources = resourcePaths.map(path => {
                     return "{{ url_for('static', filename='') }}" + path;
                 });
-                
+
                 // 设置资源列表
                 resourceManager.setRequiredResources(requiredResources);
             } catch (error) {
@@ -149,7 +200,7 @@
                 resourceManager.setRequiredResources(fallbackResources);
             }
         }
-        
+
         // 执行资源加载
         loadAllResources();
     </script>

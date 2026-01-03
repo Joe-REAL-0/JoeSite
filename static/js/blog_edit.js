@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const flaskData = document.getElementById('flask-data');
     const mode = flaskData.dataset.mode;
     const blogId = flaskData.dataset.blogId;
+    const existingTags = flaskData.dataset.tags ? flaskData.dataset.tags.split(',').filter(t => t.trim()) : [];
     
     const form = document.getElementById('blog-form');
     const titleInput = document.getElementById('blog-title');
@@ -13,6 +14,76 @@ document.addEventListener('DOMContentLoaded', function() {
     const publishBtn = document.querySelector('.publish-btn');
     const deleteBtn = document.getElementById('delete-btn');
     const charCount = document.getElementById('char-count');
+    
+    // 标签管理
+    const tagInput = document.getElementById('tag-input');
+    const tagChips = document.getElementById('tag-chips');
+    let tags = [...existingTags]; // 标签数组
+    
+    // 渲染标签芯片
+    function renderTags() {
+        tagChips.innerHTML = '';
+        tags.forEach((tag, index) => {
+            const chip = document.createElement('div');
+            chip.className = 'tag-chip';
+            chip.innerHTML = `
+                <span class="tag-text">${tag}</span>
+                <button type="button" class="tag-remove" data-index="${index}">×</button>
+            `;
+            tagChips.appendChild(chip);
+        });
+    }
+    
+    // 添加标签
+    function addTag(tagName) {
+        tagName = tagName.trim();
+        if (!tagName) return;
+        
+        // 检查是否已存在
+        if (tags.includes(tagName)) {
+            alert('该标签已存在');
+            return;
+        }
+        
+        // 限制标签数量
+        if (tags.length >= 10) {
+            alert('最多只能添加10个标签');
+            return;
+        }
+        
+        tags.push(tagName);
+        renderTags();
+        tagInput.value = '';
+    }
+    
+    // 删除标签
+    function removeTag(index) {
+        tags.splice(index, 1);
+        renderTags();
+    }
+    
+    // 标签输入框事件
+    if (tagInput) {
+        tagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTag(this.value);
+            }
+        });
+    }
+    
+    // 标签删除按钮事件（使用事件委托）
+    if (tagChips) {
+        tagChips.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tag-remove')) {
+                const index = parseInt(e.target.dataset.index);
+                removeTag(index);
+            }
+        });
+    }
+    
+    // 初始化渲染标签
+    renderTags();
     
     // 字数统计
     function updateCharCount() {
@@ -103,7 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({
                     title: title,
                     content: content,
-                    is_published: isPublished
+                    is_published: isPublished,
+                    tags: tags  // 添加标签数据
                 })
             });
             
