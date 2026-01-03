@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session, flash
 from flask_login import login_required, current_user
+from app.utils import get_china_time
 from database import Database
 from functools import wraps
 import os
@@ -194,9 +195,9 @@ def blog_create():
         clean_content = clean_markdown_for_summary(content)
         lines = clean_content.split('\n')
         summary_lines = [line.strip() for line in lines if line.strip()]
-        summary = ' '.join(summary_lines)[:180]  # 限制长度为180字符，适合卡片显示
+        summary = ' '.join(summary_lines)[:500]  # 限制长度为500字符，适合卡片显示
         
-        created_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        created_time = get_china_time()
         
         with Database('./database.db') as db:
             blog_id = db.insert_blog(title, content, summary, created_time, current_user.email, is_published)
@@ -230,9 +231,9 @@ def blog_update(blog_id):
         clean_content = clean_markdown_for_summary(content)
         lines = clean_content.split('\n')
         summary_lines = [line.strip() for line in lines if line.strip()]
-        summary = ' '.join(summary_lines)[:180]  # 限制长度为180字符，适合卡片显示
+        summary = ' '.join(summary_lines)[:500]  # 限制长度为500字符，适合卡片显示
         
-        updated_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        updated_time = get_china_time()
         
         with Database('./database.db') as db:
             success = db.update_blog(blog_id, title, content, summary, updated_time)

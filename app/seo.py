@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, make_response, url_for
+from app.utils import get_china_time
 from database import Database
 from datetime import datetime
 import os
@@ -46,11 +47,11 @@ def sitemap():
                 # 尝试解析时间字符串
                 if updated_time:
                     dt = datetime.strptime(updated_time, '%Y-%m-%d %H:%M:%S')
-                    lastmod = dt.strftime('%Y-%m-%d')
+                    lastmod = dt.strftime('%a, %d %b %Y %H:%M:%S +0800')
                 else:
-                    lastmod = datetime.now().strftime('%Y-%m-%d')
+                    lastmod = get_china_time()
             except:
-                lastmod = datetime.now().strftime('%Y-%m-%d')
+                lastmod = get_china_time()
             
             xml_content.append('  <url>')
             xml_content.append(f'    <loc>{base_url}/blog/{blog_id}</loc>')
@@ -149,7 +150,7 @@ def rss_feed():
                 dt = datetime.strptime(created_time, '%Y-%m-%d %H:%M:%S')
                 pub_date = dt.strftime('%a, %d %b %Y %H:%M:%S +0800')
             except:
-                pub_date = datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0800')
+                pub_date = get_china_time()
             
             # 转义XML特殊字符
             title_escaped = (title.replace('&', '&amp;')
