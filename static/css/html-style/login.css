@@ -1,4 +1,4 @@
-body{
+body {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -13,7 +13,7 @@ body{
     align-items: center;
 }
 
-#cover{
+#cover {
     top: 0;
     left: 0;
     position: absolute;
@@ -23,11 +23,11 @@ body{
     z-index: 1;
 }
 
-#cover.after-load{
+#cover.after-load {
     animation: cover-show 0.6s forwards;
 }
 
-#title{
+#title {
     position: relative;
     color: rgb(0, 0, 0);
     font-family: 'LengKu';
@@ -41,7 +41,7 @@ body{
     white-space: nowrap;
 }
 
-#submit_button{
+#submit_button {
     position: absolute;
     background-color: rgb(104, 217, 255);
     font-size: 36px;
@@ -55,12 +55,12 @@ body{
     right: 25px;
 }
 
-#submit_button:hover{
+#submit_button:hover {
     background-color: darkblue;
     color: white;
 }
 
-#status{
+#status {
     position: absolute;
     color: darkblue;
     font-size: 20px;
@@ -68,7 +68,7 @@ body{
     bottom: 10px;
 }
 
-#without_account{
+#without_account {
     position: absolute;
     color: black;
     font-size: 20px;
@@ -76,11 +76,11 @@ body{
     bottom: 45px;
 }
 
-#account{
+#account {
     position: relative;
     width: 80%;
     height: 60px;
-    border: rgb(196,196,196) 3px solid;
+    border: rgb(196, 196, 196) 3px solid;
     font-size: 24px;
     border-radius: 25px;
     padding-left: 35px;
@@ -90,12 +90,12 @@ body{
     box-sizing: border-box;
 }
 
-#password{
+#password {
     position: relative;
     width: 80%;
     height: 60px;
     font-size: 24px;
-    border: rgb(196,196,196) 3px solid;
+    border: rgb(196, 196, 196) 3px solid;
     margin-top: 45px;
     border-radius: 25px;
     padding-left: 35px;
@@ -103,7 +103,7 @@ body{
     box-sizing: border-box;
 }
 
-#login_form{
+#login_form {
     width: 480px;
     height: 45vh;
     min-height: 500px;
@@ -120,7 +120,7 @@ body{
     position: relative;
 }
 
-.CenterContainer{
+.CenterContainer {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -162,14 +162,14 @@ body{
         width: 100%;
         transform: translate(-50%, -50%);
     }
-    
+
     #login_form {
         width: 90%;
         height: auto;
         min-height: 450px;
         padding: 20px 0;
     }
-    
+
     #title {
         font-size: 24px;
         left: 0;
@@ -178,15 +178,16 @@ body{
         text-align: center;
         width: auto;
     }
-    
-    #account, #password {
+
+    #account,
+    #password {
         width: 80%;
         font-size: 16px;
         margin-left: 2%;
         margin-right: 2%;
         padding-left: 20px;
     }
-    
+
     #without_account {
         position: relative;
         left: 0;
@@ -195,7 +196,7 @@ body{
         text-align: center;
         width: 100%;
     }
-    
+
     #status {
         position: relative;
         left: 0;
@@ -204,7 +205,7 @@ body{
         text-align: center;
         width: 100%;
     }
-    
+
     #submit_button {
         position: relative;
         bottom: auto;
@@ -219,7 +220,9 @@ body{
 
     .back-home-btn {
         left: 50%;
-        bottom: 5%;
+        bottom: 2%;
         transform: translateX(-50%);
+        font-size: 18px;
+        padding: 10px 20px;
     }
 }
