@@ -1,93 +1,43 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="{{ blog.summary[:160] if blog.summary else (blog.title + ' - Joe的个人博客') }}">
-    <meta name="keywords"
-        content="Joe博客, {{ blog.title }}{% if blog.tags %}, {{ blog.tags|join(', ') }}{% endif %}, 技术分享">
-    <meta name="author" content="Joe">
-    <link rel="canonical" href="{{ request.url }}">
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{{ blog.title }} | Joe的博客">
-    <meta property="og:description"
-        content="{{ blog.summary[:200] if blog.summary else (blog.title + ' - Joe的个人博客') }}">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{{ request.url }}">
-    <meta property="og:site_name" content="Joe的个人小站">
-    <meta property="article:published_time" content="{{ blog.created_time }}">
-    {% if blog.updated_time and blog.updated_time != blog.created_time %}
-    <meta property="article:modified_time" content="{{ blog.updated_time }}">
-    {% endif %}
-    <meta property="article:author" content="Joe">
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ blog.title }} | Joe的博客">
-    <meta name="twitter:description"
-        content="{{ blog.summary[:200] if blog.summary else (blog.title + ' - Joe的个人博客') }}">
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      "headline": "{{ blog.title }}",
-      "description": "{{ blog.summary if blog.summary else '' }}",
-      {% if blog.tags and blog.tags|length > 0 %}
-      "keywords": "{{ blog.tags|join(', ') }}",
-      {% endif %}
-      "datePublished": "{{ blog.created_time }}",
-      {% if blog.updated_time and blog.updated_time != blog.created_time %}
-      "dateModified": "{{ blog.updated_time }}",
-      {% else %}
-      "dateModified": "{{ blog.created_time }}",
-      {% endif %}
-      "author": {
-        "@type": "Person",
-        "name": "Joe"
-      },
-      "publisher": {
-        "@type": "Person",
-        "name": "Joe"
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "{{ request.url }}"
-      },
-      "url": "{{ request.url }}"
-    }
-    </script>
-
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <title>{{ blog.title }} | Joe的博客</title>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_detail.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-
+    
     <!-- 代码高亮样式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     
-    <!-- KaTeX数学公式渲染 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <!-- MathJax数学公式渲染 -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 </head>
-
 <body>
     <div class="CenterContainer">
         <div class="blog-detail-container glassmorphism">
             <div class="blog-header">
                 <h1 class="blog-title">{{ blog.title }}</h1>
-
+                
                 <div class="blog-meta">
                     <span class="blog-date">发布于: {{ blog.created_time }}</span>
                     {% if blog.updated_time and blog.updated_time != blog.created_time %}
@@ -98,23 +48,12 @@
                     <span class="blog-draft">草稿</span>
                     {% endif %}
                 </div>
-
-                {% if blog.tags and blog.tags|length > 0 %}
-                <div class="blog-tags-section">
-                    <span class="tags-label">标签：</span>
-                    <div class="blog-tags">
-                        {% for tag in blog.tags %}
-                        <span class="blog-tag">{{ tag }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
             </div>
-
+            
             <div class="blog-content markdown-body">
                 {{ blog.content | safe }}
             </div>
-
+            
             <div class="blog-footer">
                 <a href="{{ url_for('blog.blog_list') }}" class="back-btn">← 返回博客列表</a>
                 {% if is_admin %}
@@ -123,27 +62,10 @@
             </div>
         </div>
     </div>
-
+    
     <!-- 代码高亮JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
-    
-    <!-- KaTeX自动渲染 -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$', right: '$', display: false},
-                    {left: '\\(', right: '\\)', display: false},
-                    {left: '\\[', right: '\\]', display: true}
-                ],
-                throwOnError: false
-            });
-        });
-    </script>
-    
     <script src="{{ url_for('static', filename='js/blog_detail.js') }}"></script>
 </body>
-
 </html>

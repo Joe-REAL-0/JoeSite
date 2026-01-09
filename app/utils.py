@@ -45,11 +45,7 @@ def render_markdown(content):
         'markdown.extensions.toc',  # 目录支持
         'markdown.extensions.fenced_code',  # 围栏代码块
         'markdown.extensions.nl2br',  # 换行转<br>
-        'pymdownx.arithmatex',  # 数学公式支持
-        'pymdownx.superfences',  # 增强的代码块
-        'pymdownx.highlight',  # 代码高亮
-        'pymdownx.inlinehilite',  # 行内代码高亮
-        'pymdownx.betterem',  # 更好的强调处理
+        'mdx_math',  # 数学公式支持
     ]
     
     # 配置扩展选项
@@ -61,15 +57,8 @@ def render_markdown(content):
         'markdown.extensions.toc': {
             'permalink': True
         },
-        'pymdownx.arithmatex': {
-            'generic': True  # 使用通用模式，适用于KaTeX
-        },
-        'pymdownx.highlight': {
-            'use_pygments': True,
-            'linenums': False
-        },
-        'pymdownx.superfences': {
-            'custom_fences': []
+        'mdx_math': {
+            'enable_dollar_delimiter': True  # 启用 $ 和 $$ 作为数学公式分隔符
         }
     }
     
@@ -85,8 +74,7 @@ def render_markdown(content):
         'a', 'img',
         'table', 'thead', 'tbody', 'tr', 'th', 'td',
         'div', 'span', 'hr',
-        'del', 'ins', 'sub', 'sup',
-        'script'  # 允许script标签用于KaTeX数学公式
+        'del', 'ins', 'sub', 'sup'
     ]
     
     allowed_attributes = {
@@ -102,7 +90,6 @@ def render_markdown(content):
         'h4': ['id'],
         'h5': ['id'],
         'h6': ['id'],
-        'script': ['type']  # 允许KaTeX使用script标签
     }
     
     # 清理HTML，防止XSS攻击
