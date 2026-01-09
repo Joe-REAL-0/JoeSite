@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session, flash
 from flask_login import login_required, current_user
+from app.utils import get_china_time
 from database import Database
 from functools import wraps
 import os
@@ -68,11 +69,19 @@ def blog_list():
         with Database('./database.db') as db:
             blogs = db.fetch_published_blogs(limit=per_page, offset=offset)
             total_count = db.count_published_blogs()
+            
+            # 为每个博客获取标签
+            blogs_with_tags = []
+            for blog in blogs:
+                blog_id = blog[0]
+                tags = db.fetch_blog_tags(blog_id)
+                tag_names = [tag[1] for tag in tags]  # 提取标签名称
+                blogs_with_tags.append(blog + (tag_names,))  # 添加标签到博客数据
         
         total_pages = (total_count + per_page - 1) // per_page
         
         return render_template('blog.html', 
-                               blogs=blogs,
+                               blogs=blogs_with_tags,
                                page=page,
                                total_pages=total_pages,
                                total_count=total_count)
@@ -103,6 +112,10 @@ def blog_detail(blog_id):
             # 增加阅读次数
             db.increment_view_count(blog_id)
             
+            # 获取标签
+            tags = db.fetch_blog_tags(blog_id)
+            tag_names = [tag[1] for tag in tags]
+            
             # 渲染Markdown
             from app.utils import render_markdown
             rendered_content = render_markdown(blog_data[2])
@@ -116,7 +129,8 @@ def blog_detail(blog_id):
                 'updated_time': blog_data[5],
                 'author_email': blog_data[6],
                 'is_published': blog_data[7],
-                'view_count': blog_data[8] + 1
+                'view_count': blog_data[8] + 1,
+                'tags': tag_names
             }
             
         return render_template('blog_detail.html', blog=blog_info, is_admin=is_admin)
@@ -141,6 +155,10 @@ def blog_edit(blog_id):
             if not blog_data:
                 return "博客不存在", 404
             
+            # 获取标签
+            tags = db.fetch_blog_tags(blog_id)
+            tag_names = [tag[1] for tag in tags]
+            
             blog_info = {
                 'id': blog_data[0],
                 'title': blog_data[1],
@@ -150,7 +168,8 @@ def blog_edit(blog_id):
                 'updated_time': blog_data[5],
                 'author_email': blog_data[6],
                 'is_published': blog_data[7],
-                'view_count': blog_data[8]
+                'view_count': blog_data[8],
+                'tags': tag_names
             }
             
         return render_template('blog_edit.html', blog=blog_info, mode='edit')
@@ -167,6 +186,7 @@ def blog_create():
         title = data.get('title', '').strip()
         content = data.get('content', '').strip()
         is_published = data.get('is_published', 0)
+        tags = data.get('tags', [])  # 获取标签列表
         
         if not title or not content:
             return jsonify({"success": False, "message": "标题和内容不能为空"}), 400
@@ -175,14 +195,18 @@ def blog_create():
         clean_content = clean_markdown_for_summary(content)
         lines = clean_content.split('\n')
         summary_lines = [line.strip() for line in lines if line.strip()]
-        summary = ' '.join(summary_lines)[:180]  # 限制长度为180字符，适合卡片显示
+        summary = ' '.join(summary_lines)[:500]  # 限制长度为500字符，适合卡片显示
         
-        created_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        created_time = get_china_time()
         
         with Database('./database.db') as db:
             blog_id = db.insert_blog(title, content, summary, created_time, current_user.email, is_published)
             
             if blog_id:
+                # 保存标签
+                if tags and isinstance(tags, list):
+                    db.set_blog_tags(blog_id, tags)
+                
                 return jsonify({"success": True, "message": "博客创建成功", "blog_id": blog_id})
             else:
                 return jsonify({"success": False, "message": "创建失败"}), 500
@@ -198,6 +222,7 @@ def blog_update(blog_id):
         data = request.get_json()
         title = data.get('title', '').strip()
         content = data.get('content', '').strip()
+        tags = data.get('tags', [])  # 获取标签列表
         
         if not title or not content:
             return jsonify({"success": False, "message": "标题和内容不能为空"}), 400
@@ -206,14 +231,18 @@ def blog_update(blog_id):
         clean_content = clean_markdown_for_summary(content)
         lines = clean_content.split('\n')
         summary_lines = [line.strip() for line in lines if line.strip()]
-        summary = ' '.join(summary_lines)[:180]  # 限制长度为180字符，适合卡片显示
+        summary = ' '.join(summary_lines)[:500]  # 限制长度为500字符，适合卡片显示
         
-        updated_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        updated_time = get_china_time()
         
         with Database('./database.db') as db:
             success = db.update_blog(blog_id, title, content, summary, updated_time)
             
             if success:
+                # 更新标签
+                if isinstance(tags, list):
+                    db.set_blog_tags(blog_id, tags)
+                
                 return jsonify({"success": True, "message": "博客更新成功"})
             else:
                 return jsonify({"success": False, "message": "更新失败"}), 500

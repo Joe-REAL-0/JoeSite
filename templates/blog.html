@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,6 +8,29 @@
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Joe的个人博客 - 技术分享、学习笔记与生活记录。探索编程、设计和创意的世界。">
+    <meta name="keywords" content="Joe博客, 技术博客, 编程笔记, 学习分享, 个人网站">
+    <meta name="author" content="Joe">
+    <link rel="canonical" href="{{ request.url }}">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Joe的个人小站 | 博客">
+    <meta property="og:description" content="Joe的个人博客 - 技术分享、学习笔记与生活记录">
+    <meta property="og:type" content="blog">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:site_name" content="Joe的个人小站">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Joe的个人小站 | 博客">
+    <meta name="twitter:description" content="Joe的个人博客 - 技术分享、学习笔记与生活记录">
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Joe的博客 RSS Feed"
+        href="{{ url_for('seo.rss_feed', _external=True) }}">
+
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <title>Joe的个人小站 | 博客</title>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog.css' ) }}">
@@ -14,68 +38,77 @@
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
 </head>
+
 <body>
     <div class="CenterContainer">
         <h1 id="title">Joe的博客</h1>
-        
+
         <div class="blog-header">
             <p class="blog-count">共 {{ total_count }} 篇文章</p>
             <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
         </div>
-        
+
         <div class="blog-list-container">
             {% if blogs %}
-                {% for blog in blogs %}
-                <div class="blog-item-wrapper">
-                    <!-- 左侧博客卡片 -->
-                    <a href="{{ url_for('blog.blog_detail', blog_id=blog[0]) }}" class="blog-card-link">
-                        <div class="blog-card glassmorphism">
-                            <div class="blog-card-header">
-                                <h2 class="blog-title">{{ blog[1] }}</h2>
-                            </div>
-                            
-                            {% if blog[2] %}
-                            <p class="blog-summary">{{ blog[2] }}</p>
-                            {% endif %}
-                            
-                            <div class="blog-meta">
-                                <span class="blog-views">📖 {{ blog[5] }} 次阅读</span>
-                                {% if blog[4] and blog[4] != blog[3] %}
-                                <span class="blog-updated">🔄 最后更新: {{ blog[4] }}</span>
-                                {% endif %}
-                            </div>
+            {% for blog in blogs %}
+            <div class="blog-item-wrapper">
+                <!-- 左侧博客卡片 -->
+                <a href="{{ url_for('blog.blog_detail', blog_id=blog[0]) }}" class="blog-card-link">
+                    <div class="blog-card glassmorphism">
+                        <div class="blog-card-header">
+                            <h2 class="blog-title">{{ blog[1] }}</h2>
                         </div>
-                    </a>
-                    
-                    <!-- 右侧时间轴 -->
-                    <div class="timeline-section">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">{{ blog[3] }}</div>
+
+                        {% if blog[2] %}
+                        <p class="blog-summary">{{ blog[2] }}</p>
+                        {% endif %}
+
+                        {% if blog[6] and blog[6]|length > 0 %}
+                        <div class="blog-tags">
+                            {% for tag in blog[6] %}
+                            <span class="blog-tag">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="blog-meta">
+                            <span class="blog-views">📖 {{ blog[5] }} 次阅读</span>
+                            {% if blog[4] and blog[4] != blog[3] %}
+                            <span class="blog-updated">🔄 最后更新: {{ blog[4] }}</span>
+                            {% endif %}
+                        </div>
                     </div>
+                </a>
+
+                <!-- 右侧时间轴 -->
+                <div class="timeline-section">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">{{ blog[3] }}</div>
                 </div>
-                {% endfor %}
+            </div>
+            {% endfor %}
             {% else %}
-                <div class="no-blogs glassmorphism">
-                    <p>暂无博客文章</p>
-                </div>
+            <div class="no-blogs glassmorphism">
+                <p>暂无博客文章</p>
+            </div>
             {% endif %}
         </div>
-        
+
         {% if total_pages > 1 %}
         <div class="pagination">
             {% if page > 1 %}
             <a href="{{ url_for('blog.blog_list', page=page-1) }}" class="page-btn">上一页</a>
             {% endif %}
-            
+
             <span class="page-info">第 {{ page }} / {{ total_pages }} 页</span>
-            
-            {% if page < total_pages %}
-            <a href="{{ url_for('blog.blog_list', page=page+1) }}" class="page-btn">下一页</a>
-            {% endif %}
+
+            {% if page < total_pages %} <a href="{{ url_for('blog.blog_list', page=page+1) }}" class="page-btn">下一页</a>
+                {% endif %}
         </div>
         {% endif %}
     </div>
-    
+
     <script src="{{ url_for('static', filename='js/blog.js') }}"></script>
 </body>
+
 </html>

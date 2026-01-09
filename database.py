@@ -22,6 +22,8 @@ class Database:
             self.cur.execute("CREATE TABLE IF NOT EXISTS message_likes (id INTEGER PRIMARY KEY AUTOINCREMENT, message_nickname TEXT, message_time TEXT, liker_email TEXT, UNIQUE(message_nickname, message_time, liker_email))")
             self.cur.execute("CREATE TABLE IF NOT EXISTS message_comments (id INTEGER PRIMARY KEY AUTOINCREMENT, message_nickname TEXT, message_time TEXT, commenter_email TEXT, commenter_nickname TEXT, comment_content TEXT, comment_time TEXT)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blogs (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, summary TEXT, created_time TEXT NOT NULL, updated_time TEXT, author_email TEXT NOT NULL, is_published INTEGER DEFAULT 0, view_count INTEGER DEFAULT 0)")
+            self.cur.execute("CREATE TABLE IF NOT EXISTS blog_tags (id INTEGER PRIMARY KEY AUTOINCREMENT, tag_name TEXT NOT NULL UNIQUE, created_time TEXT NOT NULL)")
+            self.cur.execute("CREATE TABLE IF NOT EXISTS blog_tag_relations (blog_id INTEGER NOT NULL, tag_id INTEGER NOT NULL, PRIMARY KEY (blog_id, tag_id), FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE, FOREIGN KEY (tag_id) REFERENCES blog_tags(id) ON DELETE CASCADE)")
             # 检查并升级现有的用户表，添加avatar列
             try:
                 self.cur.execute("SELECT avatar FROM users LIMIT 1")
@@ -539,3 +541,92 @@ class Database:
         except Exception as e:
             print(f"Database count_published_blogs error: {e}")
             return 0
+    
+    # 博客标签相关方法
+    def get_or_create_tag(self, tag_name):
+        """获取或创建标签，返回tag_id"""
+        try:
+            tag_name = tag_name.strip()
+            if not tag_name:
+                return None
+            
+            # 先尝试获取
+            self.cur.execute("SELECT id FROM blog_tags WHERE tag_name=?", (tag_name,))
+            result = self.cur.fetchone()
+            if result:
+                return result[0]
+            
+            # 不存在则创建
+            from datetime import datetime
+            created_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            self.cur.execute("INSERT INTO blog_tags (tag_name, created_time) VALUES (?, ?)", (tag_name, created_time))
+            self.conn.commit()
+            return self.cur.lastrowid
+        except Exception as e:
+            print(f"Database get_or_create_tag error: {e}")
+            self.conn.rollback()
+            return None
+    
+    def fetch_all_tags(self):
+        """获取所有标签"""
+        try:
+            self.cur.execute("SELECT id, tag_name FROM blog_tags ORDER BY tag_name")
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_all_tags error: {e}")
+            return []
+    
+    def fetch_blog_tags(self, blog_id):
+        """获取指定博客的所有标签"""
+        try:
+            self.cur.execute("""
+                SELECT bt.id, bt.tag_name 
+                FROM blog_tags bt
+                INNER JOIN blog_tag_relations btr ON bt.id = btr.tag_id
+                WHERE btr.blog_id = ?
+                ORDER BY bt.tag_name
+            """, (blog_id,))
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database fetch_blog_tags error: {e}")
+            return []
+    
+    def add_blog_tag(self, blog_id, tag_id):
+        """为博客添加标签"""
+        try:
+            self.cur.execute("INSERT OR IGNORE INTO blog_tag_relations (blog_id, tag_id) VALUES (?, ?)", (blog_id, tag_id))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database add_blog_tag error: {e}")
+            self.conn.rollback()
+            return False
+    
+    def clear_blog_tags(self, blog_id):
+        """清除博客的所有标签"""
+        try:
+            self.cur.execute("DELETE FROM blog_tag_relations WHERE blog_id=?", (blog_id,))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database clear_blog_tags error: {e}")
+            self.conn.rollback()
+            return False
+    
+    def set_blog_tags(self, blog_id, tag_names):
+        """设置博客的标签（先清除再添加）"""
+        try:
+            # 清除现有标签
+            self.clear_blog_tags(blog_id)
+            
+            # 添加新标签
+            if tag_names:
+                for tag_name in tag_names:
+                    tag_id = self.get_or_create_tag(tag_name)
+                    if tag_id:
+                        self.add_blog_tag(blog_id, tag_id)
+            
+            return True
+        except Exception as e:
+            print(f"Database set_blog_tags error: {e}")
+            return False

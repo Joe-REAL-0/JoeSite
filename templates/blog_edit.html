@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -13,20 +14,19 @@
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
 </head>
+
 <body>
     <div class="CenterContainer">
         <div class="blog-edit-container glassmorphism">
             <h1 id="title">{% if mode == 'create' %}写博客{% else %}编辑博客{% endif %}</h1>
-            
+
             <form id="blog-form">
                 <div class="form-group">
                     <label for="blog-title">标题 *</label>
-                    <input type="text" id="blog-title" name="title" 
-                           placeholder="输入博客标题..." 
-                           value="{% if blog %}{{ blog.title }}{% endif %}" 
-                           required>
+                    <input type="text" id="blog-title" name="title" placeholder="输入博客标题..."
+                        value="{% if blog %}{{ blog.title }}{% endif %}" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="blog-content">内容 * (支持Markdown)</label>
                     <div class="editor-container">
@@ -53,15 +53,27 @@
                                 👁️
                             </button>
                         </div>
-                        <textarea id="blog-content" name="content" 
-                                  placeholder="在这里使用Markdown格式书写你的博客..." 
-                                  rows="20" required>{% if blog %}{{ blog.content }}{% endif %}</textarea>
+                        <textarea id="blog-content" name="content" placeholder="在这里使用Markdown格式书写你的博客..." rows="20"
+                            required>{% if blog %}{{ blog.content }}{% endif %}</textarea>
                     </div>
                     <div class="char-counter">
                         <span id="char-count">0</span> 字
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="tag-input">标签 (用于SEO优化)</label>
+                    <div class="tag-input-container">
+                        <div class="tag-chips" id="tag-chips">
+                            <!-- 标签芯片将显示在这里 -->
+                        </div>
+                        <input type="text" id="tag-input" placeholder="输入标签后按回车键添加..." autocomplete="off">
+                    </div>
+                    <div class="tag-hint">
+                        建议添加3-5个相关标签，有助于SEO优化和搜索引擎收录
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" class="save-draft-btn" id="save-draft-btn">
                         💾 保存草稿
@@ -78,7 +90,7 @@
                 </div>
             </form>
         </div>
-        
+
         <!-- Markdown预览模态框 -->
         <div id="preview-modal" class="modal" style="display: none;">
             <div class="modal-content glassmorphism">
@@ -91,13 +103,13 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 传递数据给JS -->
-    <div id="flask-data" 
-         data-mode="{{ mode }}"
-         {% if blog %}data-blog-id="{{ blog.id }}"{% endif %}>
+    <div id="flask-data" data-mode="{{ mode }}" {% if blog %}data-blog-id="{{ blog.id }}" {% endif %} {% if blog and
+        blog.tags %}data-tags="{{ blog.tags|join(',') }}" {% endif %}>
     </div>
-    
+
     <script src="{{ url_for('static', filename='js/blog_edit.js') }}"></script>
 </body>
+
 </html>

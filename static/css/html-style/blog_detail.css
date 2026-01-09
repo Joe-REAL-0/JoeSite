@@ -63,7 +63,9 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.blog-date, .blog-updated, .blog-views {
+.blog-date,
+.blog-updated,
+.blog-views {
     display: inline-block;
     padding: 5px 12px;
     background: rgba(0, 0, 0, 0.2);
@@ -79,6 +81,47 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+/* 标签区域样式 */
+.blog-tags-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.tags-label {
+    font-size: 1em;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.blog-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    font-size: 0.9em;
+    color: white;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.blog-tag:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
 
 /* Markdown内容样式 */
 .markdown-body {
@@ -284,7 +327,8 @@ body {
     gap: 15px;
 }
 
-.back-btn, .edit-btn {
+.back-btn,
+.edit-btn {
     padding: 12px 25px;
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
@@ -298,7 +342,8 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-.back-btn:hover, .edit-btn:hover {
+.back-btn:hover,
+.edit-btn:hover {
     background: rgba(255, 255, 255, 0.25);
     transform: translateY(-3px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
@@ -318,43 +363,44 @@ body {
     body {
         overflow-x: hidden;
     }
-    
+
     .CenterContainer {
         padding: 60px 15px 40px;
     }
-    
+
     .blog-detail-container {
         max-width: 80%;
         padding: 25px;
         margin: 0;
     }
-    
+
     .blog-title {
         font-size: 2em;
     }
-    
+
     .markdown-body {
         font-size: 1em;
     }
-    
+
     .markdown-body h1 {
         font-size: 1.8em;
     }
-    
+
     .markdown-body h2 {
         font-size: 1.5em;
     }
-    
+
     .markdown-body h3 {
         font-size: 1.3em;
     }
-    
+
     .blog-footer {
         flex-direction: column;
         align-items: stretch;
     }
-    
-    .back-btn, .edit-btn {
+
+    .back-btn,
+    .edit-btn {
         text-align: center;
         width: 85%;
     }
@@ -364,16 +410,16 @@ body {
     .blog-detail-container {
         padding: 20px;
     }
-    
+
     .blog-title {
         font-size: 1.6em;
     }
-    
+
     .blog-meta {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .markdown-body pre {
         padding: 15px;
         font-size: 0.9em;
@@ -386,6 +432,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -397,6 +444,7 @@ body {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
