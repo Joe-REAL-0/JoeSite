@@ -73,6 +73,8 @@
 
                         <div class="blog-meta">
                             <span class="blog-views">📖 {{ blog[5] }} 次阅读</span>
+                            <span class="blog-likes-count">❤️ {{ blog[7] }}</span>
+                            <span class="blog-comments-count">💬 {{ blog[8] }}</span>
                             {% if blog[4] and blog[4] != blog[3] %}
                             <span class="blog-updated">🔄 最后更新: {{ blog[4] }}</span>
                             {% endif %}

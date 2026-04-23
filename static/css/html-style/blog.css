@@ -120,7 +120,7 @@ body {
     animation: fadeInUp 0.5s ease-out;
     cursor: pointer;
     width: 95%;
-    height: 280px;
+    min-height: 240px;
     display: flex;
     flex-direction: column;
 }
@@ -259,13 +259,14 @@ body {
 
 .blog-meta {
     display: flex;
-    gap: 20px;
+    gap: 12px 18px;
     font-size: 0.9em;
     color: rgba(255, 255, 255, 0.7);
     flex-wrap: wrap;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
     margin-top: auto;
+    padding-top: 10px;
 }
 
 /* 标签样式 */
@@ -295,7 +296,9 @@ body {
 }
 
 .blog-views,
-.blog-updated {
+.blog-updated,
+.blog-likes-count,
+.blog-comments-count {
     display: inline-block;
 }
 
@@ -497,7 +500,7 @@ body {
 
     .blog-card {
         padding: 20px;
-        height: 260px;
+        min-height: 200px;
     }
 
     .blog-card:hover {
@@ -549,7 +552,7 @@ body {
 
     .blog-card {
         padding: 15px;
-        height: 240px;
+        min-height: 180px;
     }
 
     .blog-title {
@@ -557,7 +560,9 @@ body {
     }
 
     .blog-meta {
-        flex-direction: column;
-        gap: 8px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px 12px;
+        font-size: 0.8em;
     }
 }

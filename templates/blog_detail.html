@@ -33,6 +33,18 @@
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 </head>
 <body>
+    <!-- 博客数据 (供JS使用) -->
+    <script>
+        var BLOG_DATA = {
+            blogId: {{ blog.id }},
+        isLoggedIn: { { 'true' if is_logged_in else 'false' } },
+        loginUrl: "{{ login_url }}",
+            likesCount: { { likes_count } },
+        commentsCount: { { comments_count } },
+        hasLiked: { { 'true' if has_liked else 'false' } }
+        };
+    </script>
+
     <div class="CenterContainer">
         <div class="blog-detail-container glassmorphism">
             <div class="blog-header">
@@ -53,7 +65,20 @@
             <div class="blog-content markdown-body">
                 {{ blog.content | safe }}
             </div>
+<<<<<<< HEAD
             
+=======
+
+            <!-- 评论区域 -->
+            <div class="blog-comments-section" id="commentsSection">
+                <h3 class="comments-title">💬 评论区 <span class="comments-count" id="commentsCount">({{ comments_count
+                        }})</span></h3>
+                <div class="comments-list" id="commentsList">
+                    <!-- 评论会通过JS动态加载 -->
+                </div>
+            </div>
+
+>>>>>>> 9b8f097 (优化主页的设计语言，优化博客详情页，实现点赞和评论的功能)
             <div class="blog-footer">
                 <a href="{{ url_for('blog.blog_list') }}" class="back-btn">← 返回博客列表</a>
                 {% if is_admin %}
@@ -62,7 +87,58 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
     
+=======
+
+    <!-- 右侧固定侧边栏：TOC + 操作按钮统一容器 -->
+    <aside class="right-sidebar" id="rightSidebar">
+        <!-- TOC 目录导航 -->
+        <div class="toc-section" id="tocSection">
+            <div class="toc-header">
+                <span class="toc-title">📑 目录</span>
+                <button class="toc-toggle" id="tocToggle" title="收起目录">🔻</button>
+            </div>
+            <div class="toc-content" id="tocContent">
+                <!-- TOC会通过JS动态生成 -->
+            </div>
+        </div>
+
+        <!-- 操作按钮组 -->
+        <div class="action-buttons">
+            <button class="sidebar-btn like-btn" id="likeBtn" title="点赞">
+                <span class="btn-icon" id="likeIcon">🤍</span>
+                <span class="btn-count" id="likeCount">{{ likes_count }}</span>
+            </button>
+            <button class="sidebar-btn comment-btn" id="commentBtn" title="评论">
+                <span class="btn-icon">💬</span>
+                <span class="btn-count" id="commentBtnCount">{{ comments_count }}</span>
+            </button>
+            <button class="sidebar-btn top-btn" id="topBtn" title="回到顶部">
+                <span class="btn-icon">⬆️</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- 评论弹窗 -->
+    <div class="comment-modal-overlay" id="commentModal">
+        <div class="comment-modal glassmorphism">
+            <div class="modal-header">
+                <h3>发表评论</h3>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <textarea class="comment-input" id="commentInput" placeholder="写下你的想法..." maxlength="500"></textarea>
+                <div class="comment-char-count"><span id="charCount">0</span>/500</div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel" id="modalCancel">取消</button>
+                <button class="modal-submit" id="modalSubmit">发表评论</button>
+            </div>
+        </div>
+    </div>
+
+>>>>>>> 9b8f097 (优化主页的设计语言，优化博客详情页，实现点赞和评论的功能)
     <!-- 代码高亮JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>

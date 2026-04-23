@@ -75,8 +75,10 @@ def blog_list():
             for blog in blogs:
                 blog_id = blog[0]
                 tags = db.fetch_blog_tags(blog_id)
-                tag_names = [tag[1] for tag in tags]  # 提取标签名称
-                blogs_with_tags.append(blog + (tag_names,))  # 添加标签到博客数据
+                tag_names = [tag[1] for tag in tags]
+                likes_count = db.get_blog_likes_count(blog_id)
+                comments_count = db.count_blog_comments(blog_id)
+                blogs_with_tags.append(blog + (tag_names, likes_count, comments_count))
         
         total_pages = (total_count + per_page - 1) // per_page
         
@@ -133,7 +135,21 @@ def blog_detail(blog_id):
                 'tags': tag_names
             }
             
-        return render_template('blog_detail.html', blog=blog_info, is_admin=is_admin)
+            # 获取点赞和评论数据
+            likes_count = db.get_blog_likes_count(blog_id)
+            comments_count = db.count_blog_comments(blog_id)
+            has_liked = False
+            if current_user.is_authenticated:
+                has_liked = db.has_blog_liked(blog_id, current_user.email)
+            
+        is_logged_in = current_user.is_authenticated
+        current_nickname = current_user.nickname if is_logged_in else ''
+        login_url = url_for('auth.login')
+        
+        return render_template('blog_detail.html', blog=blog_info, is_admin=is_admin, 
+                               is_logged_in=is_logged_in, current_nickname=current_nickname,
+                               login_url=login_url, likes_count=likes_count, 
+                               comments_count=comments_count, has_liked=has_liked)
     except Exception as e:
         print(f"Error in blog_detail: {e}")
         return f"加载博客时出错: {str(e)}", 500
@@ -305,3 +321,98 @@ def blog_manage():
     except Exception as e:
         print(f"Error in blog_manage: {e}")
         return render_template('blog_manage.html', blogs=[], page=1, total_pages=0, total_count=0)
+
+@blog.route('/api/blog/like', methods=['POST'])
+def blog_like():
+    """博客点赞/取消点赞"""
+    try:
+        if not current_user.is_authenticated:
+            return jsonify({"success": False, "error": "请先登录", "need_login": True}), 401
+        data = request.get_json()
+        blog_id = data.get('blog_id')
+        action = data.get('action', 'add')
+        user_email = current_user.email
+        
+        with Database('./database.db') as db:
+            if action == 'add':
+                success = db.add_blog_like(blog_id, user_email)
+            else:
+                success = db.remove_blog_like(blog_id, user_email)
+            
+            if success:
+                likes_count = db.get_blog_likes_count(blog_id)
+                return jsonify({"success": True, "count": likes_count})
+            else:
+                return jsonify({"success": False, "error": "操作失败"})
+    except Exception as e:
+        print(f"Blog like error: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@blog.route('/api/blog/comment', methods=['POST'])
+def blog_comment():
+    """添加博客评论"""
+    try:
+        if not current_user.is_authenticated:
+            return jsonify({"success": False, "error": "请先登录", "need_login": True}), 401
+        data = request.get_json()
+        blog_id = data.get('blog_id')
+        comment_content = data.get('content', '').strip()
+        
+        if not comment_content:
+            return jsonify({"success": False, "error": "评论内容不能为空"})
+        
+        user_email = current_user.email
+        user_nickname = current_user.nickname
+        comment_time = get_china_time("%Y-%m-%d %H:%M:%S")
+        
+        with Database('./database.db') as db:
+            success = db.add_blog_comment(blog_id, user_email, user_nickname, comment_content, comment_time)
+            
+            if success:
+                comments = db.get_blog_comments(blog_id)
+                formatted_comments = []
+                for comment in comments:
+                    formatted_comments.append({
+                        "nickname": comment[0],
+                        "content": comment[1],
+                        "time": comment[2],
+                        "is_mine": comment[3] == user_email
+                    })
+                return jsonify({"success": True, "comments": formatted_comments})
+            else:
+                return jsonify({"success": False, "error": "添加评论失败"})
+    except Exception as e:
+        print(f"Blog comment error: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@blog.route('/api/blog/data/<int:blog_id>')
+def blog_data(blog_id):
+    """获取博客点赞和评论数据"""
+    try:
+        with Database('./database.db') as db:
+            likes_count = db.get_blog_likes_count(blog_id)
+            
+            has_liked = False
+            if current_user.is_authenticated:
+                has_liked = db.has_blog_liked(blog_id, current_user.email)
+            
+            comments = db.get_blog_comments(blog_id)
+            formatted_comments = []
+            for comment in comments:
+                is_mine = current_user.is_authenticated and comment[3] == current_user.email
+                formatted_comments.append({
+                    "nickname": comment[0],
+                    "content": comment[1],
+                    "time": comment[2],
+                    "is_mine": is_mine
+                })
+            
+            return jsonify({
+                "success": True,
+                "likes_count": likes_count,
+                "has_liked": has_liked,
+                "comments": formatted_comments
+            })
+    except Exception as e:
+        print(f"Blog data error: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500

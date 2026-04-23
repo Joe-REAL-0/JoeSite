@@ -24,6 +24,8 @@ class Database:
             self.cur.execute("CREATE TABLE IF NOT EXISTS blogs (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, summary TEXT, created_time TEXT NOT NULL, updated_time TEXT, author_email TEXT NOT NULL, is_published INTEGER DEFAULT 0, view_count INTEGER DEFAULT 0)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blog_tags (id INTEGER PRIMARY KEY AUTOINCREMENT, tag_name TEXT NOT NULL UNIQUE, created_time TEXT NOT NULL)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blog_tag_relations (blog_id INTEGER NOT NULL, tag_id INTEGER NOT NULL, PRIMARY KEY (blog_id, tag_id), FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE, FOREIGN KEY (tag_id) REFERENCES blog_tags(id) ON DELETE CASCADE)")
+            self.cur.execute("CREATE TABLE IF NOT EXISTS blog_likes (id INTEGER PRIMARY KEY AUTOINCREMENT, blog_id INTEGER NOT NULL, liker_email TEXT NOT NULL, UNIQUE(blog_id, liker_email), FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE)")
+            self.cur.execute("CREATE TABLE IF NOT EXISTS blog_comments (id INTEGER PRIMARY KEY AUTOINCREMENT, blog_id INTEGER NOT NULL, commenter_email TEXT NOT NULL, commenter_nickname TEXT NOT NULL, comment_content TEXT NOT NULL, comment_time TEXT NOT NULL, FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE)")
             # 检查并升级现有的用户表，添加avatar列
             try:
                 self.cur.execute("SELECT avatar FROM users LIMIT 1")
@@ -630,3 +632,81 @@ class Database:
         except Exception as e:
             print(f"Database set_blog_tags error: {e}")
             return False
+
+    # 博客点赞相关方法
+    def add_blog_like(self, blog_id, liker_email):
+        """添加博客点赞"""
+        try:
+            self.cur.execute("INSERT INTO blog_likes (blog_id, liker_email) VALUES (?, ?)", 
+                            (blog_id, liker_email))
+            self.conn.commit()
+            return True
+        except sqlite3.IntegrityError:
+            return False
+        except Exception as e:
+            print(f"Database add_blog_like error: {e}")
+            self.conn.rollback()
+            return False
+
+    def remove_blog_like(self, blog_id, liker_email):
+        """移除博客点赞"""
+        try:
+            self.cur.execute("DELETE FROM blog_likes WHERE blog_id=? AND liker_email=?", 
+                            (blog_id, liker_email))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database remove_blog_like error: {e}")
+            self.conn.rollback()
+            return False
+
+    def get_blog_likes_count(self, blog_id):
+        """获取博客点赞数"""
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM blog_likes WHERE blog_id=?", (blog_id,))
+            return self.cur.fetchone()[0]
+        except Exception as e:
+            print(f"Database get_blog_likes_count error: {e}")
+            return 0
+
+    def has_blog_liked(self, blog_id, liker_email):
+        """检查用户是否已点赞博客"""
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM blog_likes WHERE blog_id=? AND liker_email=?", 
+                            (blog_id, liker_email))
+            return self.cur.fetchone()[0] > 0
+        except Exception as e:
+            print(f"Database has_blog_liked error: {e}")
+            return False
+
+    # 博客评论相关方法
+    def add_blog_comment(self, blog_id, commenter_email, commenter_nickname, comment_content, comment_time):
+        """添加博客评论"""
+        try:
+            self.cur.execute("INSERT INTO blog_comments (blog_id, commenter_email, commenter_nickname, comment_content, comment_time) VALUES (?, ?, ?, ?, ?)", 
+                            (blog_id, commenter_email, commenter_nickname, comment_content, comment_time))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database add_blog_comment error: {e}")
+            self.conn.rollback()
+            return False
+
+    def get_blog_comments(self, blog_id):
+        """获取博客的所有评论"""
+        try:
+            self.cur.execute("SELECT commenter_nickname, comment_content, comment_time, commenter_email FROM blog_comments WHERE blog_id=? ORDER BY comment_time ASC", 
+                            (blog_id,))
+            return self.cur.fetchall()
+        except Exception as e:
+            print(f"Database get_blog_comments error: {e}")
+            return []
+
+    def count_blog_comments(self, blog_id):
+        """获取博客评论数"""
+        try:
+            self.cur.execute("SELECT COUNT(*) FROM blog_comments WHERE blog_id=?", (blog_id,))
+            return self.cur.fetchone()[0]
+        except Exception as e:
+            print(f"Database count_blog_comments error: {e}")
+            return 0
