@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,44 +13,36 @@
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-    
+
     <!-- 代码高亮样式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    
+
     <!-- MathJax数学公式渲染 -->
     <script>
-    MathJax = {
-        tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            displayMath: [['$$', '$$'], ['\\[', '\\]']],
-            processEscapes: true,
-            processEnvironments: true
-        },
-        options: {
-            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-    };
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 </head>
-<body>
-    <!-- 博客数据 (供JS使用) -->
-    <script>
-        var BLOG_DATA = {
-            blogId: {{ blog.id }},
-        isLoggedIn: { { 'true' if is_logged_in else 'false' } },
-        loginUrl: "{{ login_url }}",
-            likesCount: { { likes_count } },
-        commentsCount: { { comments_count } },
-        hasLiked: { { 'true' if has_liked else 'false' } }
-        };
-    </script>
+
+<body data-blog-id="{{ blog.id }}" data-is-logged-in="{{ 'true' if is_logged_in else 'false' }}"
+    data-login-url="{{ login_url }}" data-likes-count="{{ likes_count }}" data-comments-count="{{ comments_count }}"
+    data-has-liked="{{ 'true' if has_liked else 'false' }}">
 
     <div class="CenterContainer">
         <div class="blog-detail-container glassmorphism">
             <div class="blog-header">
                 <h1 class="blog-title">{{ blog.title }}</h1>
-                
+
                 <div class="blog-meta">
                     <span class="blog-date">发布于: {{ blog.created_time }}</span>
                     {% if blog.updated_time and blog.updated_time != blog.created_time %}
@@ -61,15 +54,10 @@
                     {% endif %}
                 </div>
             </div>
-            
+
             <div class="blog-content markdown-body">
                 {{ blog.content | safe }}
             </div>
-<<<<<<< HEAD
-            
-=======
-
-            <!-- 评论区域 -->
             <div class="blog-comments-section" id="commentsSection">
                 <h3 class="comments-title">💬 评论区 <span class="comments-count" id="commentsCount">({{ comments_count
                         }})</span></h3>
@@ -78,7 +66,6 @@
                 </div>
             </div>
 
->>>>>>> 9b8f097 (优化主页的设计语言，优化博客详情页，实现点赞和评论的功能)
             <div class="blog-footer">
                 <a href="{{ url_for('blog.blog_list') }}" class="back-btn">← 返回博客列表</a>
                 {% if is_admin %}
@@ -87,17 +74,13 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-    
-=======
 
-    <!-- 右侧固定侧边栏：TOC + 操作按钮统一容器 -->
     <aside class="right-sidebar" id="rightSidebar">
         <!-- TOC 目录导航 -->
         <div class="toc-section" id="tocSection">
             <div class="toc-header">
                 <span class="toc-title">📑 目录</span>
-                <button class="toc-toggle" id="tocToggle" title="收起目录">🔻</button>
+                <button class="toc-toggle" id="tocToggle" title="收起目录">▲</button>
             </div>
             <div class="toc-content" id="tocContent">
                 <!-- TOC会通过JS动态生成 -->
@@ -137,11 +120,10 @@
             </div>
         </div>
     </div>
-
->>>>>>> 9b8f097 (优化主页的设计语言，优化博客详情页，实现点赞和评论的功能)
     <!-- 代码高亮JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
     <script src="{{ url_for('static', filename='js/blog_detail.js') }}"></script>
 </body>
+
 </html>

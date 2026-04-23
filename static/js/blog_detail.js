@@ -2,6 +2,17 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log('博客详情页面已加载');
 
+    // 从 body data-* 属性读取博客数据
+    var body = document.body;
+    var BLOG_DATA = {
+        blogId: parseInt(body.dataset.blogId),
+        isLoggedIn: body.dataset.isLoggedIn === 'true',
+        loginUrl: body.dataset.loginUrl,
+        likesCount: parseInt(body.dataset.likesCount),
+        commentsCount: parseInt(body.dataset.commentsCount),
+        hasLiked: body.dataset.hasLiked === 'true'
+    };
+
     // ============================
     // 1. 目录导航 (TOC) 生成
     // ============================
