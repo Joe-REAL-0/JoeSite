@@ -1,12 +1,59 @@
-body {
-    height: 100vh;
-    margin: 0;
-    background-repeat: no-repeat;
-    background-position: top;
-    background-size: cover;
-    background-image: url("../../images/background.jpg");
+/* ===========================
+   Design Tokens
+   =========================== */
+:root {
+    /* 同心圆角体系
+       外层容器 radius = --radius-outer
+       内层元素 radius = --radius-inner = outer - padding
+       确保嵌套圆角视觉和谐 */
+    --radius-outer: 32px;
+    --radius-inner: 18px;
+    /* 32 - 14(padding) = 18 */
+    --radius-sm: 10px;
+
+    /* 间距 */
+    --space-xs: 8px;
+    --space-sm: 14px;
+    --space-md: 24px;
+    --space-lg: 40px;
+    --space-xl: 64px;
+
+    --inner-alpha: 0.15;
+    --outer-alpha: 0.55;
 }
 
+/* ===========================
+   Base / Reset
+   =========================== */
+html {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+html::-webkit-scrollbar {
+    display: none;
+    /* Chrome / Safari */
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-body);
+    background-image: url("../../images/background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===========================
+   Loading Cover & Title
+   =========================== */
 #cover {
     position: fixed;
     pointer-events: none;
@@ -14,13 +61,13 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: black;
+    background-color: var(--bg-cover);
     z-index: 1000;
-    /* 确保cover覆盖所有元素，包括菜单按钮 */
+    /* 确保cover覆盖所有元素 */
 }
 
 #cover.resources-loaded {
-    animation: fadeOut 0.4s 0.2s forwards;
+    animation: fadeOut 0.6s 0.2s forwards;
 }
 
 #title_container {
@@ -46,13 +93,12 @@ body {
 
 #title {
     position: relative;
-    /* 修改为相对定位，使其能够正确响应flex布局 */
-    padding: 15px;
-    width: 100%;
+    padding: 12px 32px;
+    width: auto;
     max-width: 640px;
-    border-radius: 40px;
-    background-color: rgba(255, 255, 255, 0);
-    color: lightblue;
+    border-radius: var(--radius-outer);
+    background-color: transparent;
+    color: var(--title-color-start);
     text-align: center;
     white-space: nowrap;
     font-family: 'valorax';
@@ -67,24 +113,26 @@ body {
     text-align: center;
     overflow: hidden;
     white-space: nowrap;
-    font-size: 24px;
+    font-size: 18px;
     max-height: 30px;
     width: 100%;
-    color: lightblue;
+    color: var(--text-muted);
     opacity: 0;
     animation: fadeIn 0.3s 0.5s forwards;
     z-index: 1001;
+    letter-spacing: 3px;
+    font-family: 'YuanTi';
     /* 确保loading_text在cover上面 */
 }
 
 #title.resources-loaded {
     opacity: 1;
-    animation: titleZoom 0.5s 0.2s forwards;
+    animation: titleZoom 0.6s 0.2s forwards;
 }
 
 #title_container.resources-loaded {
     opacity: 1;
-    animation: titleMove 0.4s 0.2s forwards;
+    animation: titleMove 0.5s 0.2s forwards;
 }
 
 #loading_text.resources-loaded {
@@ -92,249 +140,228 @@ body {
     animation: fadeOut 0.2s 0s forwards;
 }
 
-#main_screen {
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    background-color: rgba(96, 96, 96, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.18);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
-    padding: 20px;
-    top: 55%;
-    width: 85%;
-    max-width: 1200px;
-    border-radius: 60px;
-    height: 0;
-    max-height: 75%;
-    overflow: hidden;
-}
-
-#main_screen.loaded {
-    animation: fold-y 0.4s 0.4s forwards;
-}
-
-#side_list {
-    position: relative;
-    overflow: hidden;
-    height: 100%;
+/* ===========================
+   Section Layout (Scroll Snap)
+   =========================== */
+.page-section {
+    height: 100vh;
     width: 100%;
-    max-width: 280px;
-    background-color: rgba(255, 255, 255, 0.75);
-    border-radius: 40px;
-    opacity: 0;
-}
-
-#side_list.loaded {
-    animation: fadeIn 0.6s 0.8s forwards;
-}
-
-#info_screen {
+    scroll-snap-align: start;
     position: relative;
-    flex: 1;
-    width: auto;
-    padding: 40px;
-    margin-bottom: 20px;
-    opacity: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 40px;
-    min-height: 0;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
-#info_screen.loaded {
-    animation: fadeIn 0.8s 1.2s forwards;
+/* Section 切换淡入淡出 — 作用于内容容器而非 section 本身，
+   避免 opacity:0 导致浏览器卸载 backdrop-filter 渲染。
+   .section-fade-ready: 入场动画完成后添加，启用 opacity transition
+   .section-fade-out: 离开视口时添加，触发淡出 */
+.section-fade-ready {
+    transition: opacity 0.5s ease !important;
 }
 
-#link_column {
-    overflow: hidden;
+.section-fade-out {
+    opacity: 0 !important;
+}
+
+/* ===========================
+   Section 1: Hero 首屏
+   =========================== */
+.hero-section {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-    max-height: 120px;
-    width: auto;
-    background-color: rgb(216, 216, 216);
-    border-radius: 20px;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    padding: var(--space-md);
+    margin-top: 60px;
+    /* 毛玻璃圆角矩形背景 — 保证任何背景图下的可读性 */
+    backdrop-filter: blur(24px) saturate(130%);
+    -webkit-backdrop-filter: blur(24px) saturate(130%);
+    background-color: var(--bg-overlay);
+    border: 1px solid var(--border-subtle);
+    border-radius: calc(var(--space-sm) + var(--space-md) + 25px);
+    box-shadow: var(--shadow-card);
     opacity: 0;
-    margin: -20px;
-    margin-top: auto;
-    z-index: 15;
-    padding: 20px 0;
+}
+
+.hero-content.loaded {
+    animation: scaleFadeIn 0.3s 0.5s forwards;
+}
+
+/* 欢迎语 — 同心内圆角 */
+.welcome_messages_container {
+    position: relative;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 5% 0;
+}
+
+.welcome-line {
+    margin: 0;
+    opacity: 0;
+}
+
+#welcome_message_1 {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    color: var(--text-muted);
+    font-family: 'YuanTi';
+    margin-bottom: var(--space-sm);
+}
+
+#welcome_message_1.welcome-start {
+    animation: fadeIn 0.4s ease forwards;
+}
+
+#welcome_message_2 {
+    font-size: 52px;
+    letter-spacing: 4px;
+    color: var(--text-primary);
+    font-family: 'GunShi';
+}
+
+#welcome_message_2.welcome-start {
+    animation: fadeIn 0.4s 0.1s ease forwards;
+}
+
+/* 社交链接（Hero底部）— 同心内圆角 */
+#link_column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-md);
+    background-color: var(--bg-overlay-inner);
+    border-radius: calc(var(--space-sm) + 25px);
+    padding: var(--space-sm);
+    width: 100%;
+    box-sizing: border-box;
+    opacity: 0;
 }
 
 #link_column.loaded {
-    animation: fadeIn 0.6s 1.4s forwards;
-}
-
-#user_info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    position: relative;
-    width: auto;
-    height: auto;
-    min-height: 60px;
-    flex-shrink: 0;
-    opacity: 0;
-    padding: 40px;
-    /* 增加上下内边距 */
-    border-radius: 40px;
-    background-color: rgba(255, 255, 255, 0.6);
-}
-
-#user_info.loaded {
-    animation: fadeIn 0.6s 1.0s forwards;
-}
-
-#login_link {
-    text-decoration: none;
-    font-size: 25px;
-    font-weight: bold;
-    /* 修正为 font-weight */
-    white-space: nowrap;
-    color: gray;
-    margin-bottom: 8px;
-    /* 添加底部间距 */
-}
-
-#login_link:hover {
-    color: blue;
-}
-
-#login_text {
-    font-size: 16px;
-    color: #222;
-    margin: 0;
-    text-align: left;
-}
-
-#user_info_link {
-    text-decoration: none;
-    font-size: 16px;
-    color: #0066cc;
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 15px;
-    transition: all 0.3s;
-}
-
-#user_info_link:hover {
-    background-color: #0066cc;
-    color: white;
-}
-
-.CenterContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.ButtonContainer {
-    margin: 15px;
-    display: flex;
-    flex: row;
+    animation: fadeIn 0.4s 0.8s forwards;
 }
 
 .LinkContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
 }
 
-.InfoContainer {
-    position: relative;
-    margin-left: 25px;
-    height: 100%;
-    width: 100%;
-    float: right;
-    text-align: left;
+.LinkIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    opacity: 0.85;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--link-icon-shadow);
+}
+
+.LinkIcon:hover {
+    opacity: 1;
+    transform: scale(1.18);
+    box-shadow: var(--link-icon-hover-shadow);
+}
+
+/* 滚动指示器 — 面板外部，绝对定位在hero底部 */
+.scroll-indicator {
+    position: absolute;
+    bottom: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 4px;
+    font-family: 'YuanTi';
+    cursor: pointer;
+    opacity: 0;
+    transition: color 0.3s ease;
 }
 
-.welcome_messages_container {
-    position: absolute;
-    width: fit-content;
-    top: 20px;
-    left: 25px;
-    z-index: 10;
-    background-color: transparent;
-    padding: 10px;
-    margin: 10px;
-    overflow: hidden;
+.scroll-indicator.loaded {
+    animation: fadeIn 0.6s 2.0s forwards;
 }
 
-.welcome-line {
-    margin: 5px 0;
-    text-align: left;
+.scroll-indicator:hover {
+    color: var(--text-secondary);
 }
 
-#welcome_message_1 {
-    font-size: 48px;
-    color: #000;
-    font-family: 'GunShi';
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
+.scroll-arrow {
+    width: 16px;
+    height: 16px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    animation: scrollHint 2.5s ease-in-out infinite;
 }
 
-#welcome_message_1.welcome-start {
-    animation: fold-x 0.4s 0s forwards;
-    width: auto;
+/* ===========================
+   Section 2: Content Hub 内容区
+   =========================== */
+.content-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#welcome_message_2 {
-    font-size: 22px;
-    color: #222;
-    font-family: 'valorax';
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
+/* 主面板 — 外层圆角 */
+#main_screen {
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: calc(var(--space-sm) * 2 + 25px);
+    padding: var(--space-sm);
+    box-shadow: var(--shadow-card-strong);
+    width: 85%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-#welcome_message_2.welcome-start {
-    animation: fold-x 0.4s 0s forwards;
-    width: auto;
+#main_screen.loaded {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-#welcome_message_3 {
-    font-size: 48px;
-    color: #000;
-    font-family: 'GunShi';
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
+/* 导航菜单 */
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-#welcome_message_3.welcome-start {
-    animation: fold-x 0.5s 0s forwards;
-    width: auto;
+/* 导航按钮 — 同心内圆角 */
+.ButtonContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    border-radius: calc(var(--space-sm) + 25px);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.25s ease;
+    margin: 0;
 }
 
-#welcome_message_4 {
-    font-size: 22px;
-    color: #222;
-    font-family: 'valorax';
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-#welcome_message_4.welcome-start {
-    animation: fold-x 0.5s 0s forwards;
-    width: auto;
+.ButtonContainer:hover {
+    background-color: var(--glass-bg-hover);
 }
 
 .ButtonIcon {
@@ -343,313 +370,208 @@ body {
     align-items: center;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 25px;
     overflow: hidden;
+    background-color: var(--icon-bg);
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+}
+
+.ButtonContainer:hover .ButtonIcon {
+    background-color: var(--icon-bg-hover);
 }
 
 .ButtonImg {
-    height: 32px;
-    width: 32px;
+    height: 24px;
+    width: 24px;
+    opacity: var(--icon-opacity);
+    transition: opacity 0.3s ease;
 }
 
-.LinkIcon {
-    border-radius: 35px;
-    height: 70px;
-    width: 70px;
-}
-
-.LinkIcon:hover {
-    transform: scale(1.2);
+.ButtonContainer:hover .ButtonImg {
+    opacity: 1;
 }
 
 .SideButton {
     text-decoration: none;
-    color: black;
-    float: left;
-    white-space: nowrap;
-    padding-left: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-size: 24px;
-    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 20px;
     font-family: 'YuanTi';
+    white-space: nowrap;
+    transition: color 0.25s ease, transform 0.25s ease;
 }
 
-.SideButton:hover {
-    color: deepskyblue;
-    margin-left: 10px;
+.ButtonContainer:hover .SideButton {
+    color: var(--accent);
+    transform: translateX(4px);
 }
 
-/* 移动端菜单按钮 */
-.mobile-menu-btn {
-    display: none;
-    position: fixed;
-    top: 6%;
-    left: 12%;
-    /* 距离左侧屏幕宽度的5% */
-    z-index: 1003;
-    /* 确保按钮在侧边栏之上 */
-    width: 50px;
-    height: 50px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+/* 面板分隔线 */
+.panel-divider {
+    height: 1px;
+    background: var(--divider);
+    margin: var(--space-sm) 0;
+}
+
+/* 用户信息 — 同心内圆角 */
+#user_info {
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    align-items: flex-start;
+    padding: var(--space-sm) calc(var(--space-sm) + 25px);
+    border-radius: calc(var(--space-sm) + 25px);
+    background-color: var(--bg-overlay-inner);
+    gap: var(--space-xs);
 }
 
-.hamburger {
-    width: 25px;
-    height: 3px;
-    background-color: #333;
-    margin: 3px 0;
-    transition: 0.3s;
+#login_link {
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
 }
 
-.mobile-menu-btn.active .hamburger:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
+#login_link:hover {
+    color: var(--accent);
 }
 
-.mobile-menu-btn.active .hamburger:nth-child(2) {
-    opacity: 0;
+#login_text {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    text-align: left;
 }
 
-.mobile-menu-btn.active .hamburger:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
+#user_info_link {
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--accent);
+    padding: 6px 14px;
+    background-color: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+    margin-top: 4px;
 }
 
-/* 移动端适配 */
+#user_info_link:hover {
+    background-color: var(--accent-hover-bg);
+    border-color: var(--accent-hover-border);
+}
+
+/* ===========================
+   移动端适配
+   =========================== */
 @media screen and (max-width: 768px) {
-    .mobile-menu-btn {
-        display: flex;
-        top: 6%;
-        left: 5%;
-        transform: translateY(-50%);
-        z-index: 999;
-        /* 初始z-index低于cover */
-    }
-
-    /* 当资源加载完成后，让菜单按钮显示在cover上面 */
-    .mobile-menu-btn.resources-loaded {
-        z-index: 1003;
-        /* 确保按钮在所有内容之上，包括侧边栏 */
-    }
-
-    #main_screen {
-        flex-direction: column;
-        padding: 10px;
-        width: 90%;
-        max-width: 1200px;
-        height: 80%;
-        max-height: 80vh;
-        border-radius: 50px;
-        align-items: stretch;
-    }
-
-    #side_list {
-        position: absolute;
-        /* 改为绝对定位，相对于main_screen */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 0;
-        /* 高度为0，通过动画展开 */
-        max-height: 100%;
-        max-width: 100%;
-        background-color: #ffffff6d;
-        z-index: 1002;
-        /* 提高z-index，确保覆盖其他内容 */
-        animation: none;
-        padding-top: 0;
-        /* 初始无内边距 */
-        padding-bottom: 0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        /* 隐藏溢出内容 */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        /* 使内容居中 */
-        border-radius: 40px;
-        /* 保持与main_screen相同的圆角 */
-        transition: none;
-    }
-
-    #side_list.active {
-        height: 100%;
-        /* 展开到全高 */
-        padding-top: 80px;
-        padding-bottom: 30px;
-        opacity: 1;
-        overflow-y: auto;
-        /* 允许内容滚动 */
-        animation: mobileSideListExpand 0.3s forwards;
-    }
-
-    #side_list.closing {
-        animation: mobileSideListCollapse 0.3s forwards;
-    }
-
-    .InfoContainer {
-        margin-left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        position: relative;
-    }
-
-    .welcome_messages_container {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        margin-bottom: 0;
-        width: calc(100% - 30px);
-        z-index: 5;
-    }
-
-    #info_screen {
-        flex: 1;
-        min-height: 250px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
-
-    #user_info {
-        height: auto;
-        min-height: 50px;
-        flex-shrink: 0;
-        width: auto;
-    }
-
-    #welcome_message_1 {
-        font-size: 32px;
-    }
-
-    #welcome_message_2 {
-        font-size: 22px;
-    }
-
-    #welcome_message_3 {
-        font-size: 26px;
-    }
-
-    #welcome_message_4 {
-        font-size: 18px;
-    }
-
     #title {
         font-size: 48px;
-        width: 100%;
-        padding: 10px 25px;
-        text-align: center;
+        padding: 10px 20px;
     }
 
     #title.resources-loaded {
-        animation: titleZoomMobile 0.5s 0.2s forwards;
+        animation: titleZoomMobile 0.6s 0.2s forwards;
     }
 
     #title_container.resources-loaded {
-        animation: titleMoveMobile 0.4s 0.2s forwards;
-        width: calc(100% - 50px);
+        animation: titleMoveMobile 0.5s 0.2s forwards;
+        width: calc(100% - 40px);
         justify-content: flex-start;
         min-height: auto;
     }
 
     #loading_text {
-        font-size: 14px;
+        font-size: 13px;
     }
 
-    #link_column {
-        position: relative;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        height: auto;
-        max-height: none;
-        align-items: center;
-        margin-top: auto;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        padding-top: 25px;
-        padding-bottom: 25px;
-        z-index: 15;
-    }
-
-    .LinkContainer {
-        margin: 8px;
-        width: 70px;
-    }
-
-    .LinkIcon {
-        height: 55px;
-        width: 55px;
-    }
-
-    #login_link {
-        font-size: 18px;
-    }
-
-    .SideButton {
-        font-size: 20px;
-        float: none;
-        text-align: center;
-        padding-left: 0;
-        width: 100%;
-    }
-
-    .ButtonContainer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 60%;
-        /* 缩小宽度使按钮更集中 */
-    }
-
-    .ButtonIcon {
-        width: 65px;
-        height: 55px;
-    }
-
-    /* ButtonImg centering now handled by flexbox on .ButtonIcon */
-}
-
-/* 平板端适配 */
-@media screen and (max-width: 1024px) and (min-width: 769px) {
-    #main_screen {
-        width: 90%;
-        max-width: 1200px;
-        padding: 15px;
+    .hero-content {
+        padding: var(--space-sm);
+        margin-top: 80px;
+        gap: var(--space-sm);
+        border-radius: calc(var(--space-sm) * 2 + 25px);
     }
 
     #welcome_message_1 {
-        font-size: 42px;
+        font-size: 16px;
+        letter-spacing: 4px;
     }
 
     #welcome_message_2 {
-        font-size: 28px;
+        font-size: 36px;
+        letter-spacing: 2px;
     }
 
-    #welcome_message_3 {
-        font-size: 32px;
+    .LinkIcon {
+        width: 40px;
+        height: 40px;
     }
 
-    #welcome_message_4 {
-        font-size: 24px;
+    #link_column {
+        gap: var(--space-sm);
     }
 
+    .scroll-indicator {
+        bottom: var(--space-lg);
+        font-size: 11px;
+    }
+
+    /* 第二屏面板 */
+    #main_screen {
+        width: 80%;
+        max-width: none;
+        padding: var(--space-sm);
+        border-radius: calc(var(--space-sm) * 2 + 18px);
+    }
+
+    #user_info {
+        border-radius: calc(var(--space-sm) + 18px);
+    }
+
+    .ButtonContainer {
+        padding: var(--space-sm);
+    }
+
+    .SideButton {
+        font-size: 15px;
+    }
+
+    .ButtonIcon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .ButtonImg {
+        height: 20px;
+        width: 20px;
+    }
+
+    #login_link {
+        font-size: 13px;
+    }
+}
+
+/* ===========================
+   平板端适配
+   =========================== */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
     #title {
         font-size: 72px;
     }
 
+    #welcome_message_1 {
+        font-size: 18px;
+    }
+
+    #welcome_message_2 {
+        font-size: 44px;
+    }
+
+    #main_screen {
+        max-width: 500px;
+    }
+
     .SideButton {
-        font-size: 22px;
+        font-size: 15px;
     }
 }

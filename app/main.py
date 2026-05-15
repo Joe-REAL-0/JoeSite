@@ -9,7 +9,7 @@ main = Blueprint('main', __name__)
 def hello():
     if(session.get('nickname')):
         return render_template('index.html',
-                               nickname="欢迎你,"+session.get('nickname'),
+                               nickname= session.get('nickname'),
                                status="注销账号",
                                signature="")
     return render_template('index.html')

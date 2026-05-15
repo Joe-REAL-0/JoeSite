@@ -48,107 +48,122 @@
     <link rel="preload" href="{{ url_for('static',filename='font/Technonomicon.ttf')}}" as="font" type="font/ttf"
         crossorigin>
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/theme.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/index.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-index.css' ) }}">
 
+    <script src="{{ url_for('static', filename='js/theme-toggle.js')}}"></script>
     <script src="{{ url_for('static', filename='js/index.js')}}"></script>
 </head>
 
-<body>
-    <!-- 移动端菜单按钮 -->
-    <button id="mobile_menu_btn" class="mobile-menu-btn" onclick="toggleMobileMenu(event)">
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
+<body class="themed-bg">
+    <!-- 主题切换按钮 -->
+    <button id="theme-toggle" title="切换浅色/深色主题" aria-label="切换主题">
+        <span class="theme-icon-sun">☀️</span>
+        <span class="theme-icon-moon">🌙</span>
     </button>
 
-    <div class="CenterContainer" id="main_screen">
-        <div id="side_list" class="side-menu">
-            <div class="ButtonContainer">
-                <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/oc_introduce.png' ) }}">
-                </div>
-                <a class="SideButton" href="{{ url_for('main.introduce') }}">角色介绍</a>
+    <!-- 加载遮罩 -->
+    <div id="cover"></div>
+    <div id="title_container">
+        <h1 id="title">JoE's Site </h1>
+        <h2 id="loading_text">—— 正在加载资源 ——</h2>
+    </div>
+
+    <!-- ========== Section 1: Hero 首屏 ========== -->
+    <section class="page-section hero-section" id="hero_section">
+        <div class="hero-content" id="hero_content">
+            <!-- 欢迎语（纯中文，2行） -->
+            <div class="welcome_messages_container">
+                <p id="welcome_message_1" class="welcome-line">{{ nickname|default('你好') }}，欢迎来到</p>
+                <p id="welcome_message_2" class="welcome-line">我的世界</p>
             </div>
 
-            <div class="ButtonContainer">
-                <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/diary.png' ) }}">
-                </div>
-                <a class="SideButton" href="{{ url_for('blog.blog_list') }}">个人笔记</a>
+            <!-- 社交链接 -->
+            <div id="link_column">
+                <a class="LinkContainer"
+                    href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">
+                    <img title="点击加入我的QQ聊天群" class="LinkIcon"
+                        src="{{ url_for('static',filename = 'images/link_image/QQ_Icon.jpg' ) }}">
+                </a>
+                <a class="LinkContainer" href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0">
+                    <img title="很没有意思的B站主页" class="LinkIcon"
+                        src="{{ url_for('static',filename = 'images/link_image/bilibili_Icon.jpg' ) }}">
+                </a>
+                <a class="LinkContainer" href="https://github.com/Joe-REAL-0/">
+                    <img title="乱糟糟很丢人的GitHub主页" class="LinkIcon"
+                        src="{{ url_for('static',filename = 'images/link_image/GitHub_Icon.jpg' ) }}">
+                </a>
+                <a class="LinkContainer" href="https://play.mcmod.cn/sv20187377.html">
+                    <img title="我运营的Minecraft服务器" class="LinkIcon"
+                        src="{{ url_for('static',filename = 'images/link_image/Minecraft_Icon.jpg' ) }}">
+                </a>
+                <a class="LinkContainer" href="https://joe-real-0.itch.io/">
+                    <img title="itch主页" class="LinkIcon"
+                        src="{{ url_for('static',filename = 'images/link_image/itch_Icon.jpg' ) }}">
+                </a>
             </div>
-
-            <div class="ButtonContainer">
-                <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
-                </div>
-                <a class="SideButton" href="https://cloud.furryjoe.site">私人网盘</a>
-            </div>
-
-            <div class="ButtonContainer">
-                <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/friend_link.png' ) }}">
-                </div>
-                <a class="SideButton" href="{{ url_for('message.friend_link') }}">友情链接</a>
-            </div>
-
-            <div class="ButtonContainer">
-                <div class="ButtonIcon" style="background-color: gray;">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/message_wall.png' ) }}">
-                </div>
-                <a class="SideButton" href="{{ url_for('message.message_wall') }}">留言墙</a>
-            </div>
-
         </div>
-        <div class="InfoContainer">
-            <div id="info_screen">
-                <div class="welcome_messages_container">
-                    <p id="welcome_message_1" class="welcome-line">你好！</p>
-                    <p id="welcome_message_2" class="welcome-line">Hello</p>
-                    <p id="welcome_message_3" class="welcome-line">欢迎走进我的世界</p>
-                    <p id="welcome_message_4" class="welcome-line">Welcome to my world</p>
-                </div>
-                <div id="link_column">
-                    <div class="LinkContainer">
-                        <a
-                            href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">
-                            <img title="点击加入我的QQ聊天群" class="LinkIcon"
-                                src="{{ url_for('static',filename = 'images/link_image/QQ_Icon.jpg' ) }}">
-                        </a>
-                    </div>
-                    <div class="LinkContainer">
-                        <a href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0">
-                            <img title="很没有意思的B站主页" class="LinkIcon"
-                                src="{{ url_for('static',filename = 'images/link_image/bilibili_Icon.jpg' ) }}">
-                        </a>
-                    </div>
-                    <div class="LinkContainer">
-                        <a href="https://github.com/Joe-REAL-0/">
-                            <img title="乱糟糟很丢人的GitHub主页" class="LinkIcon"
-                                src="{{ url_for('static',filename = 'images/link_image/GitHub_Icon.jpg' ) }}">
-                        </a>
-                    </div>
-                    <div class="LinkContainer">
-                        <a href="https://play.mcmod.cn/sv20187377.html">
-                            <img title="我运营的Minecraft服务器" class="LinkIcon"
-                                src="{{ url_for('static',filename = 'images/link_image/Minecraft_Icon.jpg' ) }}">
-                        </a>
-                    </div>
-                    <div class="LinkContainer">
-                        <a href="https://joe-real-0.itch.io/">
-                            <img title="itch主页" class="LinkIcon"
-                                src="{{ url_for('static',filename = 'images/link_image/itch_Icon.jpg' ) }}">
-                        </a>
-                    </div>
 
-                </div>
-            </div>
+        <!-- 滚动指示器 -->
+        <div class="scroll-indicator" id="scroll_indicator">
+            <span>向下探索</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ========== Section 2: Hub 内容区 ========== -->
+    <section class="page-section content-section" id="content_section">
+        <div class="content-panel" id="main_screen">
+            <!-- 导航菜单 -->
+            <nav id="side_list" class="nav-menu">
+                <a class="ButtonContainer" href="{{ url_for('main.introduce') }}">
+                    <div class="ButtonIcon">
+                        <img class="ButtonImg"
+                            src="{{ url_for('static',filename = 'images/button_image/oc_introduce.png' ) }}">
+                    </div>
+                    <span class="SideButton">角色介绍</span>
+                </a>
+
+                <a class="ButtonContainer" href="{{ url_for('blog.blog_list') }}">
+                    <div class="ButtonIcon">
+                        <img class="ButtonImg"
+                            src="{{ url_for('static',filename = 'images/button_image/diary.png' ) }}">
+                    </div>
+                    <span class="SideButton">个人笔记</span>
+                </a>
+
+                <a class="ButtonContainer" href="https://cloud.furryjoe.site">
+                    <div class="ButtonIcon">
+                        <img class="ButtonImg"
+                            src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
+                    </div>
+                    <span class="SideButton">私人网盘</span>
+                </a>
+
+                <a class="ButtonContainer" href="{{ url_for('message.friend_link') }}">
+                    <div class="ButtonIcon">
+                        <img class="ButtonImg"
+                            src="{{ url_for('static',filename = 'images/button_image/friend_link.png' ) }}">
+                    </div>
+                    <span class="SideButton">友情链接</span>
+                </a>
+
+                <a class="ButtonContainer" href="{{ url_for('message.message_wall') }}">
+                    <div class="ButtonIcon">
+                        <img class="ButtonImg"
+                            src="{{ url_for('static',filename = 'images/button_image/message_wall.png' ) }}">
+                    </div>
+                    <span class="SideButton">留言墙</span>
+                </a>
+            </nav>
+
+            <!-- 分隔线 -->
+            <div class="panel-divider"></div>
+
+            <!-- 用户信息 -->
             <div id="user_info">
-                <a id="login_link" href="{{url_for('auth.login')}}">{{nickname|default('你尚未登录Joe通行证')}} |
+                <a id="login_link" href="{{url_for('auth.login')}}">{{ nickname | default('你尚未登录Joe通行证')}} |
                     点击{{status|default('进行登录')}}</a>
                 <h4 id="login_text">{{signature|default('登录Joe通行证后才可以在留言板留言！')}}</h4>
                 {% if session.get('nickname') %}
@@ -156,12 +171,7 @@
                 {% endif %}
             </div>
         </div>
-    </div>
-    <div id="cover"></div>
-    <div id="title_container">
-        <h1 id="title">JoE's Site </h1>
-        <h2 id="loading_text">—— 正在加载资源 ——</h2>
-    </div>
+    </section>
 
     <script>
         // 初始化应用

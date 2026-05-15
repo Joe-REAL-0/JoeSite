@@ -1,27 +1,3 @@
-function toggleMobileMenu() {
-            const sideList = document.getElementById('side_list');
-            const menuBtn = document.getElementById('mobile_menu_btn');
-            
-            if (sideList.classList.contains('active')) {
-                sideList.classList.remove('active');
-                menuBtn.classList.remove('active');
-            } else {
-                sideList.classList.add('active');
-                menuBtn.classList.add('active');
-            }
-        }
-        
-        // 点击菜单外部关闭菜单
-        document.addEventListener('click', function(event) {
-            const sideList = document.getElementById('side_list');
-            const menuBtn = document.getElementById('mobile_menu_btn');
-            
-            if (!sideList.contains(event.target) && !menuBtn.contains(event.target)) {
-                sideList.classList.remove('active');
-                menuBtn.classList.remove('active');
-            }
-        });
-
 // 资源加载检测
 class ResourceLoadManager {
     constructor() {
@@ -182,7 +158,6 @@ class ResourceLoadManager {
         const title = document.getElementById('title');
         const cover = document.getElementById('cover');
         const loadingText = document.getElementById('loading_text');
-        const mobileMenuBtn = document.getElementById('mobile_menu_btn');
         
         // 检测是否为iOS设备
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
@@ -199,32 +174,32 @@ class ResourceLoadManager {
             title.classList.add('resources-loaded');
             cover.classList.add('resources-loaded');
             loadingText.classList.add('resources-loaded');
-            
-            // 资源加载完成后，将菜单按钮的z-index提高
-            if (mobileMenuBtn) {
-                setTimeout(() => {
-                    mobileMenuBtn.classList.add('resources-loaded');
-                }, 400); // 等待cover动画完成后再添加类
-            }
         }
 
-        const mainScreen = document.getElementById('main_screen');
-        const sideList = document.getElementById('side_list');
-        const infoScreen = document.getElementById('info_screen');
+        // Hero 首屏内容入场
+        const heroContent = document.getElementById('hero_content');
         const linkColumn = document.getElementById('link_column');
-        const userInfo = document.getElementById('user_info');
+        const scrollIndicator = document.getElementById('scroll_indicator');
 
-        if (mainScreen && sideList && infoScreen && linkColumn && userInfo) {
-            mainScreen.classList.add('loaded');
-            sideList.classList.add('loaded');
-            infoScreen.classList.add('loaded');
-            linkColumn.classList.add('loaded');
-            userInfo.classList.add('loaded');
-        }
+        if (heroContent) heroContent.classList.add('loaded');
+        if (linkColumn) linkColumn.classList.add('loaded');
+        if (scrollIndicator) scrollIndicator.classList.add('loaded');
 
+        // 触发欢迎语动画
         setTimeout(() => {
             this.triggerWelcomeMessages();
-        }, 1200);
+        }, 1000);
+
+        // 入场动画完成后，启用 section 切换的淡入淡出过渡
+        // hero-content: 0.8s delay + 0.8s animation = 1.6s
+        setTimeout(() => {
+            if (heroContent) heroContent.classList.add('section-fade-ready');
+            const mainScreen = document.getElementById('main_screen');
+            if (mainScreen) mainScreen.classList.add('section-fade-ready');
+        }, 1800);
+
+        // 设置 IntersectionObserver 监听第二屏
+        this.setupScrollObserver();
 
         if (this.onAllResourcesLoaded) {
             this.onAllResourcesLoaded();
@@ -234,57 +209,69 @@ class ResourceLoadManager {
     triggerWelcomeMessages() {
         const welcomeMessage1 = document.getElementById('welcome_message_1');
         const welcomeMessage2 = document.getElementById('welcome_message_2');
-        const welcomeMessage3 = document.getElementById('welcome_message_3');
-        const welcomeMessage4 = document.getElementById('welcome_message_4');
 
-        if (welcomeMessage1 && welcomeMessage2 && welcomeMessage3 && welcomeMessage4) {
-            // 第一组：第1行和第3行同时开始
+        if (welcomeMessage1) {
             welcomeMessage1.classList.add('welcome-start');
-            welcomeMessage3.classList.add('welcome-start');
-            
-            // 第二组：第2行和第4行稍晚开始（延迟800ms）
+        }
+        
+        if (welcomeMessage2) {
+            // 第2行延迟出现
             setTimeout(() => {
                 welcomeMessage2.classList.add('welcome-start');
-                welcomeMessage4.classList.add('welcome-start');
-            }, 800);
+            }, 500);
         }
+    }
+
+    setupScrollObserver() {
+        const heroSection = document.getElementById('hero_section');
+        const contentSection = document.getElementById('content_section');
+        const heroContent = document.getElementById('hero_content');
+        const mainScreen = document.getElementById('main_screen');
+
+        if (!heroSection || !contentSection || !heroContent || !mainScreen) return;
+
+        let contentLoaded = false;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 进入视口 → 对应内容容器淡入
+                    if (entry.target === heroSection) {
+                        heroContent.classList.remove('section-fade-out');
+                    } else if (entry.target === contentSection) {
+                        mainScreen.classList.remove('section-fade-out');
+                        // 第二屏首次进入时触发内容入场动画
+                        if (!contentLoaded) {
+                            mainScreen.classList.add('loaded');
+                            contentLoaded = true;
+                        }
+                    }
+                } else {
+                    // 离开视口 → 对应内容容器淡出
+                    if (entry.target === heroSection) {
+                        heroContent.classList.add('section-fade-out');
+                    } else if (entry.target === contentSection) {
+                        mainScreen.classList.add('section-fade-out');
+                    }
+                }
+            });
+        }, { threshold: 0.15 });
+
+        observer.observe(heroSection);
+        observer.observe(contentSection);
     }
 }
 
-// 移动端菜单功能
-function toggleMobileMenu(event) {
-    const sideList = document.getElementById('side_list');
-    const menuBtn = document.getElementById('mobile_menu_btn');
-    const infoScreen = document.getElementById('info_screen');
-    const userInfo = document.getElementById('user_info');
-    
-    if (sideList.classList.contains('active')) {
-        // 添加关闭动画类
-        sideList.classList.add('closing');
-        menuBtn.classList.remove('active');
-        
-        // 恢复其他元素的可见性
-        if (infoScreen) infoScreen.style.visibility = '';
-        if (userInfo) userInfo.style.visibility = '';
-        
-        // 等待动画结束后移除活动类
-        setTimeout(() => {
-            sideList.classList.remove('active');
-            sideList.classList.remove('closing');
-        }, 300); // 时间与动画持续时间一致
-    } else {
-        // 隐藏其他元素，但不隐藏main_screen
-        if (infoScreen) infoScreen.style.visibility = 'hidden';
-        if (userInfo) userInfo.style.visibility = 'hidden';
-        
-        // 激活侧边栏
-        sideList.classList.add('active');
-        menuBtn.classList.add('active');
-    }
-    
-    // 阻止事件冒泡，避免点击按钮时触发document的click事件
-    if (event) {
-        event.stopPropagation();
+// 滚动指示器点击处理
+function setupScrollIndicator() {
+    const scrollIndicator = document.getElementById('scroll_indicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', () => {
+            const contentSection = document.getElementById('content_section');
+            if (contentSection) {
+                contentSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
     }
 }
 
@@ -292,34 +279,12 @@ function toggleMobileMenu(event) {
 function initializeApp() {
     const resourceManager = new ResourceLoadManager();
     
-    // 点击菜单外部关闭菜单
-    document.addEventListener('click', function(event) {
-        const sideList = document.getElementById('side_list');
-        const menuBtn = document.getElementById('mobile_menu_btn');
-        const infoScreen = document.getElementById('info_screen');
-        const userInfo = document.getElementById('user_info');
-        
-        if (sideList && menuBtn && sideList.classList.contains('active') && !sideList.contains(event.target) && !menuBtn.contains(event.target)) {
-            // 添加关闭动画类
-            sideList.classList.add('closing');
-            menuBtn.classList.remove('active');
-            
-            // 恢复其他元素的可见性
-            if (infoScreen) infoScreen.style.visibility = '';
-            if (userInfo) userInfo.style.visibility = '';
-            
-            // 等待动画结束后移除活动类
-            setTimeout(() => {
-                sideList.classList.remove('active');
-                sideList.classList.remove('closing');
-            }, 300); // 时间与动画持续时间一致
-        }
-    });
+    // 设置滚动指示器
+    setupScrollIndicator();
     
     return resourceManager;
 }
 
 // 导出到全局作用域
 window.ResourceLoadManager = ResourceLoadManager;
-window.toggleMobileMenu = toggleMobileMenu;
 window.initializeApp = initializeApp;

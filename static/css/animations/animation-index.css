@@ -1,3 +1,6 @@
+/* ===========================
+   基础动画
+   =========================== */
 @keyframes fold-x {
     0% {
         width: 0;
@@ -65,8 +68,39 @@
 
     100% {
         opacity: 0;
-        display: none;
-        /* 确保元素在动画结束后不占用空间 */
+        pointer-events: none;
+        /* 确保元素在动画结束后不阻挡交互 */
+    }
+}
+
+@keyframes scaleFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes scaleFadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+        pointer-events: none;
+        /* 确保元素在动画结束后不阻挡交互 */
     }
 }
 
@@ -114,36 +148,45 @@
     }
 }
 
+/* ===========================
+   标题动画 — 桌面端
+   =========================== */
 @keyframes titleMove {
     0% {
         top: 50%;
     }
 
     100% {
-        top: 10%;
+        top: 12%;
     }
 }
 
 @keyframes titleZoom {
     0% {
         font-size: 96px;
-        color: lightblue;
+        color: var(--title-color-start, rgba(180, 215, 255, 0.9));
+        background-color: transparent;
     }
 
-    80% {
-        font-size: 48px;
-        color: darkblue;
-        background-color: rgba(255, 255, 255, 0.6);
+    60% {
+        color: var(--title-color-mid, rgba(200, 220, 255, 0.8));
     }
 
     100% {
-        font-size: 32px;
-        color: black;
-        background-color: rgba(255, 255, 255, 1);
+        font-size: 36px;
+        color: var(--text-primary, rgba(255, 255, 255, 0.92));
+        background-color: var(--title-bg, rgba(10, 10, 25, var(--outer-alpha)));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+        border-radius: 40px;
+        padding: 10px 40px;
     }
 }
 
-/* 移动端标题动画 - 优化iOS兼容性 */
+/* ===========================
+   标题动画 — 移动端
+   =========================== */
 @keyframes titleMoveMobile {
     0% {
         top: 50%;
@@ -152,14 +195,14 @@
     }
 
     80% {
-        top: calc(6% - 25px);
-        left: 50px;
+        top: calc(5% + 10px);
+        left: 20px;
         transform: translate(0, 0);
     }
 
     100% {
-        top: calc(6% - 25px);
-        left: 50px;
+        top: calc(5% + 10px);
+        left: 20px;
         transform: translate(0, 0);
     }
 }
@@ -167,53 +210,56 @@
 @keyframes titleZoomMobile {
     0% {
         font-size: 48px;
-        color: lightblue;
-        background-color: rgba(255, 255, 255, 0);
+        color: var(--title-color-start, rgba(180, 215, 255, 0.9));
+        background-color: transparent;
     }
 
-    80% {
-        font-size: 28px;
-        color: darkblue;
-        background-color: rgba(255, 255, 255, 0.6);
-        text-align: center;
-        width: calc(80% - 50px);
+    60% {
+        color: var(--title-color-mid, rgba(200, 220, 255, 0.8));
     }
 
     100% {
-        font-size: 28px;
-        color: black;
-        background-color: rgba(255, 255, 255, 1);
+        font-size: 26px;
+        color: var(--text-primary, rgba(255, 255, 255, 0.92));
+        background-color: var(--title-bg, rgba(10, 10, 25, var(--outer-alpha)));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+        border-radius: 30px;
+        padding: 8px 30px;
         text-align: center;
-        width: calc(80% - 50px);
+        width: auto;
     }
 }
 
-/* 移动端菜单垂直展开动画 */
-@keyframes mobileSideListExpand {
-    0% {
-        height: 0;
-        padding-top: 0;
-        padding-bottom: 0;
+/* ===========================
+   滚动指示器动画
+   =========================== */
+@keyframes scrollHint {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: rotate(45deg) translateY(0);
     }
 
-    100% {
-        height: 100%;
-        padding-top: 80px;
-        padding-bottom: 30px;
+    50% {
+        opacity: 0.9;
+        transform: rotate(45deg) translateY(6px);
     }
 }
 
-/* 移动端菜单垂直折叠动画 */
-@keyframes mobileSideListCollapse {
+/* ===========================
+   第二屏内容渐入
+   =========================== */
+@keyframes contentSlideUp {
     0% {
-        height: 100%;
-        padding-top: 80px;
-        padding-bottom: 30px;
+        opacity: 0;
+        transform: translateY(40px);
     }
 
     100% {
-        height: 0;
-        padding-top: 0;
-        padding-bottom: 0;
+        opacity: 1;
+        transform: translateY(0);
     }
 }
