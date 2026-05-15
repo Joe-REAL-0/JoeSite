@@ -17,9 +17,9 @@
     --text-muted: rgba(255, 255, 255, 0.75);
 
     /* 强调色 — 深蓝 */
-    --accent: rgba(100, 140, 220, 0.95);
+    --accent: rgba(140, 180, 250, 0.95);
     --accent-glow: rgba(100, 140, 220, 0.25);
-    --accent-bg: rgba(100, 140, 220, 0.08);
+    --accent-bg: rgba(100, 140, 220, 0.12);
     --accent-border: rgba(100, 140, 220, 0.15);
     --accent-hover-bg: rgba(100, 140, 220, 0.18);
     --accent-hover-border: rgba(100, 140, 220, 0.3);
@@ -39,7 +39,7 @@
     --title-bg: rgba(10, 10, 25, var(--outer-alpha, 0.55));
 
     /* 边框 & 阴影 */
-    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.12);
     --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.25);
     --shadow-card-strong: 0 8px 40px rgba(0, 0, 0, 0.3);
 
@@ -78,7 +78,7 @@
         --text-muted: rgba(20, 20, 40, 0.55);
 
         /* 强调色 — 亮蓝 */
-        --accent: rgba(50, 120, 220, 0.95);
+        --accent: rgba(20, 95, 200, 0.95);
         --accent-glow: rgba(50, 120, 220, 0.20);
         --accent-bg: rgba(50, 120, 220, 0.15);
         --accent-border: rgba(50, 120, 220, 0.18);
@@ -101,7 +101,7 @@
 
         /* 边框 & 阴影 */
         --border-subtle: rgba(0, 0, 0, 0.06);
-        --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.08);
+        --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.12);
         --shadow-card-strong: 0 8px 40px rgba(0, 0, 0, 0.10);
 
         /* 按钮图标背景 */
@@ -114,8 +114,8 @@
         /* 滚动条 & 分隔线 */
         --divider: linear-gradient(90deg,
                 transparent,
-                rgba(0, 0, 0, 0.08) 20%,
-                rgba(0, 0, 0, 0.08) 80%,
+                rgba(0, 0, 0, 0.12) 20%,
+                rgba(0, 0, 0, 0.12) 80%,
                 transparent);
 
         /* 主题切换按钮 */
@@ -139,9 +139,9 @@
     --text-muted: rgba(20, 20, 40, 0.55);
 
     /* 强调色 — 亮蓝 */
-    --accent: rgba(50, 120, 220, 0.95);
+    --accent: rgba(20, 95, 200, 0.95);
     --accent-glow: rgba(50, 120, 220, 0.20);
-    --accent-bg: rgba(50, 120, 220, 0.08);
+    --accent-bg: rgba(50, 120, 220, 0.12);
     --accent-border: rgba(50, 120, 220, 0.18);
     --accent-hover-bg: rgba(50, 120, 220, 0.15);
     --accent-hover-border: rgba(50, 120, 220, 0.3);
@@ -175,8 +175,8 @@
     /* 滚动条 & 分隔线 */
     --divider: linear-gradient(90deg,
             transparent,
-            rgba(0, 0, 0, 0.08) 20%,
-            rgba(0, 0, 0, 0.08) 80%,
+            rgba(0, 0, 0, 0.12) 20%,
+            rgba(0, 0, 0, 0.12) 80%,
             transparent);
 
     /* 主题切换按钮 */
@@ -321,6 +321,7 @@ body.themed-bg[data-body-theme="dark"]::before {
    移动端背景图片切换
    =========================== */
 @media screen and (max-width: 768px) {
+
     /* 暗色主题 — 移动端竖版背景 */
     body.themed-bg::before {
         background-image: url('../images/backgrounds/bkg-v\ \(1\).png');

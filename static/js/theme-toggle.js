@@ -82,6 +82,13 @@
 
     // DOM 加载完成后绑定事件
     document.addEventListener('DOMContentLoaded', function () {
+        // body 现在已存在，重新应用主题以确保 data-body-theme 被正确设置
+        // （initTheme 在 head 中执行时 body 尚不存在，背景图属性会丢失）
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'light' || saved === 'dark') {
+            applyTheme(saved);
+        }
+
         const toggleBtn = document.getElementById('theme-toggle');
         if (toggleBtn) {
             toggleBtn.addEventListener('click', toggleTheme);
