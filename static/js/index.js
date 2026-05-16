@@ -24,10 +24,7 @@ function triggerWelcomeMessages() {
     }
     
     if (welcomeMessage2) {
-        // 第2行延迟出现
-        setTimeout(() => {
-            welcomeMessage2.classList.add('welcome-start');
-        }, 500);
+        welcomeMessage2.classList.add('welcome-start');
     }
 }
 
@@ -88,9 +85,7 @@ function initializeHomePage() {
         if (scrollIndicator) scrollIndicator.classList.add('loaded');
 
         // 触发欢迎语动画
-        setTimeout(() => {
-            triggerWelcomeMessages();
-        }, 200);
+        triggerWelcomeMessages();
 
         // 入场动画完成后，启用 section 切换的淡入淡出过渡
         setTimeout(() => {

@@ -92,7 +92,7 @@ html::-webkit-scrollbar {
 }
 
 #welcome_message_1.welcome-start {
-    animation: fadeIn 0.1s ease forwards;
+    animation: fadeIn 0.2s 0.3s ease forwards;
 }
 
 #welcome_message_2 {
@@ -103,7 +103,7 @@ html::-webkit-scrollbar {
 }
 
 #welcome_message_2.welcome-start {
-    animation: fadeIn 0.2s 0.1s ease forwards;
+    animation: fadeIn 0.2s 0.6s ease forwards;
 }
 
 /* 社交链接（Hero底部）— 同心内圆角 */
@@ -121,7 +121,7 @@ html::-webkit-scrollbar {
 }
 
 #link_column.loaded {
-    animation: fadeIn 0.2s 1.2s forwards;
+    animation: fadeIn 0.4s 0.6s forwards;
 }
 
 .LinkContainer {
