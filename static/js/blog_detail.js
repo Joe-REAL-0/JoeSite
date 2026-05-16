@@ -2,15 +2,15 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log('博客详情页面已加载');
 
-    // 从 body data-* 属性读取博客数据
-    var body = document.body;
+    // 从 .CenterContainer data-* 属性读取博客数据
+    var container = document.querySelector('.CenterContainer');
     var BLOG_DATA = {
-        blogId: parseInt(body.dataset.blogId),
-        isLoggedIn: body.dataset.isLoggedIn === 'true',
-        loginUrl: body.dataset.loginUrl,
-        likesCount: parseInt(body.dataset.likesCount),
-        commentsCount: parseInt(body.dataset.commentsCount),
-        hasLiked: body.dataset.hasLiked === 'true'
+        blogId: parseInt(container.dataset.blogId),
+        isLoggedIn: container.dataset.isLoggedIn === 'true',
+        loginUrl: container.dataset.loginUrl,
+        likesCount: parseInt(container.dataset.likesCount),
+        commentsCount: parseInt(container.dataset.commentsCount),
+        hasLiked: container.dataset.hasLiked === 'true'
     };
 
     // ============================

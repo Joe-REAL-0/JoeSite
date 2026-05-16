@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-    <title>{{ blog.title }} | Joe的博客</title>
+{% block title %}{{ blog.title }} | Joe的博客{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_detail.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
 
     <!-- 代码高亮样式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+{% endblock %}
 
+{% block head_js %}
     <!-- MathJax数学公式渲染 -->
     <script>
         MathJax = {
@@ -32,13 +27,15 @@
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-</head>
+{% endblock %}
 
-<body data-blog-id="{{ blog.id }}" data-is-logged-in="{{ 'true' if is_logged_in else 'false' }}"
+{% block page_title %}{{ blog.title }}{% endblock %}
+
+{% block content %}
+<div class="CenterContainer" data-blog-id="{{ blog.id }}" data-is-logged-in="{{ 'true' if is_logged_in else 'false' }}"
     data-login-url="{{ login_url }}" data-likes-count="{{ likes_count }}" data-comments-count="{{ comments_count }}"
     data-has-liked="{{ 'true' if has_liked else 'false' }}">
 
-    <div class="CenterContainer">
         <div class="blog-detail-container glassmorphism">
             <div class="blog-header">
                 <h1 class="blog-title">{{ blog.title }}</h1>
@@ -120,10 +117,11 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra_js %}
     <!-- 代码高亮JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
     <script src="{{ url_for('static', filename='js/blog_detail.js') }}"></script>
-</body>
-
-</html>
+{% endblock %}

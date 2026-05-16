@@ -1,0 +1,357 @@
+/* ===========================
+   Global Loading Cover & Title
+   Extracted from index.css for reuse across all pages
+   =========================== */
+
+/* ===========================
+   Design Tokens (global)
+   =========================== */
+:root {
+    /* 同心圆角体系 */
+    --radius-outer: 32px;
+    --radius-inner: 18px;
+    --radius-sm: 10px;
+
+    /* 间距 */
+    --space-xs: 8px;
+    --space-sm: 14px;
+    --space-md: 24px;
+    --space-lg: 40px;
+    --space-xl: 64px;
+
+    --inner-alpha: 0.15;
+    --outer-alpha: 0.55;
+
+    --title-height: 50px;
+    --title-height-mobile: 44px;
+}
+
+/* ===========================
+   Base Body Reset
+   =========================== */
+body {
+    margin: 0;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===========================
+   Loading Cover & Title
+   =========================== */
+#cover {
+    position: fixed;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-cover);
+    z-index: 1000;
+    /* 确保cover覆盖所有元素 */
+}
+
+#cover.resources-loaded {
+    animation: fadeOut 0.6s 0.2s forwards;
+}
+
+#title_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* 垂直居中排列子元素 */
+    align-items: center;
+    /* 水平居中排列子元素 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: auto;
+    min-height: 120px;
+    /* 确保容器有足够高度容纳两个元素 */
+    z-index: 1001;
+    opacity: 0;
+    animation: slideIn 0.5s forwards;
+    /* 添加动画效果 */
+}
+
+#title_container h1 {
+    position: relative;
+    padding: 12px 32px;
+    width: auto;
+    border-radius: calc(var(--title-height) / 2);
+    background-color: transparent;
+    color: var(--title-color-start);
+    text-align: center;
+    white-space: nowrap;
+    font-family: 'valorax';
+    font-size: 96px;
+    margin: 0;
+    z-index: 1001;
+    /* 确保title在cover上面 */
+}
+
+#loading_text {
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 18px;
+    max-height: 30px;
+    width: 100%;
+    color: var(--text-muted);
+    opacity: 0;
+    animation: fadeIn 0.3s 0.5s forwards;
+    z-index: 1001;
+    letter-spacing: 3px;
+    font-family: 'YuanTi';
+    /* 确保loading_text在cover上面 */
+}
+
+#title_container h1.resources-loaded {
+    opacity: 1;
+    animation: titleZoom 0.6s 0.2s forwards;
+}
+
+#title_container.resources-loaded {
+    opacity: 1;
+    animation: titleMove 0.5s 0.2s forwards;
+}
+
+#loading_text.resources-loaded {
+    opacity: 0;
+    animation: fadeOut 0.2s 0s forwards;
+}
+
+/* ===========================
+   移动端适配
+   =========================== */
+@media screen and (max-width: 768px) {
+    #title_container h1 {
+        font-size: 48px;
+        padding: 10px 20px;
+    }
+
+    #title_container h1.resources-loaded {
+        animation: titleZoomMobile 0.6s 0.2s forwards;
+    }
+
+    #title_container.resources-loaded {
+        animation: titleMoveMobile 0.5s 0.2s forwards;
+        width: calc(100% - 40px);
+        justify-content: flex-start;
+        min-height: auto;
+    }
+
+    #loading_text {
+        font-size: 13px;
+    }
+
+    #top_column {
+        display: contents;
+        /* on mobile, make top_column layout invisible */
+    }
+}
+
+/* ===========================
+   Top Column & 返回主页按钮
+   =========================== */
+#top_column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    z-index: 1001;
+}
+
+.top-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#title_container.resources-loaded .top-side {
+    animation: sideFadeIn 0.3s 0.8s forwards;
+}
+
+.left-side {
+    justify-content: flex-end;
+    padding-right: var(--space-sm);
+}
+
+.right-side {
+    justify-content: flex-start;
+    padding-left: var(--space-sm);
+}
+
+#global-home-btn {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#global-home-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ===========================
+   移动端悬浮控制组
+   =========================== */
+#mobile_controls {
+    display: none;
+}
+
+#global-home-btn-mobile {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#global-home-btn-mobile.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.home-btn-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+    -webkit-mask-image: url('../images/button_image/back_home.svg');
+    mask-image: url('../images/button_image/back_home.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+.home-btn-text {
+    display: none;
+}
+
+/* ===========================
+   Top Column 交互按钮通用样式
+   =========================== */
+.top-btn {
+    position: relative;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--title-height);
+    height: var(--title-height);
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--top-btn-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--top-btn-border);
+    color: var(--top-btn-color);
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s ease,
+        opacity 0.4s ease;
+}
+
+.top-btn:hover {
+    background-color: var(--top-btn-hover-bg);
+    color: var(--top-btn-hover-color);
+    transform: scale(1.12);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.20);
+}
+
+.top-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===========================
+   主题切换按钮
+   =========================== */
+#theme-toggle {
+    font-size: 22px;
+    line-height: 1;
+}
+
+/* 图标切换：暗色时显示太阳，浅色时显示月亮 */
+.theme-icon-sun,
+.theme-icon-moon {
+    display: inline-block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: currentColor;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* 默认暗色 → 显示太阳 */
+.theme-icon-sun {
+    opacity: 1;
+    transform: rotate(0deg);
+    -webkit-mask-image: url('../images/button_image/sun.svg');
+    mask-image: url('../images/button_image/sun.svg');
+}
+
+.theme-icon-moon {
+    opacity: 0;
+    transform: rotate(-90deg);
+    -webkit-mask-image: url('../images/button_image/moon.svg');
+    mask-image: url('../images/button_image/moon.svg');
+}
+
+/* 移动端 */
+@media screen and (max-width: 768px) {
+    .top-side {
+        display: none !important;
+    }
+
+    #mobile_controls {
+        display: flex;
+        flex-direction: column-reverse;
+        /* 自下而上纵向排列 */
+        gap: 15px;
+        /* 按钮间距 */
+        position: fixed;
+        bottom: 10%;
+        right: 20px;
+        z-index: 1002;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    #mobile_controls.resources-loaded {
+        animation: sideFadeIn 0.3s 0.8s forwards;
+    }
+
+    #mobile_controls .top-btn {
+        width: var(--title-height-mobile);
+        height: var(--title-height-mobile);
+    }
+
+    .home-btn-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .theme-icon-sun,
+    .theme-icon-moon {
+        width: 20px;
+        height: 20px;
+    }
+}

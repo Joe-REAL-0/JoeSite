@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="msvalidate.01" content="9884C4626BA4E65D910C18E66CD449A7" />
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+{% block meta %}
     <!-- SEO Meta Tags -->
     <meta name="description" content="Joe的个人博客 - 技术分享、学习笔记与生活记录。探索编程、设计和创意的世界。">
     <meta name="keywords" content="Joe博客, 技术博客, 编程笔记, 学习分享, 个人网站">
@@ -30,22 +22,22 @@
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="Joe的博客 RSS Feed"
         href="{{ url_for('seo.rss_feed', _external=True) }}">
+{% endblock %}
 
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-    <title>Joe的个人小站 | 博客</title>
+{% block title %}Joe的个人小站 | 博客{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-</head>
+{% endblock %}
 
-<body>
+{% block page_title %}Joe的博客{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
-        <h1 id="title">Joe的博客</h1>
-
         <div class="blog-header">
             <p class="blog-count">共 {{ total_count }} 篇文章</p>
-            <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
         </div>
 
         <div class="blog-list-container">
@@ -109,8 +101,8 @@
         </div>
         {% endif %}
     </div>
+{% endblock %}
 
+{% block extra_js %}
     <script src="{{ url_for('static', filename='js/blog.js') }}"></script>
-</body>
-
-</html>
+{% endblock %}

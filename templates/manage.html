@@ -1,22 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Joe的个人小站 | 管理面板</title>
+{% extends "base.html" %}
+
+{% block title %}Joe的个人小站 | 管理面板{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/manage.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-manage.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-    <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+{% endblock %}
+
+{% block head_js %}
     <script src="{{ url_for('static', filename='js/manage.js')}}"></script>
-</head>
-<body>
+{% endblock %}
+
+{% block page_title %}管理面板{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
-        <h1 id="title">管理面板</h1>
         <button id="sidebar-toggle" aria-label="切换侧边栏">
             ☰
         </button>
@@ -171,5 +170,4 @@
             </form>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

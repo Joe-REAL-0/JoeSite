@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-    <title>博客管理 | Joe的博客</title>
+{% extends "base.html" %}
+
+{% block title %}博客管理 | Joe的博客{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-</head>
-<body>
+{% endblock %}
+
+{% block page_title %}博客管理{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
-        <h1 id="title">博客管理</h1>
-        
         <div class="blog-header">
             <p class="blog-count">共 {{ total_count }} 篇文章</p>
             <div class="header-actions">
@@ -87,7 +82,9 @@
         </div>
         {% endif %}
     </div>
-    
+{% endblock %}
+
+{% block extra_js %}
     <script>
         // 发布/取消发布功能
         document.querySelectorAll('.publish-btn').forEach(btn => {
@@ -152,5 +149,4 @@
             });
         });
     </script>
-</body>
-</html>
+{% endblock %}

@@ -1,25 +1,18 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-    <title>{% if mode == 'create' %}写博客{% else %}编辑博客{% endif %} | Joe的博客</title>
+{% block title %}{% if mode == 'create' %}写博客{% else %}编辑博客{% endif %} | Joe的博客{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_edit.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-</head>
+{% endblock %}
 
-<body>
+{% block page_title %}{% if mode == 'create' %}写博客{% else %}编辑博客{% endif %}{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
         <div class="blog-edit-container glassmorphism">
-            <h1 id="title">{% if mode == 'create' %}写博客{% else %}编辑博客{% endif %}</h1>
-
             <form id="blog-form">
                 <div class="form-group">
                     <label for="blog-title">标题 *</label>
@@ -108,8 +101,8 @@
     <div id="flask-data" data-mode="{{ mode }}" {% if blog %}data-blog-id="{{ blog.id }}" {% endif %} {% if blog and
         blog.tags %}data-tags="{{ blog.tags|join(',') }}" {% endif %}>
     </div>
+{% endblock %}
 
+{% block extra_js %}
     <script src="{{ url_for('static', filename='js/blog_edit.js') }}"></script>
-</body>
-
-</html>
+{% endblock %}

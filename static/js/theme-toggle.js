@@ -89,10 +89,10 @@
             applyTheme(saved);
         }
 
-        const toggleBtn = document.getElementById('theme-toggle');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', toggleTheme);
-        }
+        const toggleBtns = document.querySelectorAll('#theme-toggle, #theme-toggle-mobile');
+        toggleBtns.forEach(btn => {
+            if (btn) btn.addEventListener('click', toggleTheme);
+        });
 
         // 监听系统主题变化（当用户没有手动设置时自动响应）
         if (window.matchMedia) {

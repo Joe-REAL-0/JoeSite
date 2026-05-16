@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-    <title>Joe的个人小站 | 注册</title>
+{% extends "base.html" %}
+
+{% block title %}Joe的个人小站 | 注册{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/register.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-register.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
+{% endblock %}
 
+{% block head_js %}
     <script src="{{ url_for('static', filename='js/register.js')}}"></script>
-</head>
-<body>
-    <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
-    <div id="cover"></div>
+{% endblock %}
+
+{% block page_title %}Joe通行证{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
         <form id="register_form" action="/register_checker" method="POST">
-            <h1 id="title">欢迎注册Joe通行证</h1>
+            <h1 id="page-title">欢迎注册Joe通行证</h1>
             <input placeholder="邮箱" type="text" class="input_column" name="email" value="{{info[0]}}" required>
             <div class="CodeContainer">
                 <input placeholder="请输入验证码" type="text" id="code_column" name="code" required>
@@ -29,5 +29,4 @@
             <input id="submit_button" type="submit" value="注册">
         </form>
     </div>
-</body>
-</html>
+{% endblock %}

@@ -1,25 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Joe的个人小站">
-    <meta name="format-detection" content="telephone=no">
-    <title>Joe的个人小站 | 用户信息</title>
+{% extends "base.html" %}
+
+{% block title %}Joe的个人小站 | 用户信息{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/user_info.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-user_info.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-    <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+{% endblock %}
+
+{% block head_js %}
     <script src="{{ url_for('static', filename='js/user_info.js')}}"></script>
-</head>
-<body>
+{% endblock %}
+
+{% block page_title %}用户中心{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
-        <h1 id="title">用户中心</h1>
         <button id="sidebar-toggle" aria-label="切换侧边栏" aria-expanded="false" aria-controls="sidebar">
             ☰
         </button>
@@ -180,5 +176,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

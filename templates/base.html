@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="msvalidate.01" content="9884C4626BA4E65D910C18E66CD449A7" />
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    {% block meta %}{% endblock %}
+
+    <title>{% block title %}Joe的个人小站{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+
+    {% block preload %}{% endblock %}
+
+    <!-- 全局样式 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global-loader.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations/animation-global.css') }}">
+
+    {% block extra_css %}{% endblock %}
+
+    <!-- 全局脚本 -->
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/global-loader.js') }}"></script>
+
+    {% block head_js %}{% endblock %}
+</head>
+
+<body class="themed-bg">
+    <!-- 加载遮罩 -->
+    <div id="cover"></div>
+    <div id="title_container">
+        <div id="top_column">
+            <div class="top-side left-side">
+                <!-- 返回主页按钮 -->
+                {% block home_btn %}
+                <a id="global-home-btn" class="top-btn" href="{{ url_for('main.hello') }}" title="返回主页">
+                    <span class="home-btn-icon"></span>
+                </a>
+                {% endblock %}
+            </div>
+
+            <h1>{% block page_title %}JoE's Site{% endblock %}</h1>
+
+            <div class="top-side right-side">
+                <!-- 主题切换按钮 -->
+                <button id="theme-toggle" class="top-btn" title="切换浅色/深色主题" aria-label="切换主题">
+                    <span class="theme-icon-sun"></span>
+                    <span class="theme-icon-moon"></span>
+                </button>
+            </div>
+        </div>
+        <h2 id="loading_text">—— 正在加载资源 ——</h2>
+    </div>
+
+    <!-- 移动端悬浮控制组 -->
+    <div id="mobile_controls">
+        <!-- 移动端返回主页按钮 -->
+        {% block home_btn_mobile %}
+        <a id="global-home-btn-mobile" class="top-btn" href="{{ url_for('main.hello') }}" title="返回主页">
+            <span class="home-btn-icon"></span>
+        </a>
+        {% endblock %}
+
+        <!-- 移动端主题切换按钮 -->
+        <button id="theme-toggle-mobile" class="top-btn" title="切换浅色/深色主题" aria-label="切换主题">
+            <span class="theme-icon-sun"></span>
+            <span class="theme-icon-moon"></span>
+        </button>
+    </div>
+
+    <!-- 页面内容 -->
+    {% block content %}{% endblock %}
+
+    <!-- 全局资源加载脚本 -->
+    <script>
+        // 动态加载所有资源
+        async function loadAllResources() {
+            try {
+                // 从后端获取所有资源文件列表
+                const response = await fetch('{{ url_for("main.get_resources") }}');
+                const resourcePaths = await response.json();
+
+                // 将资源路径转换为完整URL
+                const requiredResources = resourcePaths.map(path => {
+                    return "{{ url_for('static', filename='') }}" + path;
+                });
+
+                // 开始加载资源
+                window.globalLoader.start(requiredResources);
+            } catch (error) {
+                console.error('Failed to load resources:', error);
+                // 加载失败时使用备用资源列表
+                const fallbackResources = [
+                    // 字体资源
+                    "{{ url_for('static', filename='font/ZhengQingKeLengKu.ttf') }}",
+                    "{{ url_for('static', filename='font/valorax-lg25v.ttf') }}",
+                    "{{ url_for('static', filename='font/Technonomicon.ttf') }}",
+                    "{{ url_for('static', filename='font/GunShi.ttf') }}"
+                ];
+                window.globalLoader.start(fallbackResources);
+            }
+        }
+
+        // 执行资源加载
+        loadAllResources();
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

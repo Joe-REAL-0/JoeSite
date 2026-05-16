@@ -1,25 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-    <title>Joe的个人小站 | 留言</title>
+{% extends "base.html" %}
+
+{% block title %}Joe的个人小站 | 留言{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/note.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-note.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+{% endblock %}
 
+{% block head_js %}
     <script src="{{ url_for('static', filename='js/note.js') }}"></script>
-</head>
-<body>
+{% endblock %}
+
+{% block page_title %}{{nickname}}，欢迎留言{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
-        <h1 id="title">{{nickname}},欢迎留言</h1>
         <div class="page-header">
-            <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
         </div>
         <div id="note_panel" class="glassmorphism">
             <div id="user_message_count">
@@ -44,5 +41,4 @@
     <div id="flask-data" 
          data-user-message-count="{{ user_message_count }}">
     </div>
-</body>
-</html>
+{% endblock %}

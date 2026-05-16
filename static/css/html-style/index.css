@@ -1,29 +1,5 @@
 /* ===========================
-   Design Tokens
-   =========================== */
-:root {
-    /* 同心圆角体系
-       外层容器 radius = --radius-outer
-       内层元素 radius = --radius-inner = outer - padding
-       确保嵌套圆角视觉和谐 */
-    --radius-outer: 32px;
-    --radius-inner: 18px;
-    /* 32 - 14(padding) = 18 */
-    --radius-sm: 10px;
-
-    /* 间距 */
-    --space-xs: 8px;
-    --space-sm: 14px;
-    --space-md: 24px;
-    --space-lg: 40px;
-    --space-xl: 64px;
-
-    --inner-alpha: 0.15;
-    --outer-alpha: 0.55;
-}
-
-/* ===========================
-   Base / Reset
+   Base / Reset (Index Page)
    =========================== */
 html {
     scroll-snap-type: y mandatory;
@@ -36,108 +12,6 @@ html {
 html::-webkit-scrollbar {
     display: none;
     /* Chrome / Safari */
-}
-
-body {
-    margin: 0;
-    background-color: var(--bg-body);
-    background-image: url("../../images/background.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-attachment: fixed;
-    color: var(--text-primary);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* ===========================
-   Loading Cover & Title
-   =========================== */
-#cover {
-    position: fixed;
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg-cover);
-    z-index: 1000;
-    /* 确保cover覆盖所有元素 */
-}
-
-#cover.resources-loaded {
-    animation: fadeOut 0.6s 0.2s forwards;
-}
-
-#title_container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* 垂直居中排列子元素 */
-    align-items: center;
-    /* 水平居中排列子元素 */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: auto;
-    min-height: 120px;
-    /* 确保容器有足够高度容纳两个元素 */
-    z-index: 1001;
-    opacity: 0;
-    animation: slideIn 0.5s forwards;
-    /* 添加动画效果 */
-}
-
-#title {
-    position: relative;
-    padding: 12px 32px;
-    width: auto;
-    max-width: 640px;
-    border-radius: var(--radius-outer);
-    background-color: transparent;
-    color: var(--title-color-start);
-    text-align: center;
-    white-space: nowrap;
-    font-family: 'valorax';
-    font-size: 96px;
-    margin: 0;
-    z-index: 1001;
-    /* 确保title在cover上面 */
-}
-
-#loading_text {
-    position: relative;
-    text-align: center;
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 18px;
-    max-height: 30px;
-    width: 100%;
-    color: var(--text-muted);
-    opacity: 0;
-    animation: fadeIn 0.3s 0.5s forwards;
-    z-index: 1001;
-    letter-spacing: 3px;
-    font-family: 'YuanTi';
-    /* 确保loading_text在cover上面 */
-}
-
-#title.resources-loaded {
-    opacity: 1;
-    animation: titleZoom 0.6s 0.2s forwards;
-}
-
-#title_container.resources-loaded {
-    opacity: 1;
-    animation: titleMove 0.5s 0.2s forwards;
-}
-
-#loading_text.resources-loaded {
-    opacity: 1;
-    animation: fadeOut 0.2s 0s forwards;
 }
 
 /* ===========================
@@ -191,7 +65,7 @@ body {
 }
 
 .hero-content.loaded {
-    animation: scaleFadeIn 0.3s 0.5s forwards;
+    animation: scaleFadeIn 0.4s forwards;
 }
 
 /* 欢迎语 — 同心内圆角 */
@@ -218,7 +92,7 @@ body {
 }
 
 #welcome_message_1.welcome-start {
-    animation: fadeIn 0.4s ease forwards;
+    animation: fadeIn 0.1s ease forwards;
 }
 
 #welcome_message_2 {
@@ -229,7 +103,7 @@ body {
 }
 
 #welcome_message_2.welcome-start {
-    animation: fadeIn 0.4s 0.1s ease forwards;
+    animation: fadeIn 0.2s 0.1s ease forwards;
 }
 
 /* 社交链接（Hero底部）— 同心内圆角 */
@@ -247,7 +121,7 @@ body {
 }
 
 #link_column.loaded {
-    animation: fadeIn 0.4s 0.8s forwards;
+    animation: fadeIn 0.2s 1.2s forwards;
 }
 
 .LinkContainer {
@@ -291,7 +165,7 @@ body {
 }
 
 .scroll-indicator.loaded {
-    animation: fadeIn 0.6s 2.0s forwards;
+    animation: fadeIn 0.4s forwards;
 }
 
 .scroll-indicator:hover {
@@ -330,14 +204,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
-    opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-#main_screen.loaded {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 /* 导航菜单 */
@@ -465,25 +332,6 @@ body {
    移动端适配
    =========================== */
 @media screen and (max-width: 768px) {
-    #title {
-        font-size: 48px;
-        padding: 10px 20px;
-    }
-
-    #title.resources-loaded {
-        animation: titleZoomMobile 0.6s 0.2s forwards;
-    }
-
-    #title_container.resources-loaded {
-        animation: titleMoveMobile 0.5s 0.2s forwards;
-        width: calc(100% - 40px);
-        justify-content: flex-start;
-        min-height: auto;
-    }
-
-    #loading_text {
-        font-size: 13px;
-    }
 
     .hero-content {
         padding: var(--space-sm);
@@ -555,10 +403,6 @@ body {
    平板端适配
    =========================== */
 @media screen and (max-width: 1024px) and (min-width: 769px) {
-    #title {
-        font-size: 72px;
-    }
-
     #welcome_message_1 {
         font-size: 18px;
     }

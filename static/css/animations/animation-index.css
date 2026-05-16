@@ -1,6 +1,8 @@
 /* ===========================
-   基础动画
+   首页特有动画
+   (fadeIn, fadeOut, slideIn, titleMove/Zoom 已移至 animation-global.css)
    =========================== */
+
 @keyframes fold-x {
     0% {
         width: 0;
@@ -51,28 +53,6 @@
     }
 }
 
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeOut {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-        pointer-events: none;
-        /* 确保元素在动画结束后不阻挡交互 */
-    }
-}
-
 @keyframes scaleFadeIn {
     0% {
         opacity: 0;
@@ -101,18 +81,6 @@
         transform: scale(0.8);
         pointer-events: none;
         /* 确保元素在动画结束后不阻挡交互 */
-    }
-}
-
-@keyframes slideIn {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -120%);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%);
     }
 }
 
@@ -145,90 +113,6 @@
 
     100% {
         border-width: 0;
-    }
-}
-
-/* ===========================
-   标题动画 — 桌面端
-   =========================== */
-@keyframes titleMove {
-    0% {
-        top: 50%;
-    }
-
-    100% {
-        top: 12%;
-    }
-}
-
-@keyframes titleZoom {
-    0% {
-        font-size: 96px;
-        color: var(--title-color-start, rgba(180, 215, 255, 0.9));
-        background-color: transparent;
-    }
-
-    60% {
-        color: var(--title-color-mid, rgba(200, 220, 255, 0.8));
-    }
-
-    100% {
-        font-size: 36px;
-        color: var(--text-primary, rgba(255, 255, 255, 0.92));
-        background-color: var(--title-bg, rgba(10, 10, 25, var(--outer-alpha)));
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-        border-radius: 40px;
-        padding: 10px 40px;
-    }
-}
-
-/* ===========================
-   标题动画 — 移动端
-   =========================== */
-@keyframes titleMoveMobile {
-    0% {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    80% {
-        top: calc(5% + 10px);
-        left: 20px;
-        transform: translate(0, 0);
-    }
-
-    100% {
-        top: calc(5% + 10px);
-        left: 20px;
-        transform: translate(0, 0);
-    }
-}
-
-@keyframes titleZoomMobile {
-    0% {
-        font-size: 48px;
-        color: var(--title-color-start, rgba(180, 215, 255, 0.9));
-        background-color: transparent;
-    }
-
-    60% {
-        color: var(--title-color-mid, rgba(200, 220, 255, 0.8));
-    }
-
-    100% {
-        font-size: 26px;
-        color: var(--text-primary, rgba(255, 255, 255, 0.92));
-        background-color: var(--title-bg, rgba(10, 10, 25, var(--outer-alpha)));
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-        border-radius: 30px;
-        padding: 8px 30px;
-        text-align: center;
-        width: auto;
     }
 }
 

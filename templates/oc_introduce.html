@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Joe的个人小站 | 档案馆</title>
+{% extends "base.html" %}
+
+{% block title %}Joe的个人小站 | 档案馆{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/oc_introduce.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-oc_introduce.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/font.css' ) }}">
     <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-    <link rel="icon" href="{{ url_for('static',filename = 'images/favicon.ico' ) }}">
+{% endblock %}
+
+{% block head_js %}
     <script src="{{ url_for('static', filename='js/oc_introduce.js')}}"></script>
-</head>
-<body>
+{% endblock %}
+
+{% block page_title %}档案馆{% endblock %}
+
+{% block content %}
     <div class="CenterContainer">
-        <h1 id="title">档案馆</h1>
         <div class="page-header">
-            <a href="{{ url_for('main.hello') }}" class="back-home-btn">返回主页</a>
         </div>
         <button id="sidebar-toggle" aria-label="切换侧边栏">
             ☰
@@ -36,5 +34,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
