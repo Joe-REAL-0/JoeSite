@@ -275,9 +275,9 @@ def login():
     else:
         session['next'] = url_for('main.hello')
     
-    if (session.get('nickname')):
+    if current_user.is_authenticated:
         logout_user()
-        session.pop('nickname')
+        session.pop('nickname', None)
         return redirect(url_for('main.hello'))
     if (session.get('info')):
         info = session.get('info')

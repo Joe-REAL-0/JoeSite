@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, session
-from flask_login import logout_user
+from flask_login import current_user
 import os
 from database import Database
 
@@ -7,9 +7,9 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def hello():
-    if(session.get('nickname')):
+    if current_user.is_authenticated:
         return render_template('index.html',
-                               nickname= session.get('nickname'),
+                               nickname=current_user.nickname,
                                status="注销账号",
                                signature="")
     return render_template('index.html')
