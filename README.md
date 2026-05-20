@@ -51,19 +51,25 @@ Joe_Site/
 
 - `GITHUB_CLIENT_ID`
 - `GITHUB_CLIENT_SECRET`
-- `GITHUB_REDIRECT_URI`，例如 `https://你的域名/github_callback`
+- `GITHUB_REDIRECT_URI`，例如 `https://你的域名/oauth/github/callback`
+- `GOOGLE_REDIRECT_URI`，例如 `https://你的域名/oauth/google/callback`
+- `DISCORD_REDIRECT_URI`，例如 `https://你的域名/oauth/discord/callback`
+- `TELEGRAM_REDIRECT_URI`，例如 `https://你的域名/oauth/telegram/callback`
 - `MAIL_USERNAME` 和 `MAIL_PASSWORD` 仍然用于原有验证码注册流程
 
-GitHub OAuth App 的回调地址需要指向 `/github_callback`。
+如果站点前面有 Nginx / 反向代理，请确保外层实际访问协议是 HTTPS，并正确转发 `X-Forwarded-Proto`，否则 Flask 可能会把外部回调地址生成成 `http`。
 
 示例：
 
 ```bash
 GITHUB_CLIENT_ID=xxxxxxxxxxxxxxxxxxxx
 GITHUB_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-GITHUB_REDIRECT_URI=https://example.com/github_callback
+GITHUB_REDIRECT_URI=https://example.com/oauth/github/callback
+GOOGLE_REDIRECT_URI=https://example.com/oauth/google/callback
+DISCORD_REDIRECT_URI=https://example.com/oauth/discord/callback
+TELEGRAM_REDIRECT_URI=https://example.com/oauth/telegram/callback
 MAIL_USERNAME=your_mail@qq.com
 MAIL_PASSWORD=your_mail_app_password
 ```
 
-如果你在本地调试，回调地址也可以先填 `http://127.0.0.1:30069/github_callback`，但 GitHub OAuth App 里的回调 URL 必须和实际访问地址保持一致。
+如果你在本地调试，回调地址也可以先填 `http://127.0.0.1:30069/oauth/github/callback`，但第三方平台里登记的回调 URL 必须和实际请求地址完全一致。

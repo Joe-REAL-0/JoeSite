@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 import os
 from dotenv import load_dotenv
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app.auth import auth as auth_blueprint
 from app.oauth import oauth as oauth_blueprint
@@ -20,6 +21,8 @@ load_dotenv()
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.secret_key = 'ThisIsJoeSite'
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 # 配置上传文件路径和允许的扩展
 
