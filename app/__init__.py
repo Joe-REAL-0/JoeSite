@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 
 from app.auth import auth as auth_blueprint
+from app.oauth import oauth as oauth_blueprint
 from app.main import main as main_blueprint
 from app.user import user as user_blueprint
 from app.message import message as message_blueprint
@@ -32,6 +33,24 @@ app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USE_TLS'] = False
+
+# GitHub OAuth 配置
+app.config['GITHUB_CLIENT_ID'] = os.getenv('GITHUB_CLIENT_ID')
+app.config['GITHUB_CLIENT_SECRET'] = os.getenv('GITHUB_CLIENT_SECRET')
+app.config['GITHUB_REDIRECT_URI'] = os.getenv('GITHUB_REDIRECT_URI')
+
+app.config['GOOGLE_CLIENT_ID'] = os.getenv('GOOGLE_CLIENT_ID')
+app.config['GOOGLE_CLIENT_SECRET'] = os.getenv('GOOGLE_CLIENT_SECRET')
+app.config['GOOGLE_REDIRECT_URI'] = os.getenv('GOOGLE_REDIRECT_URI')
+
+app.config['DISCORD_CLIENT_ID'] = os.getenv('DISCORD_CLIENT_ID')
+app.config['DISCORD_CLIENT_SECRET'] = os.getenv('DISCORD_CLIENT_SECRET')
+app.config['DISCORD_REDIRECT_URI'] = os.getenv('DISCORD_REDIRECT_URI')
+
+app.config['TELEGRAM_BOT_TOKEN'] = os.getenv('TELEGRAM_BOT_TOKEN')
+app.config['TELEGRAM_BOT_USERNAME'] = os.getenv('TELEGRAM_BOT_USERNAME')
+app.config['TELEGRAM_REDIRECT_URI'] = os.getenv('TELEGRAM_REDIRECT_URI')
+
 mail = Mail(app)
 
 # 初始化登录管理器
@@ -40,6 +59,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
 
 app.register_blueprint(auth_blueprint)
+app.register_blueprint(oauth_blueprint)
 app.register_blueprint(main_blueprint)
 app.register_blueprint(user_blueprint)
 app.register_blueprint(message_blueprint)

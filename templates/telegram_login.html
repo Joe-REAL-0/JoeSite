@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Joe的个人小站 | Telegram登录{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/html-style/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animations/animation-login.css') }}">
+{% endblock %}
+
+{% block page_title %}Telegram 登录{% endblock %}
+
+{% block content %}
+<div class="auth-shell" data-auth-mode="login">
+    <header class="auth-header">
+        <span class="auth-kicker">Joe Passport</span>
+        <h2 class="auth-title">Telegram 登录</h2>
+    </header>
+
+    <div class="auth-card">
+        <div class="auth-form" aria-hidden="false" style="display:flex;">
+            <p class="auth-hint">点击下方按钮完成 Telegram 授权。</p>
+            <div class="auth-field" style="align-items:center;">
+                <script async src="https://telegram.org/js/telegram-widget.js?22"
+                    data-telegram-login="{{ bot_username }}"
+                    data-size="large"
+                    data-userpic="false"
+                    data-auth-url="{{ auth_url }}"
+                    data-request-access="write"></script>
+            </div>
+            <div class="auth-meta">
+                <a class="auth-link" href="{{ url_for('auth.login') }}">返回登录页</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

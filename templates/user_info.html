@@ -116,17 +116,12 @@
                             <label for="new_email">新邮箱</label>
                             <input type="email" id="new_email" name="new_email" required>
                         </div>
-                        <div class="form-group verification-group">
-                            <label for="verification_code">验证码</label>
-                            <div class="code-input-container">
-                                <input type="text" id="verification_code" name="verification_code" required>
-                                <button type="button" id="send_code_btn" class="code-btn">获取验证码</button>
-                            </div>
-                            <div class="verification-tip">验证码将发送至新邮箱，请确保您能访问该邮箱</div>
-                        </div>
                         <div class="form-group">
                             <label for="password_for_email">当前密码</label>
                             <input type="password" id="password_for_email" name="password" required>
+                        </div>
+                        <div class="form-group verification-group">
+                            <div class="verification-tip">提交后，系统会向新邮箱发送验证链接；点击邮件中的按钮即可完成邮箱修改。</div>
                         </div>
                         <div id="email-status" class="status-message">{{ email_status }}</div>
                         <div class="form-group">

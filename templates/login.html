@@ -3,25 +3,126 @@
 {% block title %}Joe的个人小站 | 登录{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/login.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-login.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/login.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-login.css' ) }}">
 {% endblock %}
 
 {% block head_js %}
-    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 {% endblock %}
 
 {% block page_title %}Joe通行证{% endblock %}
 
 {% block content %}
-    <div class="CenterContainer">
-        <form id="login_form" action="/login_checker" method="POST">
-            <h1 id="page-title">使用Joe通行证登录</h1>
-            <input placeholder="昵称/邮箱" type="text" id="account" name="account" value="{{info[0]}}" required>
-            <input placeholder="密码" type="password" id="password" name="password" value="{{info[1]}}" required>
-            <p id="without_account">没有Joe通行证？<a href="{{url_for('auth.register')}}">立即注册</a></p>
-            <p id="status">{{status}}</p>
-            <input id="submit_button" type="submit" value="登录">
+{% set active_mode = active_tab|default('login') %}
+{% set login_account = login_info[0] if login_info is defined else '' %}
+{% set login_password = login_info[1] if login_info is defined else '' %}
+{% set register_nickname = register_info[0] if register_info is defined else '' %}
+{% set register_password = register_info[1] if register_info is defined else '' %}
+{% set register_repeat = register_info[2] if register_info is defined else '' %}
+{% set reset_token = reset_token|default('') %}
+
+<div class="auth-shell" data-auth-mode="{{ active_mode }}">
+    <header class="auth-header">
+        <span class="auth-kicker">Joe Passport</span>
+        <h2 class="auth-title" data-title-login="登录 Joe 通行证" data-title-register="注册 Joe 通行证" data-title-forgot="找回密码" data-title-reset="重置密码">
+            {{ '登录 Joe 通行证' if active_mode == 'login' else '注册 Joe 通行证' if active_mode == 'register' else '找回密码' if active_mode == 'forgot' else '重置密码' }}
+        </h2>
+    </header>
+
+    <div class="auth-card">
+        <form id="login_form" class="auth-form" data-auth-panel="login"
+            aria-hidden="{{ 'false' if active_mode == 'login' else 'true' }}" action="/login_checker" method="POST">
+            <div class="auth-field">
+                <input placeholder="昵称/邮箱" type="text" id="account" name="account" class="auth-input"
+                    value="{{ login_account }}" required autocomplete="username">
+            </div>
+            <div class="auth-field">
+                <input placeholder="密码" type="password" id="password" name="password" class="auth-input"
+                    value="{{ login_password }}" required autocomplete="current-password">
+            </div>
+            <div class="auth-meta">
+                <a class="auth-link" href="{{ url_for('auth.forgot_password') }}" data-auth-switch="forgot">忘记密码？</a>
+            </div>
+            <div class="auth-meta">
+                <a class="auth-link" href="{{ url_for('auth.register') }}" data-auth-switch="register">没有Joe通行证？立即注册</a>
+            </div>
+            <p class="auth-hint">第三方登录后仍需绑定邮箱，同邮箱下的数据会自动共享。</p>
+            <div class="auth-oauth">
+                <div class="auth-oauth-divider"><span>第三方登录</span></div>
+                <div class="auth-oauth-grid">
+                    <a class="auth-oauth-btn is-github" href="{{ url_for('oauth.oauth_login', provider='github') }}" aria-label="使用 GitHub 登录" title="使用 GitHub 登录">
+                        <span class="auth-oauth-icon" aria-hidden="true"></span>
+                        <span class="sr-only">GitHub</span>
+                    </a>
+                    <a class="auth-oauth-btn is-google" href="{{ url_for('oauth.oauth_login', provider='google') }}" aria-label="使用 Google 登录" title="使用 Google 登录">
+                        <span class="auth-oauth-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Google</span>
+                    </a>
+                    <a class="auth-oauth-btn is-discord" href="{{ url_for('oauth.oauth_login', provider='discord') }}" aria-label="使用 Discord 登录" title="使用 Discord 登录">
+                        <span class="auth-oauth-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Discord</span>
+                    </a>
+                    <a class="auth-oauth-btn is-telegram" href="{{ url_for('oauth.oauth_login', provider='telegram') }}" aria-label="使用 Telegram 登录" title="使用 Telegram 登录">
+                        <span class="auth-oauth-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Telegram</span>
+                    </a>
+                </div>
+            </div>
+            <p id="login_status" class="auth-status{% if login_status %} is-active{% endif %}" aria-live="polite">{{ login_status|default('') }}</p>
+            <button class="auth-submit" type="submit">登录</button>
+        </form>
+        <form id="forgot_form" class="auth-form" data-auth-panel="forgot"
+            aria-hidden="{{ 'false' if active_mode == 'forgot' else 'true' }}" action="{{ url_for('auth.forgot_password') }}" method="POST">
+            <p class="auth-hint">输入注册邮箱，我们会向该邮箱发送密码重置链接。</p>
+            <div class="auth-field">
+                <input placeholder="注册邮箱" type="email" name="email" class="auth-input" required autocomplete="email">
+            </div>
+            <div class="auth-meta">
+                <a class="auth-link" href="{{ url_for('auth.login') }}" data-auth-switch="login">返回登录</a>
+            </div>
+            <p id="forgot_status" class="auth-status{% if forgot_status %} is-active{% endif %}" aria-live="polite">{{ forgot_status|default('') }}</p>
+            <button class="auth-submit" type="submit">发送重置链接</button>
+        </form>
+
+        <form id="reset_form" class="auth-form" data-auth-panel="reset"
+            aria-hidden="{{ 'false' if active_mode == 'reset' else 'true' }}" action="{{ url_for('auth.reset_password', token=reset_token) }}" method="POST">
+            <p class="auth-hint">设置新的登录密码。</p>
+            <div class="auth-field">
+                <input placeholder="新密码" type="password" class="auth-input" name="new_password" required autocomplete="new-password">
+            </div>
+            <div class="auth-field">
+                <input placeholder="确认新密码" type="password" class="auth-input" name="confirm_password" required autocomplete="new-password">
+            </div>
+            <div class="auth-meta">
+                <a class="auth-link" href="{{ url_for('auth.login') }}" data-auth-switch="login">返回登录</a>
+            </div>
+            <p id="reset_status" class="auth-status{% if reset_status %} is-active{% endif %}" aria-live="polite">{{ reset_status|default('') }}</p>
+            <button class="auth-submit" type="submit">确认重置</button>
+        </form>
+
+        <form id="register_form" class="auth-form" data-auth-panel="register"
+            aria-hidden="{{ 'false' if active_mode == 'register' else 'true' }}" action="/register_checker" method="POST">
+            <p class="auth-hint">昵称需为 3-15 位中英文、数字或下划线组合</p>
+            <div class="auth-field">
+                <input placeholder="昵称" type="text" class="auth-input" id="nickname_column" name="nickname"
+                    value="{{ register_nickname }}" required minlength="3" maxlength="15" autocomplete="nickname">
+            </div>
+            <div class="auth-field">
+                <input placeholder="密码" type="password" class="auth-input" name="password" value="{{ register_password }}" required
+                    autocomplete="new-password">
+            </div>
+            <div class="auth-field">
+                <input placeholder="重复密码" type="password" class="auth-input" name="repeat_password" value="{{ register_repeat }}" required
+                    autocomplete="new-password">
+            </div>
+            <div class="auth-meta">
+                <a class="auth-link" href="{{ url_for('auth.login') }}" data-auth-switch="login">已有Joe通行证？去登录</a>
+            </div>
+            <p class="auth-hint">点击“下一步”进行邮箱验证</p>
+            <p id="register_status" class="auth-status{% if register_status %} is-active{% endif %}" aria-live="polite">{{ register_status|default('') }}</p>
+            <button class="auth-submit" type="submit">下一步</button>
         </form>
     </div>
+</div>
 {% endblock %}

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, session
-from flask_login import current_user, login_required, logout_user
+from flask_login import logout_user
 import os
 from database import Database
 
@@ -69,13 +69,6 @@ def get_resources():
 @main.route('/self_diary')
 def diary():
     return render_template('diary.html')
-
-@main.route('/note')
-@login_required
-def note():
-    db = Database('./database.db')
-    nickname = session.get('nickname')
-    return render_template('note.html', nickname=nickname, user_message_count=db.count_user_messages(nickname))
 
 @main.route('/find_text', methods=['POST'])
 def find_text():

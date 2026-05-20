@@ -114,15 +114,7 @@
                 <div class="ButtonIcon">
                     <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/diary.png' ) }}">
                 </div>
-                <span class="SideButton">个人笔记</span>
-            </a>
-
-            <a class="ButtonContainer" href="https://cloud.furryjoe.site">
-                <div class="ButtonIcon">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
-                </div>
-                <span class="SideButton">私人网盘</span>
+                <span class="SideButton">我的博客</span>
             </a>
 
             <a class="ButtonContainer" href="{{ url_for('message.friend_link') }}">
@@ -133,12 +125,12 @@
                 <span class="SideButton">友情链接</span>
             </a>
 
-            <a class="ButtonContainer" href="{{ url_for('message.message_wall') }}">
+            <a class="ButtonContainer" href="https://cloud.furryjoe.site">
                 <div class="ButtonIcon">
                     <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/message_wall.png' ) }}">
+                        src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
                 </div>
-                <span class="SideButton">留言墙</span>
+                <span class="SideButton">我的网盘</span>
             </a>
         </nav>
 

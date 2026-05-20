@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Joe的个人小站 | 绑定邮箱{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/html-style/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animations/animation-login.css') }}">
+{% endblock %}
+
+{% block page_title %}绑定邮箱{% endblock %}
+
+{% block content %}
+{% set bind_mode = bind_mode|default('oauth') %}
+<div class="auth-shell" data-auth-mode="login">
+    <header class="auth-header">
+        <span class="auth-kicker">Joe Passport</span>
+        <h2 class="auth-title">绑定邮箱</h2>
+    </header>
+
+    <div class="auth-card">
+        <form class="auth-form" data-auth-panel="login" action="{{ action_url }}" method="POST" aria-hidden="false">
+            <p class="auth-hint">{{ intro_text|default('请填写你要绑定的邮箱，验证链接会自动发送到该邮箱。') }}</p>
+            <div class="auth-field">
+                <input placeholder="邮箱" type="email" class="auth-input" name="email" value="{{ suggested_email|default('') }}" required autocomplete="email">
+            </div>
+            <p id="bind_status" class="auth-status{% if status %} is-active{% endif %}" aria-live="polite">{{ status|default('') }}</p>
+            <button class="auth-submit" type="submit">{{ submit_text|default('发送验证链接') }}</button>
+            <div class="auth-meta" style="margin-top: 8px;">
+                <a class="auth-link" href="{{ back_url|default(url_for('auth.login')) }}">{{ back_text|default('返回登录页') }}</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

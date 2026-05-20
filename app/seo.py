@@ -64,7 +64,6 @@ def sitemap():
         other_pages = [
             ('/oc_introduce', '0.7', 'monthly'),
             ('/friend_link', '0.6', 'weekly'),
-            ('/message_wall', '0.7', 'daily'),
         ]
         
         for path, priority, changefreq in other_pages:

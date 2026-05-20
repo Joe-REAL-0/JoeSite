@@ -19,13 +19,12 @@ class Database:
             self.cur.execute("CREATE TABLE IF NOT EXISTS users (email TEXT,nickname TEXT,password TEXT,avatar TEXT,friend_link TEXT,register_time TEXT)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS messages (nickname TEXT,time TEXT,content TEXT,UNIQUE(nickname,time))")
             self.cur.execute("CREATE TABLE IF NOT EXISTS oc_introduces (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, order_id INTEGER, UNIQUE(title))")
-            self.cur.execute("CREATE TABLE IF NOT EXISTS message_likes (id INTEGER PRIMARY KEY AUTOINCREMENT, message_nickname TEXT, message_time TEXT, liker_email TEXT, UNIQUE(message_nickname, message_time, liker_email))")
-            self.cur.execute("CREATE TABLE IF NOT EXISTS message_comments (id INTEGER PRIMARY KEY AUTOINCREMENT, message_nickname TEXT, message_time TEXT, commenter_email TEXT, commenter_nickname TEXT, comment_content TEXT, comment_time TEXT)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blogs (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, summary TEXT, created_time TEXT NOT NULL, updated_time TEXT, author_email TEXT NOT NULL, is_published INTEGER DEFAULT 0, view_count INTEGER DEFAULT 0)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blog_tags (id INTEGER PRIMARY KEY AUTOINCREMENT, tag_name TEXT NOT NULL UNIQUE, created_time TEXT NOT NULL)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blog_tag_relations (blog_id INTEGER NOT NULL, tag_id INTEGER NOT NULL, PRIMARY KEY (blog_id, tag_id), FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE, FOREIGN KEY (tag_id) REFERENCES blog_tags(id) ON DELETE CASCADE)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blog_likes (id INTEGER PRIMARY KEY AUTOINCREMENT, blog_id INTEGER NOT NULL, liker_email TEXT NOT NULL, UNIQUE(blog_id, liker_email), FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE)")
             self.cur.execute("CREATE TABLE IF NOT EXISTS blog_comments (id INTEGER PRIMARY KEY AUTOINCREMENT, blog_id INTEGER NOT NULL, commenter_email TEXT NOT NULL, commenter_nickname TEXT NOT NULL, comment_content TEXT NOT NULL, comment_time TEXT NOT NULL, FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE)")
+            self.cur.execute("CREATE TABLE IF NOT EXISTS oauth_accounts (provider TEXT NOT NULL, provider_user_id TEXT NOT NULL, email TEXT NOT NULL, display_name TEXT, avatar TEXT, profile_json TEXT, created_time TEXT, updated_time TEXT, PRIMARY KEY (provider, provider_user_id))")
             # 检查并升级现有的用户表，添加avatar列
             try:
                 self.cur.execute("SELECT avatar FROM users LIMIT 1")
@@ -96,17 +95,6 @@ class Database:
             print(f"Database insert_message error: {e}")
             self.conn.rollback()
             raise
-            
-    def fetch_messages(self, limit=None, offset=0):
-        try:
-            if limit:
-                self.cur.execute("SELECT * FROM messages ORDER BY time DESC LIMIT ? OFFSET ?", (limit, offset))
-            else:
-                self.cur.execute("SELECT * FROM messages ORDER BY time DESC")
-            return self.cur.fetchall()
-        except Exception as e:
-            print(f"Database fetch_messages error: {e}")
-            return []
             
     def count_user_messages(self, nickname):
         try:
@@ -306,6 +294,10 @@ class Database:
         """更新用户邮箱"""
         try:
             self.cur.execute("UPDATE users SET email=? WHERE email=?", (new_email, old_email))
+            self.cur.execute("UPDATE oauth_accounts SET email=? WHERE email=?", (new_email, old_email))
+            self.cur.execute("UPDATE blogs SET author_email=? WHERE author_email=?", (new_email, old_email))
+            self.cur.execute("UPDATE blog_likes SET liker_email=? WHERE liker_email=?", (new_email, old_email))
+            self.cur.execute("UPDATE blog_comments SET commenter_email=? WHERE commenter_email=?", (new_email, old_email))
             self.conn.commit()
             return True
         except Exception as e:
@@ -321,6 +313,41 @@ class Database:
         except Exception as e:
             print(f"Database email_exists error: {e}")
             return False
+
+    def fetch_oauth_account(self, provider, provider_user_id):
+        """获取已绑定的第三方账号"""
+        try:
+            self.cur.execute(
+                "SELECT provider, provider_user_id, email, display_name, avatar, profile_json, created_time, updated_time FROM oauth_accounts WHERE provider=? AND provider_user_id=?",
+                (provider, provider_user_id),
+            )
+            return self.cur.fetchone()
+        except Exception as e:
+            print(f"Database fetch_oauth_account error: {e}")
+            return None
+
+    def upsert_oauth_account(self, provider, provider_user_id, email, display_name='', avatar='', profile_json=''):
+        """绑定或更新第三方账号与站内邮箱"""
+        try:
+            from app.utils import get_china_time
+
+            existing = self.fetch_oauth_account(provider, provider_user_id)
+            if existing:
+                self.cur.execute(
+                    "UPDATE oauth_accounts SET email=?, display_name=?, avatar=?, profile_json=?, updated_time=? WHERE provider=? AND provider_user_id=?",
+                    (email, display_name, avatar, profile_json, get_china_time(), provider, provider_user_id),
+                )
+            else:
+                self.cur.execute(
+                    "INSERT INTO oauth_accounts (provider, provider_user_id, email, display_name, avatar, profile_json, created_time, updated_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (provider, provider_user_id, email, display_name, avatar, profile_json, get_china_time(), get_china_time()),
+                )
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Database upsert_oauth_account error: {e}")
+            self.conn.rollback()
+            return False
             
     def nickname_exists(self, nickname, exclude_email=None):
         """检查昵称是否存在，排除指定邮箱的用户"""
@@ -333,106 +360,6 @@ class Database:
         except Exception as e:
             print(f"Database nickname_exists error: {e}")
             
-    def add_like(self, message_nickname, message_time, liker_email):
-        """添加点赞"""
-        try:
-            self.cur.execute("INSERT INTO message_likes (message_nickname, message_time, liker_email) VALUES (?, ?, ?)", 
-                            (message_nickname, message_time, liker_email))
-            self.conn.commit()
-            return True
-        except sqlite3.IntegrityError:
-            # 已经点赞过了
-            return False
-        except Exception as e:
-            print(f"Database add_like error: {e}")
-            self.conn.rollback()
-            return False
-            
-    def remove_like(self, message_nickname, message_time, liker_email):
-        """移除点赞"""
-        try:
-            self.cur.execute("DELETE FROM message_likes WHERE message_nickname=? AND message_time=? AND liker_email=?", 
-                            (message_nickname, message_time, liker_email))
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Database remove_like error: {e}")
-            self.conn.rollback()
-            return False
-            
-    def get_likes_count(self, message_nickname, message_time):
-        """获取留言点赞数"""
-        try:
-            self.cur.execute("SELECT COUNT(*) FROM message_likes WHERE message_nickname=? AND message_time=?", 
-                            (message_nickname, message_time))
-            return self.cur.fetchone()[0]
-        except Exception as e:
-            print(f"Database get_likes_count error: {e}")
-            return 0
-            
-    def has_liked(self, message_nickname, message_time, liker_email):
-        """检查用户是否已点赞"""
-        try:
-            self.cur.execute("SELECT COUNT(*) FROM message_likes WHERE message_nickname=? AND message_time=? AND liker_email=?", 
-                            (message_nickname, message_time, liker_email))
-            return self.cur.fetchone()[0] > 0
-        except Exception as e:
-            print(f"Database has_liked error: {e}")
-            return False
-            
-    def add_comment(self, message_nickname, message_time, commenter_email, commenter_nickname, comment_content, comment_time):
-        """添加评论，如果用户已经评论过则更新评论"""
-        try:
-            # 检查用户是否已经评论过这条留言
-            self.cur.execute("SELECT id FROM message_comments WHERE message_nickname=? AND message_time=? AND commenter_email=?", 
-                           (message_nickname, message_time, commenter_email))
-            existing_comment = self.cur.fetchone()
-            
-            if existing_comment:
-                # 如果已经评论过，更新评论内容和时间
-                self.cur.execute("UPDATE message_comments SET comment_content=?, comment_time=? WHERE id=?",
-                               (comment_content, comment_time, existing_comment[0]))
-            else:
-                # 如果没有评论过，插入新评论
-                self.cur.execute("INSERT INTO message_comments (message_nickname, message_time, commenter_email, commenter_nickname, comment_content, comment_time) VALUES (?, ?, ?, ?, ?, ?)", 
-                                (message_nickname, message_time, commenter_email, commenter_nickname, comment_content, comment_time))
-            
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Database add_comment error: {e}")
-            self.conn.rollback()
-            return False
-            
-    def get_comments(self, message_nickname, message_time):
-        """获取留言的所有评论"""
-        try:
-            self.cur.execute("SELECT commenter_nickname, comment_content, comment_time, commenter_email FROM message_comments WHERE message_nickname=? AND message_time=? ORDER BY comment_time ASC", 
-                            (message_nickname, message_time))
-            return self.cur.fetchall()
-        except Exception as e:
-            print(f"Database get_comments error: {e}")
-            return []
-            
-    def delete_message_by_nickname_time(self, nickname, time):
-        """删除指定用户的指定时间的留言"""
-        try:
-            # 首先删除相关的点赞记录
-            self.cur.execute("DELETE FROM message_likes WHERE message_nickname=? AND message_time=?", (nickname, time))
-            
-            # 然后删除相关的评论记录
-            self.cur.execute("DELETE FROM message_comments WHERE message_nickname=? AND message_time=?", (nickname, time))
-            
-            # 最后删除留言本身
-            self.cur.execute("DELETE FROM messages WHERE nickname=? AND time=?", (nickname, time))
-            
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Database delete_message_by_nickname_time error: {e}")
-            self.conn.rollback()
-            return False
-    
     # 博客相关方法
     def insert_blog(self, title, content, summary, created_time, author_email, is_published=0):
         """创建博客文章"""

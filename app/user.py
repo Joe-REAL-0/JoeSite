@@ -1,8 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_login import login_required, current_user
+from flask_mail import Message
 from werkzeug.utils import secure_filename
 import os
 import uuid
+import threading
+from app.auth import is_valid_nickname
 from database import Database
 
 user = Blueprint('user', __name__)
@@ -240,6 +243,8 @@ def check_nickname():
         
         if not nickname:
             return jsonify({'available': False, 'message': '昵称不能为空'}), 400
+        if not is_valid_nickname(nickname):
+            return jsonify({'available': False, 'message': '昵称需为3-15位的中文、数字或下划线组合'}), 200
             
         with Database('./database.db') as db:
             if db.nickname_exists(nickname, exclude_email=email):
@@ -250,180 +255,104 @@ def check_nickname():
         print(f"Check nickname error: {e}")
         return jsonify({'available': False, 'message': '检查昵称时出错'}), 500
 
+
+def _send_email_link(recipient_email, subject, body):
+    from app import app, mail
+
+    msg = Message(subject, sender='joe_real@qq.com', recipients=[recipient_email])
+    msg.body = body
+
+    def send_mail_async():
+        try:
+            with app.app_context():
+                mail.send(msg)
+        except Exception as e:
+            print(f"Email send error: {e}")
+
+    thread = threading.Thread(target=send_mail_async)
+    thread.daemon = True
+    thread.start()
+
+
 @user.route('/email_verification', methods=['POST'])
 @login_required
 def email_verification():
     try:
-        data = request.get_json()
-        email = data.get('email')
-        action = data.get('action')  # 用于区分不同的邮箱验证场景
-        
-        # 从auth模块导入所需功能
-        from app.auth import email_dict, legal_characters, clean_expired_codes
-        from random import choice
-        import time
-        import threading
-        
-        # 清理过期的验证码
-        clean_expired_codes()
-        
-        # 检查邮箱是否已被注册（除了当前用户）
+        data = request.get_json() or {}
+        email = (data.get('email') or '').strip()
+        if not email:
+            return jsonify({'message': '请输入邮箱地址'}), 400
+
         with Database('./database.db') as db:
             if db.email_exists(email) and email != current_user.email:
                 return jsonify({'message': '该邮箱已被注册'}), 400
-        
-        # 生成验证码
-        code = ''.join(choice(legal_characters) for _ in range(8))
-        timestamp = time.time()
-        
-        # 存储验证码和操作类型
-        email_dict[email] = [code, timestamp, action]
-        
-        # 获取邮件服务
-        from app import mail, app
-        
-        # 设置邮件内容
-        msg_subject = '来自Joe Site的邮箱验证'
-        if action == 'update_email':
-            msg_body = f"这是Joe从 www.furryjoe.site 发送的邮箱修改验证邮件\n如非您本人操作请忽略该消息\n\n*感谢你的使用！\n以下是你的验证码\n\n  {code}  \n\n请在 五分钟 内进行验证并完成邮箱修改"
-        else:
-            msg_body = f"这是Joe从 www.furryjoe.site 发送的身份验证邮件\n如非您本人操作请忽略该消息\n\n*感谢你的来访！\n以下是你的验证码\n\n  {code}  \n\n请在 五分钟 内进行验证"
-        
-        from flask_mail import Message
-        msg = Message(msg_subject, sender='joe_real@qq.com', recipients=[email])
-        msg.body = msg_body
-        
-        # 在新线程中发送邮件
-        def send_mail_async():
-            try:
-                with app.app_context():
-                    mail.send(msg)
-            except Exception as e:
-                print(f"Email send error: {e}")
-        
-        thread = threading.Thread(target=send_mail_async)
-        thread.daemon = True
-        thread.start()
-        
-        return jsonify({'message': '验证码已发送至新邮箱'})
+
+        from app.email_links import create_email_link_token
+
+        token = create_email_link_token({
+            'purpose': 'update_email',
+            'current_email': current_user.email,
+            'new_email': email,
+        })
+        verify_url = url_for('oauth.email_link_verify', token=token, _external=True)
+        _send_email_link(
+            email,
+            'Joe Site 邮箱验证',
+            f'这是 Joe Site 发送的邮箱验证邮件。\n\n请点击下面的按钮完成邮箱修改：\n{verify_url}\n\n如果这不是您的操作，请忽略这封邮件。',
+        )
+
+        return jsonify({'message': '验证链接已发送至新邮箱'})
     
     except Exception as e:
         print(f"Email verification error: {e}")
-        return jsonify({'message': '验证码发送失败，请稍后重试'}), 500
+        return jsonify({'message': '验证链接发送失败，请稍后重试'}), 500
 
 @user.route('/update_email', methods=['POST'])
 @login_required
 def update_email():
     try:
         current_email = current_user.email
-        new_email = request.form.get('new_email')
+        new_email = (request.form.get('new_email') or '').strip()
         password = request.form.get('password')
-        verification_code = request.form.get('verification_code')
-        
-        if not new_email or not password or not verification_code:
-            with Database('./database.db') as db:
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-            return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                  status="", avatar=avatar, friend_link=friend_link, 
-                                  friend_link_status="", email_status="请填写所有必要信息")
-        
-        # 导入验证码相关功能
-        from app.auth import email_dict, clean_expired_codes
-        import time
-        
-        # 清理过期的验证码
-        clean_expired_codes()
-        
+
         with Database('./database.db') as db:
-            # 验证当前密码
+            user_data = db.fetch(current_email)
+            register_time = db.get_user_register_time(current_email)
+            avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
+            friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
+
+            if not new_email or not password:
+                return render_template('user_info.html', user_data=user_data, register_time=register_time,
+                                      status="", avatar=avatar, friend_link=friend_link,
+                                      friend_link_status="", email_status="请填写所有必要信息")
+
             if not db.check(current_email, password):
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-                return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                      status="", avatar=avatar, friend_link=friend_link, 
+                return render_template('user_info.html', user_data=user_data, register_time=register_time,
+                                      status="", avatar=avatar, friend_link=friend_link,
                                       friend_link_status="", email_status="密码错误")
-            
-            # 检查新邮箱是否已被使用（除了当前用户）
+
             if db.email_exists(new_email) and new_email != current_email:
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-                return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                      status="", avatar=avatar, friend_link=friend_link, 
+                return render_template('user_info.html', user_data=user_data, register_time=register_time,
+                                      status="", avatar=avatar, friend_link=friend_link,
                                       friend_link_status="", email_status="该邮箱已被注册")
-            
-            # 验证码检查
-            if not (new_email in email_dict):
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-                return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                      status="", avatar=avatar, friend_link=friend_link, 
-                                      friend_link_status="", email_status="请先获取验证码")
-            
-            # 检查验证码是否过期
-            if email_dict[new_email][1] + 300 < time.time():
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-                return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                      status="", avatar=avatar, friend_link=friend_link, 
-                                      friend_link_status="", email_status="验证码已过期，请重新获取")
-            
-            # 检查验证码是否正确
-            if email_dict[new_email][0] != verification_code:
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-                return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                      status="", avatar=avatar, friend_link=friend_link, 
-                                      friend_link_status="", email_status="验证码错误，请注意区分大小写")
-            
-            # 检查验证码操作类型
-            if len(email_dict[new_email]) > 2 and email_dict[new_email][2] != 'update_email':
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-                return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                      status="", avatar=avatar, friend_link=friend_link, 
-                                      friend_link_status="", email_status="验证码类型错误，请重新获取")
-                                      
-            # 验证通过，更新邮箱
-            if db.update_email(current_email, new_email):
-                # 清理验证码
-                email_dict.pop(new_email, None)
-                
-                # 需要更新当前用户的邮箱
-                current_user.email = new_email
-                
-                # 邮箱更新成功，重定向到用户信息页面
-                return redirect(url_for('user.user_info'))
-            else:
-                user_data = db.fetch(current_email)
-                register_time = db.get_user_register_time(current_email)
-                avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
-                friend_link = user_data[4] if len(user_data) > 4 and user_data[4] else ""
-                
-                return render_template('user_info.html', user_data=user_data, register_time=register_time, 
-                                      status="", avatar=avatar, friend_link=friend_link, 
-                                      friend_link_status="", email_status="邮箱更新失败，请稍后重试")
+
+        from app.email_links import create_email_link_token
+
+        token = create_email_link_token({
+            'purpose': 'update_email',
+            'current_email': current_email,
+            'new_email': new_email,
+        })
+        verify_url = url_for('oauth.email_link_verify', token=token, _external=True)
+        _send_email_link(
+            new_email,
+            'Joe Site 邮箱验证',
+            f'这是 Joe Site 发送的邮箱验证邮件。\n\n请点击下面的按钮完成邮箱修改：\n{verify_url}\n\n如果这不是您的操作，请忽略这封邮件。',
+        )
+
+        return render_template('user_info.html', user_data=user_data, register_time=register_time,
+                              status="", avatar=avatar, friend_link=friend_link,
+                              friend_link_status="", email_status="验证链接已发送，请前往新邮箱点击完成修改")
     except Exception as e:
         print(f"Update email error: {e}")
         return redirect(url_for('auth.login'))
