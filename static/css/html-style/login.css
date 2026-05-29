@@ -1,3 +1,38 @@
+/* ===========================
+   Login Page Variables
+   =========================== */
+body {
+    /* 核心尺寸映射 */
+    --login-pill-height: var(--pill-height-sm);
+    --login-pill-radius: var(--pill-radius-sm);
+
+    --login-body-padding: var(--space-lg);
+
+    /* --- 1. 内层 (Inputs, Buttons, Status, Links) --- */
+    --auth-item-height: var(--login-pill-height);
+    --auth-item-radius: var(--login-pill-radius);
+
+    --auth-input-padding: 0 18px;
+    --auth-button-padding: 0 26px;
+    --auth-link-padding: 6px 18px;
+    --auth-status-padding: 8px 16px;
+
+    --auth-oauth-size: calc(var(--circle-size-sm) + 4px);
+    /* 52px */
+    --auth-oauth-radius: 50%;
+
+    /* --- 2. 中层 (Auth Header / Auth Card) --- */
+    --auth-header-padding: var(--space-md);
+    --auth-header-radius: calc(var(--auth-header-padding) + var(--auth-item-radius));
+
+    --auth-card-padding: var(--space-md);
+    --auth-card-radius: calc(var(--auth-card-padding) + var(--auth-item-radius));
+
+    /* --- 3. 外层 (Auth Shell) --- */
+    --auth-shell-padding: var(--space-sm);
+    --auth-shell-radius: calc(var(--auth-shell-padding) + var(--auth-card-radius));
+}
+
 body {
     min-height: 100vh;
     background-color: var(--bg-body);
@@ -6,24 +41,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-lg);
+    padding: var(--login-body-padding);
     box-sizing: border-box;
 }
 
 .auth-shell {
-    --auth-core-radius: var(--radius-inner);
-    --auth-pad-panel: calc(var(--space-sm) + 4px);
-    --auth-pad-shell: calc(var(--space-md) - 2px);
-    --auth-input-height: 48px;
-    --auth-pill-radius: calc(var(--auth-input-height) / 2);
-    --auth-card-padding: var(--space-md);
     width: min(420px, 92vw);
-    padding: var(--auth-pad-shell);
-    border-radius: calc(var(--auth-core-radius) + var(--auth-pad-panel) + var(--auth-pad-shell));
+    padding: var(--auth-shell-padding);
+    border-radius: var(--auth-shell-radius);
+    /* 使用全局提取的同心圆角设定 */
     background-color: var(--bg-overlay);
     border: 1px solid var(--border-subtle);
-    backdrop-filter: blur(26px) saturate(140%);
-    -webkit-backdrop-filter: blur(26px) saturate(140%);
     box-shadow: var(--shadow-card);
     position: relative;
     overflow: hidden;
@@ -33,7 +61,7 @@ body {
     gap: var(--space-md);
 }
 
-    
+
 
 .auth-header {
     position: relative;
@@ -43,8 +71,8 @@ body {
     align-items: center;
     text-align: center;
     gap: 6px;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: calc(var(--auth-pill-radius) + var(--space-sm));
+    padding: var(--auth-header-padding);
+    border-radius: var(--auth-header-radius);
     background-color: var(--bg-overlay-inner);
     border: 1px solid var(--border-subtle);
 }
@@ -68,11 +96,9 @@ body {
 .auth-card {
     position: relative;
     padding: var(--auth-card-padding);
-    border-radius: calc(var(--auth-pill-radius) + var(--auth-card-padding));
+    border-radius: var(--auth-card-radius);
     background-color: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
     overflow: hidden;
     z-index: 1;
 }
@@ -81,7 +107,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: calc(var(--auth-pill-radius) + var(--auth-card-padding));
+    border-radius: var(--auth-card-radius);
     background: radial-gradient(70% 60% at 85% 0%, var(--accent-glow), transparent 60%);
     opacity: 0.6;
     pointer-events: none;
@@ -103,39 +129,39 @@ body {
     display: flex;
 }
 
-.auth-form > * {
+.auth-form>* {
     animation: authReveal 0.45s ease both;
 }
 
-.auth-form > *:nth-child(1) {
+.auth-form>*:nth-child(1) {
     animation-delay: 0.04s;
 }
 
-.auth-form > *:nth-child(2) {
+.auth-form>*:nth-child(2) {
     animation-delay: 0.08s;
 }
 
-.auth-form > *:nth-child(3) {
+.auth-form>*:nth-child(3) {
     animation-delay: 0.12s;
 }
 
-.auth-form > *:nth-child(4) {
+.auth-form>*:nth-child(4) {
     animation-delay: 0.16s;
 }
 
-.auth-form > *:nth-child(5) {
+.auth-form>*:nth-child(5) {
     animation-delay: 0.2s;
 }
 
-.auth-form > *:nth-child(6) {
+.auth-form>*:nth-child(6) {
     animation-delay: 0.24s;
 }
 
-.auth-form > *:nth-child(7) {
+.auth-form>*:nth-child(7) {
     animation-delay: 0.28s;
 }
 
-.auth-form > *:nth-child(8) {
+.auth-form>*:nth-child(8) {
     animation-delay: 0.32s;
 }
 
@@ -146,9 +172,9 @@ body {
 
 .auth-input {
     width: 100%;
-    height: var(--auth-input-height);
-    padding: 0 18px;
-    border-radius: var(--auth-pill-radius);
+    height: var(--auth-item-height);
+    padding: var(--auth-input-padding);
+    border-radius: var(--auth-item-radius);
     border: 1px solid var(--glass-border);
     background-color: var(--glass-bg);
     color: var(--text-primary);
@@ -179,15 +205,15 @@ body {
 
 .auth-button,
 .auth-submit {
-    border-radius: var(--auth-pill-radius);
+    border-radius: var(--auth-item-radius);
     border: 1px solid var(--accent-border);
     background: linear-gradient(135deg, var(--accent-bg), var(--glass-bg));
     color: var(--text-primary);
     font-size: 15px;
     letter-spacing: 2px;
     font-family: 'YuanTi';
-    height: var(--auth-input-height);
-    padding: 0 26px;
+    height: var(--auth-item-height);
+    padding: var(--auth-button-padding);
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
@@ -253,10 +279,10 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0;
-    width: 52px;
-    height: 52px;
+    width: var(--auth-oauth-size);
+    height: var(--auth-oauth-size);
     padding: 0;
-    border-radius: 50%;
+    border-radius: var(--auth-oauth-radius);
     border: 1px solid var(--accent-border);
     background: linear-gradient(135deg, var(--accent-bg), var(--glass-bg));
     color: var(--text-primary);
@@ -345,8 +371,8 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 18px;
-    border-radius: var(--auth-pill-radius);
+    padding: var(--auth-link-padding);
+    border-radius: var(--auth-item-radius);
     border: 1px solid var(--border-subtle);
     background-color: var(--bg-overlay-inner);
     color: var(--text-secondary);
@@ -366,8 +392,8 @@ body {
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 8px 16px;
-    border-radius: var(--auth-pill-radius);
+    padding: var(--auth-status-padding);
+    border-radius: var(--auth-item-radius);
     border: 1px solid var(--accent-border);
     background-color: var(--accent-bg);
     color: var(--text-primary);
@@ -381,46 +407,40 @@ body {
 }
 
 @media (max-width: 768px) {
-    .auth-shell {
-        width: min(520px, 92vw);
-        --auth-input-height: 44px;
+    body {
+        --login-pill-height: calc(var(--pill-height-sm) - 4px);
+        --login-pill-radius: calc(var(--login-pill-height) / 2);
+        --login-body-padding: var(--space-sm);
+
         --auth-card-padding: var(--space-sm);
+        --auth-oauth-size: var(--circle-size-sm);
     }
 
-    body {
-        padding: var(--space-sm);
+    .auth-shell {
+        width: min(520px, 92vw);
     }
 
     .auth-title {
         font-size: 22px;
     }
 
-    .auth-card {
-        padding: var(--auth-card-padding);
-    }
-
     .auth-row {
         grid-template-columns: 1fr;
-    }
-
-    .auth-oauth-btn {
-        width: 48px;
-        height: 48px;
     }
 
     .auth-button,
     .auth-submit,
     .auth-input {
-        height: var(--auth-input-height);
         font-size: 14px;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .auth-shell,
     .auth-shell::after,
     .auth-form,
-    .auth-form > * {
+    .auth-form>* {
         animation: none !important;
     }
 }

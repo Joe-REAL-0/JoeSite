@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 import os
 import uuid
 import threading
-from app.auth import is_valid_nickname
+from app.auth import is_valid_nickname, _build_email_button_html
 from database import Database
 
 user = Blueprint('user', __name__)
@@ -256,11 +256,13 @@ def check_nickname():
         return jsonify({'available': False, 'message': '检查昵称时出错'}), 500
 
 
-def _send_email_link(recipient_email, subject, body):
+def _send_email_link(recipient_email, subject, body, html=None):
     from app import app, mail
 
     msg = Message(subject, sender='joe_real@qq.com', recipients=[recipient_email])
     msg.body = body
+    if html:
+        msg.html = html
 
     def send_mail_async():
         try:
@@ -295,10 +297,18 @@ def email_verification():
             'new_email': email,
         })
         verify_url = url_for('oauth.email_link_verify', token=token, _external=True)
+        html = _build_email_button_html(
+            title='Joe Site 邮箱验证',
+            message='这是 Joe Site 发送的邮箱验证邮件。点击下方按钮完成邮箱修改。',
+            button_text='完成修改',
+            button_url=verify_url,
+            hint_text='如果这不是你的操作，请忽略本邮件。',
+        )
         _send_email_link(
             email,
             'Joe Site 邮箱验证',
             f'这是 Joe Site 发送的邮箱验证邮件。\n\n请点击下面的按钮完成邮箱修改：\n{verify_url}\n\n如果这不是您的操作，请忽略这封邮件。',
+            html,
         )
 
         return jsonify({'message': '验证链接已发送至新邮箱'})
@@ -344,10 +354,18 @@ def update_email():
             'new_email': new_email,
         })
         verify_url = url_for('oauth.email_link_verify', token=token, _external=True)
+        html = _build_email_button_html(
+            title='Joe Site 邮箱验证',
+            message='这是 Joe Site 发送的邮箱验证邮件。点击下方按钮完成邮箱修改。',
+            button_text='完成修改',
+            button_url=verify_url,
+            hint_text='如果这不是你的操作，请忽略本邮件。',
+        )
         _send_email_link(
             new_email,
             'Joe Site 邮箱验证',
             f'这是 Joe Site 发送的邮箱验证邮件。\n\n请点击下面的按钮完成邮箱修改：\n{verify_url}\n\n如果这不是您的操作，请忽略这封邮件。',
+            html,
         )
 
         return render_template('user_info.html', user_data=user_data, register_time=register_time,

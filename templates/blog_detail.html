@@ -3,125 +3,125 @@
 {% block title %}{{ blog.title }} | Joe的博客{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_detail.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_detail.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
 
-    <!-- 代码高亮样式 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<!-- 代码高亮样式 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 {% endblock %}
 
 {% block head_js %}
-    <!-- MathJax数学公式渲染 -->
-    <script>
-        MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                processEnvironments: true
-            },
-            options: {
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-            }
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<!-- MathJax数学公式渲染 -->
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 {% endblock %}
 
-{% block page_title %}文章详情{% endblock %}
+{% block page_title %}博客详情{% endblock %}
 
 {% block content %}
 <div class="CenterContainer" data-blog-id="{{ blog.id }}" data-is-logged-in="{{ 'true' if is_logged_in else 'false' }}"
     data-login-url="{{ login_url }}" data-likes-count="{{ likes_count }}" data-comments-count="{{ comments_count }}"
     data-has-liked="{{ 'true' if has_liked else 'false' }}">
 
-        <div class="blog-detail-container glassmorphism">
-            <div class="blog-header">
-                <h1 class="blog-title">{{ blog.title }}</h1>
+    <div class="blog-detail-container glassmorphism">
+        <div class="blog-header">
+            <h1 class="blog-title">{{ blog.title }}</h1>
 
-                <div class="blog-meta">
-                    <span class="blog-date">发布于: {{ blog.created_time }}</span>
-                    {% if blog.updated_time and blog.updated_time != blog.created_time %}
-                    <span class="blog-updated">更新于: {{ blog.updated_time }}</span>
-                    {% endif %}
-                    <span class="blog-views">📖 {{ blog.view_count }} 次阅读</span>
-                    {% if not blog.is_published %}
-                    <span class="blog-draft">草稿</span>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="blog-content markdown-body">
-                {{ blog.content | safe }}
-            </div>
-            <div class="blog-comments-section" id="commentsSection">
-                <h3 class="comments-title">💬 评论区 <span class="comments-count" id="commentsCount">({{ comments_count
-                        }})</span></h3>
-                <div class="comments-list" id="commentsList">
-                    <!-- 评论会通过JS动态加载 -->
-                </div>
-            </div>
-
-            <div class="blog-footer">
-                <a href="{{ url_for('blog.blog_list') }}" class="back-btn">← 返回博客列表</a>
-                {% if is_admin %}
-                <a href="{{ url_for('blog.blog_edit', blog_id=blog.id) }}" class="edit-btn">编辑文章</a>
+            <div class="blog-meta">
+                <span class="blog-date">发布于: {{ blog.created_time }}</span>
+                {% if blog.updated_time and blog.updated_time != blog.created_time %}
+                <span class="blog-updated">更新于: {{ blog.updated_time }}</span>
+                {% endif %}
+                <span class="blog-views">📖 {{ blog.view_count }} 次阅读</span>
+                {% if not blog.is_published %}
+                <span class="blog-draft">草稿</span>
                 {% endif %}
             </div>
         </div>
-    </div>
 
-    <aside class="right-sidebar" id="rightSidebar">
-        <!-- TOC 目录导航 -->
-        <div class="toc-section" id="tocSection">
-            <div class="toc-header">
-                <span class="toc-title">📑 目录</span>
-                <button class="toc-toggle" id="tocToggle" title="收起目录">▲</button>
-            </div>
-            <div class="toc-content" id="tocContent">
-                <!-- TOC会通过JS动态生成 -->
+        <div class="blog-content markdown-body">
+            {{ blog.content | safe }}
+        </div>
+        <div class="blog-comments-section" id="commentsSection">
+            <h3 class="comments-title">💬 评论区 <span class="comments-count" id="commentsCount">({{ comments_count
+                    }})</span></h3>
+            <div class="comments-list" id="commentsList">
+                <!-- 评论会通过JS动态加载 -->
             </div>
         </div>
 
-        <!-- 操作按钮组 -->
-        <div class="action-buttons">
-            <button class="sidebar-btn like-btn" id="likeBtn" title="点赞">
-                <span class="btn-icon" id="likeIcon">🤍</span>
-                <span class="btn-count" id="likeCount">{{ likes_count }}</span>
-            </button>
-            <button class="sidebar-btn comment-btn" id="commentBtn" title="评论">
-                <span class="btn-icon">💬</span>
-                <span class="btn-count" id="commentBtnCount">{{ comments_count }}</span>
-            </button>
-            <button class="sidebar-btn top-btn" id="topBtn" title="回到顶部">
-                <span class="btn-icon">⬆️</span>
-            </button>
-        </div>
-    </aside>
-
-    <!-- 评论弹窗 -->
-    <div class="comment-modal-overlay" id="commentModal">
-        <div class="comment-modal glassmorphism">
-            <div class="modal-header">
-                <h3>发表评论</h3>
-                <button class="modal-close" id="modalClose">✕</button>
-            </div>
-            <div class="modal-body">
-                <textarea class="comment-input" id="commentInput" placeholder="写下你的想法..." maxlength="500"></textarea>
-                <div class="comment-char-count"><span id="charCount">0</span>/500</div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-cancel" id="modalCancel">取消</button>
-                <button class="modal-submit" id="modalSubmit">发表评论</button>
-            </div>
+        <div class="blog-footer">
+            <a href="{{ url_for('blog.blog_list') }}" class="back-btn">← 返回博客列表</a>
+            {% if is_admin %}
+            <a href="{{ url_for('blog.blog_edit', blog_id=blog.id) }}" class="edit-btn">编辑文章</a>
+            {% endif %}
         </div>
     </div>
+</div>
+
+<aside class="right-sidebar" id="rightSidebar">
+    <!-- TOC 目录导航 -->
+    <div class="toc-section" id="tocSection">
+        <div class="toc-header">
+            <span class="toc-title">📑 目录</span>
+            <button class="toc-toggle" id="tocToggle" title="收起目录">▲</button>
+        </div>
+        <div class="toc-content" id="tocContent">
+            <!-- TOC会通过JS动态生成 -->
+        </div>
+    </div>
+
+    <!-- 操作按钮组 -->
+    <div class="action-buttons">
+        <button class="sidebar-btn like-btn" id="likeBtn" title="点赞">
+            <span class="btn-icon" id="likeIcon">🤍</span>
+            <span class="btn-count" id="likeCount">{{ likes_count }}</span>
+        </button>
+        <button class="sidebar-btn comment-btn" id="commentBtn" title="评论">
+            <span class="btn-icon">💬</span>
+            <span class="btn-count" id="commentBtnCount">{{ comments_count }}</span>
+        </button>
+        <button class="sidebar-btn top-btn" id="topBtn" title="回到顶部">
+            <span class="btn-icon">⬆️</span>
+        </button>
+    </div>
+</aside>
+
+<!-- 评论弹窗 -->
+<div class="comment-modal-overlay" id="commentModal">
+    <div class="comment-modal glassmorphism">
+        <div class="modal-header">
+            <h3>发表评论</h3>
+            <button class="modal-close" id="modalClose">✕</button>
+        </div>
+        <div class="modal-body">
+            <textarea class="comment-input" id="commentInput" placeholder="写下你的想法..." maxlength="500"></textarea>
+            <div class="comment-char-count"><span id="charCount">0</span>/500</div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-cancel" id="modalCancel">取消</button>
+            <button class="modal-submit" id="modalSubmit">发表评论</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
-    <!-- 代码高亮JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
-    <script src="{{ url_for('static', filename='js/blog_detail.js') }}"></script>
+<!-- 代码高亮JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src="{{ url_for('static', filename='js/blog_detail.js') }}"></script>
 {% endblock %}

@@ -49,7 +49,7 @@ class GlobalResourceLoader {
             if (url.endsWith('.ttf') || url.endsWith('.woff') || url.endsWith('.woff2')) {
                 // 字体检测
                 const fontName = this.getFontNameFromUrl(url);
-                
+
                 // 改进的字体检测方法
                 if (document.fonts && document.fonts.load) {
                     // 使用FontFace API加载字体
@@ -67,17 +67,17 @@ class GlobalResourceLoader {
             } else {
                 // 图片检测
                 const img = new Image();
-                
+
                 img.onload = () => {
                     clearTimeout(timeout);
                     resolve(url);
                 };
-                
+
                 img.onerror = (error) => {
                     clearTimeout(timeout);
                     resolve(url); // 即使失败也resolve，避免阻塞
                 };
-                
+
                 img.src = url;
             }
         });
@@ -87,16 +87,16 @@ class GlobalResourceLoader {
         if (document.fonts && document.fonts.check) {
             let checkCount = 0;
             const maxChecks = 30; // 减少到3秒
-            
+
             const checkFont = () => {
                 checkCount++;
                 // 尝试多种字体大小检测
                 const sizes = ['12px', '16px', '20px'];
-                const isLoaded = sizes.some(size => 
+                const isLoaded = sizes.some(size =>
                     document.fonts.check(`${size} "${fontName}"`) ||
                     document.fonts.check(`${size} ${fontName}`)
                 );
-                
+
                 if (isLoaded) {
                     clearTimeout(timeout);
                     resolve(url);
@@ -122,9 +122,9 @@ class GlobalResourceLoader {
             'ZhengQingKeLengKu.ttf': 'LengKu',
             'valorax-lg25v.ttf': 'valorax',
             'Technonomicon.ttf': 'Technonomicon',
-            'GunShi.ttf': 'GunShi'
+            'GunShi.otf': 'GunShi'
         };
-        
+
         for (const [file, name] of Object.entries(fontMap)) {
             if (url.includes(file)) {
                 return name;
@@ -138,9 +138,9 @@ class GlobalResourceLoader {
             this.triggerAnimation();
             return;
         }
-        
+
         let completedCount = 0;
-        const promises = this.requiredResources.map((url, index) => 
+        const promises = this.requiredResources.map((url, index) =>
             this.checkResource(url).then(
                 (loadedUrl) => {
                     this.loadedResources.add(loadedUrl);
@@ -159,14 +159,14 @@ class GlobalResourceLoader {
 
         try {
             const results = await Promise.allSettled(promises); // 使用allSettled代替all
-            
+
             // 不管成功失败都触发动画
             this.triggerAnimation();
         } catch (error) {
             // 即使有错误也触发动画，避免永久等待
             setTimeout(() => this.triggerAnimation(), 2000);
         }
-        
+
         // 备用机制：如果15秒内没有触发动画，强制触发
         setTimeout(() => {
             const titleH1 = document.querySelector('#title_container h1');
@@ -184,11 +184,11 @@ class GlobalResourceLoader {
         const titleH1 = document.querySelector('#title_container h1');
         const cover = document.getElementById('cover');
         const loadingText = document.getElementById('loading_text');
-        
+
         // 检测是否为iOS设备
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
         if (titleH1 && cover && loadingText) {
             // 如果是iOS设备，添加特殊类
             if (isIOS) {

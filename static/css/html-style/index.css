@@ -1,4 +1,43 @@
 /* ===========================
+   Index Page Variables
+   =========================== */
+body {
+    /* --- Hero Section --- */
+    --hero-icon-size: var(--circle-size-md);
+    --hero-icon-radius: var(--circle-radius-md);
+
+    --link-column-padding: var(--space-sm);
+    --link-column-gap: var(--space-sm);
+    --link-column-radius: calc(var(--link-column-padding) + var(--hero-icon-radius));
+
+    --hero-content-padding: var(--space-md);
+    --hero-content-gap: var(--space-md);
+    --hero-content-radius: calc(var(--hero-content-padding) + var(--link-column-radius));
+
+    --scroll-indicator-gap: var(--space-sm);
+
+    /* --- Content Section --- */
+    --content-icon-size: var(--circle-size-sm);
+    --content-icon-radius: var(--circle-radius-sm);
+
+    --button-container-padding: var(--space-sm);
+    --button-container-gap: var(--space-sm);
+    --button-container-radius: calc(var(--button-container-padding) + var(--content-icon-radius));
+
+    --user-info-padding: var(--space-md);
+    --user-info-radius: var(--button-container-radius);
+    --user-info-gap: var(--space-sm);
+
+    --info-link-height: var(--pill-height-xs);
+    --info-link-padding: 0 var(--space-md);
+    --info-link-radius: calc(var(--info-link-height) / 2);
+
+    --main-screen-padding: var(--space-sm);
+    --main-screen-gap: var(--space-xs);
+    --main-screen-radius: calc(var(--main-screen-padding) + var(--button-container-radius));
+}
+
+/* ===========================
    Base / Reset (Index Page)
    =========================== */
 html {
@@ -50,16 +89,14 @@ html::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--hero-content-gap);
     text-align: center;
-    padding: var(--space-md);
+    padding: var(--hero-content-padding);
     margin-top: 60px;
-    /* 毛玻璃圆角矩形背景 — 保证任何背景图下的可读性 */
-    backdrop-filter: blur(24px) saturate(130%);
-    -webkit-backdrop-filter: blur(24px) saturate(130%);
+    /* 毛玻璃圆角矩形背景 — 保证任何背景图下的可读性（已通过 .glass-effect 类实现） */
     background-color: var(--bg-overlay);
     border: 1px solid var(--border-subtle);
-    border-radius: calc(var(--space-sm) + var(--space-md) + 25px);
+    border-radius: var(--hero-content-radius);
     box-shadow: var(--shadow-card);
     opacity: 0;
 }
@@ -111,10 +148,10 @@ html::-webkit-scrollbar {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--link-column-gap);
     background-color: var(--bg-overlay-inner);
-    border-radius: calc(var(--space-sm) + 25px);
-    padding: var(--space-sm);
+    border-radius: var(--link-column-radius);
+    padding: var(--link-column-padding);
     width: 100%;
     box-sizing: border-box;
     opacity: 0;
@@ -131,9 +168,9 @@ html::-webkit-scrollbar {
 }
 
 .LinkIcon {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
+    width: var(--hero-icon-size);
+    height: var(--hero-icon-size);
+    border-radius: var(--hero-icon-radius);
     opacity: 0.85;
     transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: var(--link-icon-shadow);
@@ -154,7 +191,7 @@ html::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--scroll-indicator-gap);
     color: var(--text-muted);
     font-size: 12px;
     letter-spacing: 4px;
@@ -192,18 +229,16 @@ html::-webkit-scrollbar {
 
 /* 主面板 — 外层圆角 */
 #main_screen {
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
     background-color: var(--bg-card);
     border: 1px solid var(--border-subtle);
-    border-radius: calc(var(--space-sm) * 2 + 25px);
-    padding: var(--space-sm);
+    border-radius: var(--main-screen-radius);
+    padding: var(--main-screen-padding);
     box-shadow: var(--shadow-card-strong);
     width: 85%;
     max-width: 360px;
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--main-screen-gap);
     transform: translateY(30px);
 }
 
@@ -211,16 +246,15 @@ html::-webkit-scrollbar {
 .nav-menu {
     display: flex;
     flex-direction: column;
-    gap: 2px;
 }
 
 /* 导航按钮 — 同心内圆角 */
 .ButtonContainer {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm);
-    border-radius: calc(var(--space-sm) + 25px);
+    gap: var(--button-container-gap);
+    padding: var(--button-container-padding);
+    border-radius: var(--button-container-radius);
     cursor: pointer;
     text-decoration: none;
     transition: background-color 0.25s ease;
@@ -235,9 +269,9 @@ html::-webkit-scrollbar {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
+    width: var(--content-icon-size);
+    height: var(--content-icon-size);
+    border-radius: var(--content-icon-radius);
     overflow: hidden;
     background-color: var(--icon-bg);
     flex-shrink: 0;
@@ -286,10 +320,10 @@ html::-webkit-scrollbar {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: var(--space-sm) calc(var(--space-sm) + 25px);
-    border-radius: calc(var(--space-sm) + 25px);
+    gap: var(--user-info-gap);
+    padding: var(--user-info-padding);
+    border-radius: var(--user-info-radius);
     background-color: var(--bg-overlay-inner);
-    gap: var(--space-xs);
 }
 
 #login_link {
@@ -312,13 +346,18 @@ html::-webkit-scrollbar {
 }
 
 #user_info_link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
     font-size: 13px;
     color: var(--accent);
-    padding: 6px 14px;
+    height: var(--info-link-height);
+    padding: var(--info-link-padding);
+    box-sizing: border-box;
     background-color: var(--accent-bg);
     border: 1px solid var(--accent-border);
-    border-radius: var(--radius-sm);
+    border-radius: var(--info-link-radius);
     transition: all 0.3s ease;
     margin-top: 4px;
 }
@@ -332,12 +371,18 @@ html::-webkit-scrollbar {
    移动端适配
    =========================== */
 @media screen and (max-width: 768px) {
+    body {
+        --hero-icon-size: var(--space-lg);
+        --hero-icon-radius: calc(var(--space-lg) / 2);
+        --hero-content-padding: var(--space-sm);
+        --hero-content-gap: var(--space-sm);
+
+        --content-icon-size: calc(var(--circle-size-sm) * 0.75);
+        --content-icon-radius: calc(var(--circle-radius-sm) * 0.75);
+    }
 
     .hero-content {
-        padding: var(--space-sm);
         margin-top: 80px;
-        gap: var(--space-sm);
-        border-radius: calc(var(--space-sm) * 2 + 25px);
     }
 
     #welcome_message_1 {
@@ -350,15 +395,6 @@ html::-webkit-scrollbar {
         letter-spacing: 2px;
     }
 
-    .LinkIcon {
-        width: 40px;
-        height: 40px;
-    }
-
-    #link_column {
-        gap: var(--space-sm);
-    }
-
     .scroll-indicator {
         bottom: var(--space-lg);
         font-size: 11px;
@@ -368,25 +404,10 @@ html::-webkit-scrollbar {
     #main_screen {
         width: 80%;
         max-width: none;
-        padding: var(--space-sm);
-        border-radius: calc(var(--space-sm) * 2 + 18px);
-    }
-
-    #user_info {
-        border-radius: calc(var(--space-sm) + 18px);
-    }
-
-    .ButtonContainer {
-        padding: var(--space-sm);
     }
 
     .SideButton {
         font-size: 15px;
-    }
-
-    .ButtonIcon {
-        width: 36px;
-        height: 36px;
     }
 
     .ButtonImg {

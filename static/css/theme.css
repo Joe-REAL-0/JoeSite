@@ -14,7 +14,7 @@
     /* 文字 */
     --text-primary: rgba(255, 255, 255, 1);
     --text-secondary: rgba(255, 255, 255, 0.90);
-    --text-muted: rgba(255, 255, 255, 0.75);
+    --text-muted: rgba(255, 255, 255, 0.5);
 
     /* 强调色 — 深蓝 */
     --accent: rgba(140, 180, 250, 0.95);
@@ -286,4 +286,12 @@ body.themed-bg[data-body-theme="dark"]::before {
     body.themed-bg[data-body-theme="light"]::before {
         background-image: url('../images/backgrounds/bkg-v\ \(3\).png');
     }
+}
+
+/* ===========================
+   全局组件类
+   =========================== */
+.glass-effect {
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
 }

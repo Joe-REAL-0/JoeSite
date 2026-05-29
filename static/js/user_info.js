@@ -1,48 +1,64 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const sectionItems = Array.from(document.querySelectorAll('.SectionTitle'));
+    const menuItems = Array.from(document.querySelectorAll('.menu-item'));
     const sections = Array.from(document.querySelectorAll('.section-content'));
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const sidebar = document.getElementById('sidebar');
+    const panelShell = document.getElementById('user_panel');
+    const menuSection = document.getElementById('menu_section');
+    const contentSection = document.getElementById('content_section');
     const contentContainer = document.getElementById('content-container');
+    const backToMenuButton = document.getElementById('back_to_menu');
+    const sectionTitle = document.getElementById('section-title');
+    const contentHeader = document.querySelector('.content-header');
 
-    function showSection(sectionName) {
-        sections.forEach((section) => {
-            section.classList.remove('active');
-        });
+    const isContentStage = () => panelShell && panelShell.classList.contains('show-content');
 
-        const activeSection = document.getElementById(`${sectionName}-section`);
-        if (activeSection) {
-            activeSection.classList.add('active');
+    function setPanelStage(stage) {
+        const showContent = stage === 'content';
+        if (panelShell) {
+            panelShell.classList.toggle('show-content', showContent);
         }
+        if (menuSection) {
+            menuSection.setAttribute('aria-hidden', showContent ? 'true' : 'false');
+        }
+        if (contentSection) {
+            contentSection.setAttribute('aria-hidden', showContent ? 'false' : 'true');
+        }
+    }
 
-        sectionItems.forEach((item) => {
-            item.classList.toggle('active', item.dataset.section === sectionName);
+    function setActiveSection(sectionName, titleText) {
+        sections.forEach((section) => {
+            section.classList.toggle('active', section.id === `${sectionName}-section`);
         });
+
+        menuItems.forEach((item) => {
+            const isActive = item.dataset.section === sectionName;
+            item.classList.toggle('active', isActive);
+            item.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+
+        if (sectionTitle) {
+            sectionTitle.textContent = titleText || sectionName;
+        }
 
         if (contentContainer) {
             contentContainer.scrollTop = 0;
         }
-
-        if (sidebar && sidebar.classList.contains('expanded') && window.innerWidth <= 768) {
-            sidebar.classList.remove('expanded');
-            if (sidebarToggle) {
-                sidebarToggle.setAttribute('aria-expanded', 'false');
-            }
-        }
     }
 
-    if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', () => {
-            const expanded = sidebar.classList.toggle('expanded');
-            sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        });
+    function showSection(sectionName, titleText) {
+        setActiveSection(sectionName, titleText);
+        setPanelStage('content');
     }
 
-    sectionItems.forEach((item) => {
+    function showMenu() {
+        setPanelStage('menu');
+    }
+
+    menuItems.forEach((item) => {
         item.addEventListener('click', () => {
             const sectionName = item.dataset.section;
+            const titleText = item.dataset.title || item.textContent.trim();
             if (sectionName) {
-                showSection(sectionName);
+                showSection(sectionName, titleText);
             }
         });
 
@@ -50,16 +66,66 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
                 const sectionName = item.dataset.section;
+                const titleText = item.dataset.title || item.textContent.trim();
                 if (sectionName) {
-                    showSection(sectionName);
+                    showSection(sectionName, titleText);
                 }
             }
         });
     });
 
-    if (sectionItems.length > 0) {
-        showSection(sectionItems[0].dataset.section || 'profile');
+    if (backToMenuButton) {
+        backToMenuButton.addEventListener('click', showMenu);
     }
+
+    if (menuItems.length > 0) {
+        const defaultItem = menuItems[0];
+        setActiveSection(defaultItem.dataset.section || 'profile', defaultItem.dataset.title || defaultItem.textContent.trim());
+        setPanelStage('menu');
+    }
+
+    window.addEventListener('wheel', (event) => {
+        if (!isContentStage()) return;
+        
+        const isScrollingContent = event.target.closest('#content-container');
+        // If scrolling inside the content container and not at the top, let it scroll normally
+        if (isScrollingContent && contentContainer && contentContainer.scrollTop > 0) {
+            return;
+        }
+
+        // If scrolling up (deltaY < -12) anywhere on the page, or at the top of content container
+        if (event.deltaY < -12) {
+            // Only prevent default if we are actually handling it
+            event.preventDefault();
+            showMenu();
+        }
+    }, { passive: false });
+
+    let touchStartY = null;
+
+    window.addEventListener('touchstart', (event) => {
+        if (!isContentStage()) return;
+        if (event.touches.length === 1) {
+            touchStartY = event.touches[0].clientY;
+        }
+    }, { passive: true });
+
+    window.addEventListener('touchend', (event) => {
+        if (!isContentStage() || touchStartY === null) return;
+        
+        const deltaY = event.changedTouches[0].clientY - touchStartY;
+        touchStartY = null;
+
+        const isTouchingContent = event.target.closest('#content-container');
+        
+        // If swiping up (deltaY < -60) anywhere outside the content container
+        // Or if they are at the top of the content container (though swiping up scrolls down, 
+        // the original design relies on swiping up to go back. We only allow it outside content
+        // so it doesn't conflict with reading the content).
+        if (!isTouchingContent && deltaY < -60) {
+            showMenu();
+        }
+    });
 
     const nicknameForm = document.getElementById('nickname_form');
     const newNicknameInput = document.getElementById('new_nickname');

@@ -13,7 +13,7 @@ from flask import Blueprint, current_app, jsonify, redirect, render_template, re
 from flask_login import login_user, current_user
 from flask_mail import Message
 
-from app.auth import User, render_auth_page
+from app.auth import User, render_auth_page, _build_email_button_html
 from app.email_links import (
     create_email_link_token,
     create_pending_oauth_binding,
@@ -292,11 +292,13 @@ def _finalize_oauth_binding(binding_token, email):
     return user, None, payload.get('next_url'), provider
 
 
-def _send_email_link(recipient_email, subject, body):
+def _send_email_link(recipient_email, subject, body, html=None):
     from app import app, mail
 
     msg = Message(subject, sender='joe_real@qq.com', recipients=[recipient_email])
     msg.body = body
+    if html:
+        msg.html = html
 
     def send_mail_async():
         try:
@@ -414,10 +416,18 @@ def register_bind_email(register_token):
                         'email': email,
                     })
                     verify_url = url_for('oauth.email_link_verify', token=link_token, _external=True)
+                    html = _build_email_button_html(
+                        title='Joe Site 注册验证',
+                        message='这是 Joe Site 发送的邮箱注册验证邮件。点击下方按钮完成注册。',
+                        button_text='完成注册',
+                        button_url=verify_url,
+                        hint_text='如果这不是你的操作，请忽略本邮件。',
+                    )
                     _send_email_link(
                         email,
                         '来自Joe Site的注册验证邮件',
                         f'这是 Joe Site 发送的邮箱注册验证邮件。\n\n请点击下面的按钮完成注册：\n{verify_url}\n\n如果这不是您本人操作，请忽略该邮件。',
+                        html,
                     )
                     status = '验证链接已发送，请前往邮箱点击完成注册'
 
@@ -566,10 +576,18 @@ def oauth_bind_email(binding_token):
                 'email': email,
             })
             verify_url = url_for('oauth.email_link_verify', token=link_token, _external=True)
+            html = _build_email_button_html(
+                title='Joe Site 邮箱绑定验证',
+                message='这是 Joe Site 发送的邮箱绑定验证邮件。点击下方按钮完成邮箱绑定。',
+                button_text='完成绑定',
+                button_url=verify_url,
+                hint_text='如果这不是你的操作，请忽略本邮件。',
+            )
             _send_email_link(
                 email,
                 'Joe Site 邮箱绑定验证',
                 f'这是 Joe Site 发送的邮箱绑定验证邮件。\n\n请点击下面的按钮完成邮箱绑定：\n{verify_url}\n\n如果这不是你的操作，请忽略这封邮件。',
+                html,
             )
             status = '验证链接已发送，请前往邮箱点击完成绑定'
 

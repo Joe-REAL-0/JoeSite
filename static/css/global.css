@@ -7,11 +7,6 @@
    Design Tokens (global)
    =========================== */
 :root {
-    /* 同心圆角体系 */
-    --radius-outer: 32px;
-    --radius-inner: 18px;
-    --radius-sm: 10px;
-
     /* 间距 */
     --space-xs: 8px;
     --space-sm: 14px;
@@ -24,6 +19,24 @@
 
     --title-height: 50px;
     --title-height-mobile: 44px;
+
+    /* 药丸形设计 (Pill Design) */
+    --pill-height-xs: 24px;
+    --pill-radius-xs: 12px;
+    --pill-height-sm: 48px;
+    --pill-radius-sm: 24px;
+    --pill-height-md: 56px;
+    --pill-radius-md: 28px;
+    --pill-height-lg: 64px;
+    --pill-radius-lg: 32px;
+
+    /* 圆形设计 (Circle Design) */
+    --circle-size-sm: 48px;
+    --circle-radius-sm: 24px;
+    --circle-size-md: 56px;
+    --circle-radius-md: 28px;
+    --circle-size-lg: 64px;
+    --circle-radius-lg: 32px;
 }
 
 /* ===========================
@@ -81,11 +94,11 @@ body {
     padding: 12px 32px;
     width: auto;
     border-radius: calc(var(--title-height) / 2);
-    background-color: transparent;
+    background-color: var(--title-bg);
     color: var(--title-color-start);
     text-align: center;
     white-space: nowrap;
-    font-family: 'valorax';
+    font-family: 'GunShi';
     font-size: 96px;
     margin: 0;
     z-index: 1001;
@@ -247,8 +260,6 @@ body {
     padding: 0;
     border-radius: 50%;
     background-color: var(--top-btn-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--top-btn-border);
     color: var(--top-btn-color);
     text-decoration: none;
@@ -328,8 +339,8 @@ body {
         gap: 15px;
         /* 按钮间距 */
         position: fixed;
-        bottom: 10%;
-        right: 20px;
+        bottom: 5%;
+        right: 12px;
         z-index: 1002;
         opacity: 0;
         pointer-events: none;

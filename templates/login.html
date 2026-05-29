@@ -22,7 +22,7 @@
 {% set register_repeat = register_info[2] if register_info is defined else '' %}
 {% set reset_token = reset_token|default('') %}
 
-<div class="auth-shell" data-auth-mode="{{ active_mode }}">
+<div class="auth-shell glass-effect" data-auth-mode="{{ active_mode }}">
     <header class="auth-header">
         <span class="auth-kicker">Joe Passport</span>
         <h2 class="auth-title" data-title-login="登录 Joe 通行证" data-title-register="注册 Joe 通行证" data-title-forgot="找回密码" data-title-reset="重置密码">
@@ -30,7 +30,7 @@
         </h2>
     </header>
 
-    <div class="auth-card">
+    <div class="auth-card glass-effect">
         <form id="login_form" class="auth-form" data-auth-panel="login"
             aria-hidden="{{ 'false' if active_mode == 'login' else 'true' }}" action="/login_checker" method="POST">
             <div class="auth-field">

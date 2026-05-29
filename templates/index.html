@@ -57,7 +57,7 @@
 {% block content %}
 <!-- ========== Section 1: Hero 首屏 ========== -->
 <section class="page-section hero-section" id="hero_section">
-    <div class="hero-content" id="hero_content">
+    <div class="hero-content glass-effect" id="hero_content">
         <!-- 欢迎语（纯中文，2行） -->
         <div class="welcome_messages_container">
             <p id="welcome_message_1" class="welcome-line">{{ nickname|default('你好') }}，欢迎来到</p>
@@ -99,7 +99,7 @@
 
 <!-- ========== Section 2: Hub 内容区 ========== -->
 <section class="page-section content-section" id="content_section">
-    <div class="content-panel" id="main_screen">
+    <div class="content-panel glass-effect" id="main_screen">
         <!-- 导航菜单 -->
         <nav id="side_list" class="nav-menu">
             <a class="ButtonContainer" href="{{ url_for('main.introduce') }}">
@@ -141,7 +141,7 @@
         <div id="user_info">
             <a id="login_link" href="{{url_for('auth.login')}}">{{ nickname | default('你尚未登录Joe通行证')}} |
                 点击{{status|default('进行登录')}}</a>
-            <h4 id="login_text">{{signature|default('登录Joe通行证后才可以在留言板留言！')}}</h4>
+            <h4 id="login_text">{{signature|default('登录Joe通行证后才可以在博客中留言！')}}</h4>
             {% if current_user.is_authenticated %}
             <a id="user_info_link" href="{{url_for('user.user_info')}}">查看/修改个人信息</a>
             {% endif %}
