@@ -37,6 +37,19 @@
     --circle-radius-md: 28px;
     --circle-size-lg: 64px;
     --circle-radius-lg: 32px;
+
+    /* 面板与布局尺寸 (Panel & Layout Sizes) */
+    --panel-width-md: 600px;
+    --panel-height-md: 500px;
+    --panel-width-mobile: 90%;
+    --panel-height-mobile: 70vh;
+    --panel-width-sm: 95%;
+    --panel-height-sm: 65vh;
+
+    /* 边框宽度 (Border Widths) */
+    --border-width-sm: 1px;
+    --border-width-md: 2px;
+    --border-width-lg: 3px;
 }
 
 /* ===========================

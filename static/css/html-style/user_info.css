@@ -19,8 +19,8 @@ body {
     --content-surface-radius: calc(var(--content-surface-padding) + var(--inner-item-radius));
 
     /* Avatar */
-    --avatar-size: 140px;
-    --avatar-big-size: 160px;
+    --avatar-size: 80px;
+    --avatar-big-size: 100px;
     --avatar-padding: var(--space-sm);
     --avatar-radius: 50%;
 
@@ -98,14 +98,14 @@ body {
 }
 
 .menu-surface {
-    width: min(420px, 92vw);
+    width: min(360px, 92vw);
     padding: var(--menu-surface-padding);
     gap: var(--menu-surface-gap);
     border-radius: var(--menu-surface-radius);
 }
 
 .content-surface {
-    width: min(420px, 92vw);
+    width: min(480px, 92vw);
     padding: var(--content-surface-padding);
     gap: var(--content-surface-gap);
     border-radius: var(--content-surface-radius);
@@ -317,7 +317,7 @@ form {
 .profile-info-container {
     display: flex;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--space-md);
 }
 
 .profile-avatar {

@@ -153,3 +153,54 @@ function setFriendLinkVars(page, hasMoreLinks) {
     window.currentPage = page;
     window.hasMore = hasMoreLinks;
 }
+
+// 快速添加友情链接
+function quickAddFriendLink() {
+    const input = document.getElementById('quick_friend_link_input');
+    if (!input) return;
+    
+    const url = input.value.trim();
+    if (!url) {
+        alert('请输入友情链接网址');
+        return;
+    }
+    
+    // 禁用按钮和输入框防止重复提交
+    const btn = document.getElementById('add_link_button');
+    if (btn) {
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.5';
+    }
+    input.disabled = true;
+    
+    fetch('/api/add_friend_link', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ friend_link: url })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 成功后刷新页面以显示新链接
+            window.location.reload();
+        } else {
+            alert(data.message || '添加失败，请稍后重试');
+            if (btn) {
+                btn.style.pointerEvents = 'auto';
+                btn.style.opacity = '1';
+            }
+            input.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error adding friend link:', error);
+        alert('网络错误，请稍后重试');
+        if (btn) {
+            btn.style.pointerEvents = 'auto';
+            btn.style.opacity = '1';
+        }
+        input.disabled = false;
+    });
+}

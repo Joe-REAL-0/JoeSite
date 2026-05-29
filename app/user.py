@@ -5,6 +5,9 @@ from werkzeug.utils import secure_filename
 import os
 import uuid
 import threading
+import urllib.request
+import re
+from urllib.parse import urljoin, urlparse
 from app.auth import is_valid_nickname, _build_email_button_html
 from database import Database
 
@@ -374,3 +377,71 @@ def update_email():
     except Exception as e:
         print(f"Update email error: {e}")
         return redirect(url_for('auth.login'))
+
+@user.route('/api/add_friend_link', methods=['POST'])
+@login_required
+def api_add_friend_link():
+    try:
+        data = request.get_json()
+        friend_link = data.get('friend_link')
+        if not friend_link:
+            return jsonify({'success': False, 'message': '网址不能为空'})
+            
+        email = current_user.email
+        with Database('./database.db') as db:
+            user_data = db.fetch(email)
+            avatar = user_data[3] if len(user_data) > 3 and user_data[3] else "default_avatar.png"
+            
+            # 更新友链
+            if not db.update_friend_link(email, friend_link):
+                return jsonify({'success': False, 'message': '友链更新失败'})
+                
+            current_user.friend_link = friend_link
+            
+            # 尝试抓取头像
+            if avatar == "default_avatar.png":
+                try:
+                    # 添加 scheme 如果缺失
+                    url_to_fetch = friend_link
+                    if not url_to_fetch.startswith('http'):
+                        url_to_fetch = 'https://' + url_to_fetch
+                        
+                    req = urllib.request.Request(url_to_fetch, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'})
+                    with urllib.request.urlopen(req, timeout=5) as response:
+                        html_content = response.read().decode('utf-8', errors='ignore')
+                        
+                        # 查找 favicon
+                        match = re.search(r'<link[^>]*rel=["\']?(?:shortcut )?icon["\']?[^>]*href=["\']?([^"\'>]+)["\']?', html_content, re.IGNORECASE)
+                        icon_url = match.group(1) if match else '/favicon.ico'
+                        
+                        # 拼接完整URL
+                        full_icon_url = urljoin(url_to_fetch, icon_url)
+                        
+                        # 下载图标
+                        icon_req = urllib.request.Request(full_icon_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'})
+                        with urllib.request.urlopen(icon_req, timeout=5) as icon_resp:
+                            icon_data = icon_resp.read()
+                            
+                            # 保存图标
+                            ext = os.path.splitext(urlparse(full_icon_url).path)[1]
+                            if not ext or len(ext) > 5:
+                                ext = '.ico' # 默认扩展名
+                                
+                            filename = f"{str(uuid.uuid4())[:8]}_avatar{ext}"
+                            from app import app
+                            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                            
+                            with open(filepath, 'wb') as f:
+                                f.write(icon_data)
+                                
+                            # 更新数据库
+                            if db.update_avatar(email, filename):
+                                current_user.avatar = filename
+                except Exception as e:
+                    print(f"Failed to fetch favicon for {friend_link}: {e}")
+                    # 抓取头像失败不影响添加友链成功
+            
+            return jsonify({'success': True})
+    except Exception as e:
+        print(f"API add friend link error: {e}")
+        return jsonify({'success': False, 'message': '服务器内部错误'})
