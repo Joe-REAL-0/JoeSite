@@ -12,11 +12,15 @@ body {
     --link-item-gap: var(--space-sm);
     --link-item-radius: calc(var(--avatar-radius) + var(--link-item-padding));
 
-    /* Main Panel Variables (Wraps Link Item) */
+    /* Wrapper Variables (Wraps Link Items Container) */
+    --wrapper-padding: var(--link-item-gap);
+    --wrapper-radius: calc(var(--link-item-radius) + var(--wrapper-padding));
+
+    /* Main Panel Variables (Wraps Wrapper) */
     --panel-width: var(--panel-width-md);
     --panel-height: var(--panel-height-md);
     --panel-padding: var(--space-md);
-    --panel-radius: calc(var(--link-item-radius) + var(--panel-padding));
+    --panel-radius: calc(var(--wrapper-radius) + var(--panel-padding));
 
     /* Add Link Button Variables (Independent Circular Element) */
     --btn-margin: var(--link-item-padding);
@@ -72,10 +76,21 @@ body {
     box-sizing: border-box;
 }
 
+#friend_link_container_wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--wrapper-radius);
+    padding: var(--wrapper-padding);
+    position: relative;
+}
+
 #friend_link_container {
     flex: 1;
     overflow-y: auto;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
+    /* Firefox */
     gap: var(--space-sm);
     display: flex;
     flex-direction: column;

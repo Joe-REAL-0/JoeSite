@@ -148,7 +148,7 @@ class Database:
     def fetch_friend_links(self, page=0, per_page=10):
         try:
             offset = page * per_page
-            self.cur.execute("SELECT nickname, avatar, friend_link FROM users WHERE friend_link != '' AND friend_link IS NOT NULL LIMIT ? OFFSET ?", 
+            self.cur.execute("SELECT nickname, avatar, friend_link, email FROM users WHERE friend_link != '' AND friend_link IS NOT NULL LIMIT ? OFFSET ?", 
                             (per_page, offset))
             return self.cur.fetchall()
         except Exception as e:

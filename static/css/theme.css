@@ -16,6 +16,17 @@
     --text-secondary: rgba(255, 255, 255, 0.90);
     --text-muted: rgba(255, 255, 255, 0.5);
 
+    /* 状态色 (Status Colors) */
+    --success-color: rgba(46, 204, 113, 0.9);
+    --danger-color: rgba(231, 76, 60, 0.9);
+    --warning-color: rgba(241, 196, 15, 0.9);
+    --success-bg: rgba(46, 204, 113, 0.15);
+    --danger-bg: rgba(231, 76, 60, 0.15);
+    --warning-bg: rgba(241, 196, 15, 0.15);
+    --success-border: rgba(46, 204, 113, 0.3);
+    --danger-border: rgba(231, 76, 60, 0.3);
+    --warning-border: rgba(241, 196, 15, 0.3);
+
     /* 强调色 — 深蓝 */
     --accent: rgba(140, 180, 250, 0.95);
     --accent-glow: rgba(100, 140, 220, 0.25);
@@ -29,6 +40,7 @@
     --bg-overlay: rgba(10, 10, 25, 0.55);
     --bg-overlay-inner: rgba(255, 255, 255, 0.15);
     --bg-card: rgba(10, 10, 20, 0.55);
+    --bg-card-hover: rgba(30, 30, 45, 0.65);
     --bg-top-column: rgba(10, 10, 20, 0.55);
 
     /* Loading cover */
@@ -43,6 +55,10 @@
     --border-subtle: rgba(255, 255, 255, 0.12);
     --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.25);
     --shadow-card-strong: 0 8px 40px rgba(0, 0, 0, 0.3);
+
+    /* 遮罩 (Mask) */
+    --mask-solid: #000;
+    --mask-clear: transparent;
 
     /* 按钮图标背景 */
     --icon-bg: rgba(255, 255, 255, 0.15);
@@ -79,6 +95,17 @@
         --text-secondary: rgba(20, 20, 40, 0.85);
         --text-muted: rgba(20, 20, 40, 0.55);
 
+        /* 状态色 (Status Colors) */
+        --success-color: rgba(39, 174, 96, 0.95);
+        --danger-color: rgba(192, 57, 43, 0.95);
+        --warning-color: rgba(243, 156, 18, 0.95);
+        --success-bg: rgba(39, 174, 96, 0.15);
+        --danger-bg: rgba(192, 57, 43, 0.15);
+        --warning-bg: rgba(243, 156, 18, 0.15);
+        --success-border: rgba(39, 174, 96, 0.3);
+        --danger-border: rgba(192, 57, 43, 0.3);
+        --warning-border: rgba(243, 156, 18, 0.3);
+
         /* 强调色 — 亮蓝 */
         --accent: rgba(20, 95, 200, 0.95);
         --accent-glow: rgba(50, 120, 220, 0.20);
@@ -92,6 +119,7 @@
         --bg-overlay: rgba(255, 255, 255, 0.55);
         --bg-overlay-inner: rgba(0, 0, 0, 0.15);
         --bg-card: rgba(255, 255, 255, 0.55);
+        --bg-card-hover: rgba(255, 255, 255, 0.75);
 
         /* Loading cover */
         --bg-cover: #eef1f6;
@@ -141,6 +169,17 @@
     --text-secondary: rgba(20, 20, 40, 0.85);
     --text-muted: rgba(20, 20, 40, 0.55);
 
+    /* 状态色 (Status Colors) */
+    --success-color: rgba(39, 174, 96, 0.95);
+    --danger-color: rgba(192, 57, 43, 0.95);
+    --warning-color: rgba(243, 156, 18, 0.95);
+    --success-bg: rgba(39, 174, 96, 0.15);
+    --danger-bg: rgba(192, 57, 43, 0.15);
+    --warning-bg: rgba(243, 156, 18, 0.15);
+    --success-border: rgba(39, 174, 96, 0.3);
+    --danger-border: rgba(192, 57, 43, 0.3);
+    --warning-border: rgba(243, 156, 18, 0.3);
+
     /* 强调色 — 亮蓝 */
     --accent: rgba(20, 95, 200, 0.95);
     --accent-glow: rgba(50, 120, 220, 0.20);
@@ -154,6 +193,7 @@
     --bg-overlay: rgba(255, 255, 255, 0.55);
     --bg-overlay-inner: rgba(0, 0, 0, 0.15);
     --bg-card: rgba(255, 255, 255, 0.55);
+    --bg-card-hover: rgba(255, 255, 255, 0.75);
 
     /* Loading cover */
     --bg-cover: #eef1f6;
@@ -294,4 +334,8 @@ body.themed-bg[data-body-theme="dark"]::before {
 .glass-effect {
     backdrop-filter: blur(24px) saturate(140%);
     -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+.solid-effect {
+    background-color: var(--bg-overlay);
 }

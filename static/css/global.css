@@ -8,11 +8,14 @@
    =========================== */
 :root {
     /* 间距 */
+    --space-2xs: 4px;
     --space-xs: 8px;
     --space-sm: 14px;
+    --space-base: 20px;
     --space-md: 24px;
     --space-lg: 40px;
     --space-xl: 64px;
+    --space-2xl: 80px;
 
     --inner-alpha: 0.15;
     --outer-alpha: 0.55;
@@ -21,6 +24,8 @@
     --title-height-mobile: 44px;
 
     /* 药丸形设计 (Pill Design) */
+    --pill-height-2xs: 16px;
+    --pill-radius-2xs: 8px;
     --pill-height-xs: 24px;
     --pill-radius-xs: 12px;
     --pill-height-sm: 48px;
@@ -31,6 +36,8 @@
     --pill-radius-lg: 32px;
 
     /* 圆形设计 (Circle Design) */
+    --circle-size-xs: 20px;
+    --circle-radius-xs: 10px;
     --circle-size-sm: 48px;
     --circle-radius-sm: 24px;
     --circle-size-md: 56px;
@@ -39,6 +46,9 @@
     --circle-radius-lg: 32px;
 
     /* 面板与布局尺寸 (Panel & Layout Sizes) */
+    --max-width-lg: 1200px;
+    --panel-height-xs: 240px;
+    --mask-height-top: 200px;
     --panel-width-md: 600px;
     --panel-height-md: 500px;
     --panel-width-mobile: 90%;
@@ -50,6 +60,15 @@
     --border-width-sm: 1px;
     --border-width-md: 2px;
     --border-width-lg: 3px;
+
+    /* 字体大小 (Font Sizes) */
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 32px;
+    --font-size-3xl: 48px;
 }
 
 /* ===========================
@@ -60,6 +79,24 @@ body {
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    --local-mask-height-top: var(--mask-height-top);
+}
+
+/* ===========================
+   顶部模糊遮罩
+   =========================== */
+#top_blur_mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--local-mask-height-top);
+    z-index: 999;
+    pointer-events: none;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    -webkit-mask-image: linear-gradient(to bottom, var(--mask-solid) 40%, var(--mask-clear) 100%);
+    mask-image: linear-gradient(to bottom, var(--mask-solid) 40%, var(--mask-clear) 100%);
 }
 
 /* ===========================

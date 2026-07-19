@@ -48,7 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 var target = document.getElementById(this.dataset.target);
                 if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    var mask = document.getElementById('top_blur_mask');
+                    var offset = mask ? mask.offsetHeight : 120;
+                    var padding = 20; // 额外留出 20px 间距
+                    var targetPosition = target.getBoundingClientRect().top + window.scrollY - offset - padding;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
                 }
             });
 
@@ -60,10 +64,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function updateActiveHeading() {
             var current = null;
+            var mask = document.getElementById('top_blur_mask');
+            var offset = mask ? mask.offsetHeight : 120;
+            var threshold = offset + 40; // 比遮罩稍多出一点触发范围
 
             headings.forEach(function (heading) {
                 var rect = heading.getBoundingClientRect();
-                if (rect.top <= 120) {
+                if (rect.top <= threshold) {
                     current = heading;
                 }
             });

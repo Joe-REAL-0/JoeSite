@@ -3,13 +3,13 @@
 {% block title %}Joe的个人小站 | 友情链接{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/friend_link.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-friend_link.css' ) }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/friend_link.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-friend_link.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
 {% endblock %}
 
 {% block head_js %}
-    <script src="{{ url_for('static', filename='js/friend_link.js')}}"></script>
+<script src="{{ url_for('static', filename='js/friend_link.js')}}"></script>
 {% endblock %}
 
 {% block page_title %}友情链接{% endblock %}
@@ -18,10 +18,11 @@
 <section class="page-section" id="friend_link_section">
     <div class="CenterContainer">
         <div id="friend_link_panel" class="glass-effect">
-            <div id="friend_link_container">
-                {% if friend_links %}
+            <div id="friend_link_container_wrapper" class="solid-effect">
+                <div id="friend_link_container">
+                    {% if friend_links %}
                     {% for link in friend_links %}
-                    <div class="FriendLink glass-effect">
+                    <div class="FriendLink">
                         <img src="{{ url_for('static', filename='images/avatars/' + link[1]) }}" alt="{{ link[0] }}的头像">
                         <div class="info">
                             <p class="nickname">{{ link[0] }}</p>
@@ -35,20 +36,21 @@
                         </div>
                     </div>
                     {% endfor %}
-                {% else %}
+                    {% else %}
                     <div class="no-links">
                         <p>尚未添加友情链接</p>
                     </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
-            
+
             {% if has_more %}
             <div id="loading" class="hidden">
                 <div class="spinner"></div>
                 <p>加载中...</p>
             </div>
             {% endif %}
-            
+
             <div id="add_link_container">
                 {% if current_user.is_authenticated %}
                 <input type="text" id="quick_friend_link_input" class="glass-effect" placeholder="输入网址快速添加友链">
@@ -62,27 +64,25 @@
         </div>
     </div>
 </section>
-    
+
 <!-- 将Flask变量作为data属性传递给DOM元素 -->
-<div id="flask-data" 
-        data-page="{{ page }}" 
-        data-has-more="{{ 'true' if has_more else 'false' }}">
+<div id="flask-data" data-page="{{ page }}" data-has-more="{{ 'true' if has_more else 'false' }}">
 </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 从DOM元素读取Flask变量
-            const flaskData = document.getElementById('flask-data');
-            if (flaskData) {
-                const page = parseInt(flaskData.getAttribute('data-page'));
-                const hasMore = flaskData.getAttribute('data-has-more') === 'true';
-                
-                // 设置变量
-                window.currentPage = page;
-                window.hasMore = hasMore;
-            }
-        });
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 从DOM元素读取Flask变量
+        const flaskData = document.getElementById('flask-data');
+        if (flaskData) {
+            const page = parseInt(flaskData.getAttribute('data-page'));
+            const hasMore = flaskData.getAttribute('data-has-more') === 'true';
+
+            // 设置变量
+            window.currentPage = page;
+            window.hasMore = hasMore;
+        }
+    });
+</script>
 {% endblock %}
