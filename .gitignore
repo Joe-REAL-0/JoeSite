@@ -37,3 +37,10 @@ create_admin.py
 
 .env
 .DS_Store
+# 备份文件 / 目录（图片优化等本地操作产生的中间产物）
+*.bak
+*.bak2
+*.orig
+*.rej
+static/images/backgrounds/.original_backup/
+static/images/background_light.png.bak
