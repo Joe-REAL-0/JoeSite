@@ -8,11 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToMenuButton = document.getElementById('back_to_menu');
     const sectionTitle = document.getElementById('section-title');
     const contentHeader = document.querySelector('.content-header');
+    const returnContentHint = document.getElementById('return-content-hint');
+    let hasOpenedContent = false;
 
     const isContentStage = () => panelShell && panelShell.classList.contains('show-content');
 
     function setPanelStage(stage) {
         const showContent = stage === 'content';
+        if (showContent) {
+            hasOpenedContent = true;
+        }
+        if (returnContentHint) {
+            returnContentHint.hidden = showContent || !hasOpenedContent;
+        }
         if (panelShell) {
             panelShell.classList.toggle('show-content', showContent);
         }
@@ -85,7 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('wheel', (event) => {
-        if (!isContentStage()) return;
+        if (!isContentStage()) {
+            if (hasOpenedContent && event.deltaY > 12) {
+                event.preventDefault();
+                setPanelStage('content');
+            }
+            return;
+        }
         
         const isScrollingContent = event.target.closest('#content-container');
         // If scrolling inside the content container and not at the top, let it scroll normally

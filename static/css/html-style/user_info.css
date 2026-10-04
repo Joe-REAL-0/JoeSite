@@ -7,6 +7,9 @@ body {
     --menu-surface-padding: var(--space-md);
     --menu-surface-gap: var(--space-xs);
     --menu-surface-radius: calc(var(--menu-surface-padding) + var(--menu-item-radius));
+    --menu-section-gap: var(--space-md);
+    --return-hint-padding: var(--space-sm) var(--space-md);
+    --return-hint-radius: var(--pill-radius-md);
 
     /* === Content Surface === */
     --inner-item-height: var(--pill-height-sm);
@@ -63,6 +66,8 @@ body {
 }
 
 #menu_section {
+    flex-direction: column;
+    gap: var(--menu-section-gap);
     transform: translateY(0);
     pointer-events: auto;
 }
@@ -102,6 +107,20 @@ body {
     padding: var(--menu-surface-padding);
     gap: var(--menu-surface-gap);
     border-radius: var(--menu-surface-radius);
+}
+
+.return-content-hint {
+    padding: var(--return-hint-padding);
+    border-radius: var(--return-hint-radius);
+    background: var(--bg-card);
+    border: var(--border-width-sm) solid var(--border-subtle);
+    box-shadow: var(--shadow-card-strong);
+    box-sizing: border-box;
+    font-size: var(--font-size-sm);
+    line-height: 1.8;
+    text-align: center;
+    color: var(--text-secondary);
+    pointer-events: none;
 }
 
 .content-surface {
