@@ -103,7 +103,6 @@
 
         <form id="register_form" class="auth-form" data-auth-panel="register"
             aria-hidden="{{ 'false' if active_mode == 'register' else 'true' }}" action="/register_checker" method="POST">
-            <p class="auth-hint">昵称需为 3-15 位中英文、数字或下划线组合</p>
             <div class="auth-field">
                 <input placeholder="昵称" type="text" class="auth-input" id="nickname_column" name="nickname"
                     value="{{ register_nickname }}" required minlength="3" maxlength="15" autocomplete="nickname">

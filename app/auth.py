@@ -18,7 +18,7 @@ from app.email_links import create_email_link_token, peek_email_link_token, pop_
 # 创建蓝图
 auth = Blueprint('auth', __name__)
 
-NICKNAME_PATTERN = re.compile(r'^[\u4e00-\u9fff0-9_]{3,15}$')
+NICKNAME_PATTERN = re.compile(r'^[\u4e00-\u9fffa-zA-Z0-9_]{3,15}$')
 
 # 存储验证码的字典
 email_dict = {}
@@ -413,7 +413,7 @@ def register_checker():
     Info_list = [nickname, password, repeat_password]
 
     if not is_valid_nickname(nickname):
-        status = '昵称需为3-15位的中文、数字或下划线组合'
+        status = '昵称需为3-15位的中文，英文，数字或下划线组合'
     elif password != repeat_password:
         status = '两次输入的密码不一致'
     else:

@@ -247,7 +247,7 @@ def check_nickname():
         if not nickname:
             return jsonify({'available': False, 'message': '昵称不能为空'}), 400
         if not is_valid_nickname(nickname):
-            return jsonify({'available': False, 'message': '昵称需为3-15位的中文、数字或下划线组合'}), 200
+            return jsonify({'available': False, 'message': '昵称需为3-15位的中文，英文，数字或下划线组合'}), 200
             
         with Database('./database.db') as db:
             if db.nickname_exists(nickname, exclude_email=email):
