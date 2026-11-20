@@ -17,12 +17,12 @@
 {% block content %}
 <section class="page-section" id="friend_link_section">
     <div class="CenterContainer">
-        <div id="friend_link_panel" class="glass-effect">
-            <div id="friend_link_container_wrapper" class="solid-effect">
+        <div id="friend_link_panel" class="cyber-frame">
+            <div id="friend_link_container_wrapper">
                 <div id="friend_link_container">
                     {% if friend_links %}
                     {% for link in friend_links %}
-                    <div class="FriendLink">
+                    <div class="FriendLink cyber-frame">
                         <img src="{{ url_for('static', filename='images/avatars/' + link[1]) }}" alt="{{ link[0] }}的头像">
                         <div class="info">
                             <p class="nickname">{{ link[0] }}</p>
@@ -53,12 +53,12 @@
 
             <div id="add_link_container">
                 {% if current_user.is_authenticated %}
-                <input type="text" id="quick_friend_link_input" class="glass-effect" placeholder="输入网址快速添加友链">
-                <a id="add_link_button" href="javascript:void(0)" title="添加友链" onclick="quickAddFriendLink()">
-                    <span>+</span>
-                </a>
+                <input type="text" id="quick_friend_link_input" aria-label="友情链接网址" placeholder="输入网址快速添加友链">
+                <button type="button" id="add_link_button" class="cyber-control" aria-label="添加友链" title="添加友链" onclick="quickAddFriendLink()">
+                    <span aria-hidden="true">+</span>
+                </button>
                 {% else %}
-                <a id="login_for_link_btn" href="{{ url_for('auth.login') }}" class="glass-effect">登录后添加友链</a>
+                <a id="login_for_link_btn" href="{{ url_for('auth.login') }}" class="cyber-control">登录后添加友链</a>
                 {% endif %}
             </div>
         </div>

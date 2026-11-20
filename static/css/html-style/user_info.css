@@ -2,36 +2,29 @@ body {
     /* === Menu Surface === */
     --menu-item-height: var(--pill-height-md);
     --menu-item-padding: 0 var(--space-md);
-    --menu-item-radius: var(--pill-radius-md);
 
     --menu-surface-padding: var(--space-md);
     --menu-surface-gap: var(--space-xs);
-    --menu-surface-radius: calc(var(--menu-surface-padding) + var(--menu-item-radius));
     --menu-section-gap: var(--space-md);
     --return-hint-padding: var(--space-sm) var(--space-md);
-    --return-hint-radius: var(--pill-radius-md);
 
     /* === Content Surface === */
     --inner-item-height: var(--pill-height-sm);
     --inner-item-padding: 0 var(--space-xs);
-    --inner-item-radius: var(--pill-radius-sm);
     --inner-item-gap: var(--space-xs);
 
     --content-surface-padding: var(--space-md);
     --content-surface-gap: var(--space-md);
-    --content-surface-radius: calc(var(--content-surface-padding) + var(--inner-item-radius));
 
     /* Avatar */
-    --avatar-size: 80px;
-    --avatar-big-size: 100px;
+    --avatar-size: var(--space-2xl);
+    --avatar-big-size: calc(var(--space-2xl) + var(--space-base));
     --avatar-padding: var(--space-sm);
     --avatar-radius: 50%;
 
-    /* Back Button */
-    --back-btn-size: var(--circle-size-sm);
-    --back-btn-radius: var(--circle-radius-sm);
-
     --disclaimer-padding: var(--space-sm);
+    --user-field-padding: 0 var(--space-md);
+    --user-submit-padding: 0 var(--space-lg);
 
 }
 
@@ -91,30 +84,22 @@ body {
 }
 
 .section-surface {
-    background: var(--bg-card);
-    /* Matching index.css */
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-card-strong);
-    /* Matching index.css */
     display: flex;
     flex-direction: column;
     max-height: 86vh;
     min-height: 0;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 .menu-surface {
     width: min(360px, 92vw);
     padding: var(--menu-surface-padding);
     gap: var(--menu-surface-gap);
-    border-radius: var(--menu-surface-radius);
 }
 
 .return-content-hint {
     padding: var(--return-hint-padding);
-    border-radius: var(--return-hint-radius);
-    background: var(--bg-card);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    box-shadow: var(--shadow-card-strong);
     box-sizing: border-box;
     font-size: var(--font-size-sm);
     line-height: 1.8;
@@ -127,7 +112,6 @@ body {
     width: min(480px, 92vw);
     padding: var(--content-surface-padding);
     gap: var(--content-surface-gap);
-    border-radius: var(--content-surface-radius);
 }
 
 .menu-list {
@@ -143,9 +127,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: var(--menu-item-padding);
-    border-radius: var(--menu-item-radius);
-    border: none;
-    background: transparent;
+    border: var(--border-width-sm) solid var(--border-subtle);
+    background: var(--bg-overlay-inner);
     color: var(--text-primary);
     min-height: var(--menu-item-height);
     cursor: pointer;
@@ -176,15 +159,7 @@ body {
     align-items: center;
     gap: var(--space-md);
     padding: var(--space-sm);
-    border-bottom: 1px solid var(--divider);
-}
-
-.back-icon {
-    width: 16px;
-    height: 16px;
-    border-left: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg);
+    border-bottom: var(--border-width-sm) solid var(--border-subtle);
 }
 
 .content-title-group {
@@ -235,16 +210,6 @@ body {
     display: none;
 }
 
-/* Base inner blocks (inputs, form items, info text) */
-.inner-block {
-    background: var(--bg-overlay-inner);
-    border-radius: var(--inner-item-radius);
-    padding: var(--inner-item-padding);
-    min-height: var(--inner-item-height);
-    display: flex;
-    align-items: center;
-}
-
 /* Forms */
 form {
     display: flex;
@@ -268,13 +233,13 @@ form {
 
 .form-group input,
 .form-group textarea {
-    padding: 0 var(--space-md);
+    padding: var(--user-field-padding);
     height: var(--inner-item-height);
-    background: var(--bg-overlay-inner);
-    border: 1px solid transparent;
-    border-radius: var(--inner-item-radius);
+    background: var(--bg-body);
+    border: var(--border-width-sm) solid var(--border-subtle);
+    border-radius: var(--ui-radius);
     color: var(--text-primary);
-    font-size: 15px;
+    font-size: var(--font-size-md);
     transition: background-color 0.25s ease, border-color 0.25s ease;
     width: 100%;
     box-sizing: border-box;
@@ -282,13 +247,15 @@ form {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    outline: none;
-    background: var(--glass-bg-hover);
-    border-color: var(--accent-border);
+    outline: var(--border-width-md) solid var(--accent);
+    outline-offset: calc(-1 * var(--border-width-md));
+    border-color: var(--accent);
 }
 
 .form-group input:disabled {
-    opacity: 0.6;
+    color: var(--text-secondary);
+    background: var(--bg-overlay-inner);
+    opacity: 1;
     cursor: not-allowed;
 }
 
@@ -299,10 +266,9 @@ form {
 
 .submit-btn {
     height: var(--inner-item-height);
-    padding: 0 var(--space-lg);
-    border-radius: var(--inner-item-radius);
-    background: var(--bg-overlay-inner);
-    border: none;
+    padding: var(--user-submit-padding);
+    background: var(--accent-bg);
+    border: var(--border-width-sm) solid var(--accent-border);
     color: var(--text-primary);
     font-size: 16px;
     font-weight: bold;
@@ -319,7 +285,6 @@ form {
 
 .status-message {
     padding: var(--inner-item-padding);
-    border-radius: var(--inner-item-radius);
     background: var(--bg-overlay-inner);
     color: var(--text-secondary);
     font-size: 14px;
@@ -330,6 +295,14 @@ form {
 
 .status-message:empty {
     display: none;
+}
+
+.status-message[data-state="error"] {
+    border-inline-start: var(--border-width-lg) solid var(--danger-color);
+}
+
+.status-message[data-state="success"] {
+    border-inline-start: var(--border-width-lg) solid var(--success-color);
 }
 
 /* Profile Section */
@@ -363,15 +336,15 @@ form {
     flex-direction: column;
     gap: var(--inner-item-gap);
     width: 100%;
+    min-width: 0;
 }
 
 .info-item {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    padding: 0 var(--space-md);
+    padding: var(--user-field-padding);
     min-height: var(--inner-item-height);
-    border-radius: var(--inner-item-radius);
     background: var(--bg-overlay-inner);
 }
 
@@ -383,6 +356,7 @@ form {
 
 .info-item span {
     color: var(--text-primary);
+    overflow-wrap: anywhere;
 }
 
 /* Avatar Update Section */
@@ -416,9 +390,10 @@ form {
     align-items: center;
     justify-content: center;
     height: var(--inner-item-height);
-    padding: 0 var(--space-lg);
-    border-radius: var(--inner-item-radius);
+    padding: var(--user-submit-padding);
     background: var(--bg-overlay-inner);
+    box-sizing: border-box;
+    border: var(--border-width-sm) solid var(--border-subtle);
     color: var(--text-primary);
     cursor: pointer;
     transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
@@ -436,8 +411,7 @@ form {
     align-items: center;
     justify-content: center;
     min-height: var(--inner-item-height);
-    padding: 0 var(--space-md);
-    border-radius: var(--inner-item-radius);
+    padding: var(--user-field-padding);
     background: var(--bg-overlay-inner);
     color: var(--text-muted);
     font-size: 14px;
@@ -450,7 +424,6 @@ form {
 .disclaimer p {
     margin: 0;
     padding: var(--disclaimer-padding);
-    border-radius: var(--inner-item-radius);
     background: var(--bg-overlay-inner);
     color: var(--text-muted);
     font-size: 13px;
@@ -485,9 +458,8 @@ form {
 @media (max-width: 768px) {
     body {
         --menu-item-height: var(--pill-height-sm);
-        --menu-item-radius: var(--pill-radius-sm);
-        --avatar-size: 100px;
-        --avatar-big-size: 120px;
+        --avatar-size: calc(var(--space-2xl) + var(--space-base));
+        --avatar-big-size: calc(var(--space-2xl) + var(--space-lg));
     }
 
     #user_panel {

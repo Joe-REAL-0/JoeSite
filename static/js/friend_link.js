@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 添加新的友情链接到容器中
                 data.friend_links.forEach(link => {
                     const linkElement = document.createElement('div');
-                    linkElement.className = 'FriendLink';
+                    linkElement.className = 'FriendLink cyber-frame';
 
                     // 使用动画效果使新元素淡入
                     linkElement.style.opacity = '0';

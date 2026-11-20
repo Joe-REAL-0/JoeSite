@@ -11,7 +11,8 @@
 
 {% block content %}
 {% set bind_mode = bind_mode|default('oauth') %}
-<div class="auth-shell" data-auth-mode="login">
+<main class="auth-page">
+<div class="auth-shell cyber-frame" data-auth-mode="login">
     <header class="auth-header">
         <span class="auth-kicker">Joe Passport</span>
         <h2 class="auth-title">绑定邮箱</h2>
@@ -24,11 +25,12 @@
                 <input placeholder="邮箱" type="email" class="auth-input" name="email" value="{{ suggested_email|default('') }}" required autocomplete="email">
             </div>
             <p id="bind_status" class="auth-status{% if status %} is-active{% endif %}" aria-live="polite">{{ status|default('') }}</p>
-            <button class="auth-submit" type="submit">{{ submit_text|default('发送验证链接') }}</button>
-            <div class="auth-meta" style="margin-top: 8px;">
-                <a class="auth-link" href="{{ back_url|default(url_for('auth.login')) }}">{{ back_text|default('返回登录页') }}</a>
+            <button class="auth-submit cyber-control" type="submit">{{ submit_text|default('发送验证链接') }}</button>
+            <div class="auth-meta">
+                <a class="auth-link cyber-control" href="{{ back_url|default(url_for('auth.login')) }}">{{ back_text|default('返回登录页') }}</a>
             </div>
         </form>
     </div>
 </div>
+</main>
 {% endblock %}

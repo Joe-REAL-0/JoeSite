@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
             tocItem.className = 'toc-item toc-' + heading.tagName.toLowerCase();
             tocItem.textContent = heading.textContent.replace(/^#\s*/, '').replace(/¶$/, '');
             tocItem.dataset.target = heading.id;
+            tocItem.href = '#' + encodeURIComponent(heading.id);
             tocItem.title = tocItem.textContent;
 
             tocItem.addEventListener('click', function (e) {
@@ -156,10 +157,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             setTimeout(function () {
                                 likeBtn.classList.remove('animate');
                             }, 600);
+                        }
                         } else {
                             likeBtn.classList.remove('liked');
                             likeIcon.textContent = '🤍';
-                        }
                     }
                 })
                 .catch(function (err) {
@@ -282,14 +283,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!commentsList) return;
 
         if (!comments || comments.length === 0) {
-            commentsList.innerHTML = '<div class="no-comments">暂无评论，来发表第一条评论吧 ✨</div>';
+            commentsList.innerHTML = '<div class="no-comments cyber-frame">暂无评论，来发表第一条评论吧 ✨</div>';
             return;
         }
 
         commentsList.innerHTML = '';
         comments.forEach(function (comment) {
             var item = document.createElement('div');
-            item.className = 'comment-item';
+            item.className = 'comment-item cyber-frame';
 
             var authorClass = comment.is_mine ? 'comment-author is-mine' : 'comment-author';
 

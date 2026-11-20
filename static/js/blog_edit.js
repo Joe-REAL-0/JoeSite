@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chip.className = 'tag-chip';
             chip.innerHTML = `
                 <span class="tag-text">${tag}</span>
-                <button type="button" class="tag-remove" data-index="${index}">×</button>
+                <button type="button" class="tag-remove cyber-control" data-index="${index}">×</button>
             `;
             tagChips.appendChild(chip);
         });

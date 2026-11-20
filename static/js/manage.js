@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <td>${user.nickname}</td>
                             <td><img src="/static/images/avatars/${user.avatar}" alt="${user.nickname}" class="avatar-preview"></td>
                             <td>
-                                <button class="action-btn" onclick="editUser('${user.email}', '${user.nickname}')">编辑</button>
-                                <button class="action-btn delete-btn" onclick="deleteUser('${user.email}')">删除</button>
+                                <button class="action-btn cyber-control" onclick="editUser('${user.email}', '${user.nickname}')">编辑</button>
+                                <button class="action-btn delete-btn cyber-control" onclick="deleteUser('${user.email}')">删除</button>
                             </td>
                         `;
                         usersTableBody.appendChild(row);
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <td>${message.time}</td>
                             <td>${message.content}</td>
                             <td>
-                                <button class="action-btn delete-btn" onclick="deleteMessage(${message.id})">删除</button>
+                                <button class="action-btn delete-btn cyber-control" onclick="deleteMessage(${message.id})">删除</button>
                             </td>
                         `;
                         messagesTableBody.appendChild(row);
@@ -147,8 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <td>${oc.title}</td>
                             <td>${oc.order_id}</td>
                             <td>
-                                <button class="action-btn" onclick="editOC(${oc.id}, '${oc.title}', ${oc.order_id})">编辑</button>
-                                <button class="action-btn delete-btn" onclick="deleteOC(${oc.id})">删除</button>
+                                <button class="action-btn cyber-control" onclick="editOC(${oc.id}, '${oc.title}', ${oc.order_id})">编辑</button>
+                                <button class="action-btn delete-btn cyber-control" onclick="deleteOC(${oc.id})">删除</button>
                             </td>
                         `;
                         ocTableBody.appendChild(row);
@@ -289,7 +289,7 @@ function editUser(email, nickname) {
                             <td>${message.time}</td>
                             <td>${message.content}</td>
                             <td>
-                                <button class="action-btn delete-btn" onclick="deleteMessage(${message.id})">删除</button>
+                                <button class="action-btn delete-btn cyber-control" onclick="deleteMessage(${message.id})">删除</button>
                             </td>
                         `;
                         userMessagesTable.appendChild(row);

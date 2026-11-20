@@ -1,234 +1,73 @@
-/* ===========================
-   全局主题变量
-   根据 data-theme 属性或浏览器 prefers-color-scheme 切换
-   =========================== */
-
-/* ===== 暗色主题（默认） ===== */
+/* 手动选择优先；未指定主题时，颜色跟随系统。 */
 :root {
-    /* 毛玻璃 */
-    --glass-bg: rgba(255, 255, 255, 0.07);
-    --glass-bg-hover: rgba(255, 255, 255, 0.13);
-    --glass-border: rgba(255, 255, 255, 0.10);
-    --glass-blur: 20px;
+    color-scheme: dark;
+    --accent: light-dark(#00676e, #62f7e6);
+    --signal: light-dark(#aa225c, #ff68aa);
+    --text-primary: light-dark(#132a31, #effbfa);
+    --text-secondary: light-dark(#274951, #c6dddd);
+    --text-muted: light-dark(#48616a, #9bb6bd);
 
-    /* 文字 */
-    --text-primary: rgba(255, 255, 255, 1);
-    --text-secondary: rgba(255, 255, 255, 0.90);
-    --text-muted: rgba(255, 255, 255, 0.5);
+    --bg-body: light-dark(#e4edec, #061016);
+    --bg-overlay: light-dark(rgb(239 249 248 / 95%), rgb(6 21 29 / 94%));
+    --bg-card: var(--bg-overlay);
+    --bg-card-hover: light-dark(#f7fffe, #132f38);
+    --bg-overlay-inner: light-dark(rgb(0 78 81 / 8%), rgb(109 234 221 / 7%));
+    --bg-cover: var(--bg-body);
+    --bg-top-column: var(--bg-card);
 
-    /* 状态色 (Status Colors) */
-    --success-color: rgba(46, 204, 113, 0.9);
-    --danger-color: rgba(231, 76, 60, 0.9);
-    --warning-color: rgba(241, 196, 15, 0.9);
-    --success-bg: rgba(46, 204, 113, 0.15);
-    --danger-bg: rgba(231, 76, 60, 0.15);
-    --warning-bg: rgba(241, 196, 15, 0.15);
-    --success-border: rgba(46, 204, 113, 0.3);
-    --danger-border: rgba(231, 76, 60, 0.3);
-    --warning-border: rgba(241, 196, 15, 0.3);
+    --accent-bg: color-mix(in srgb, var(--accent) 13%, transparent);
+    --accent-glow: color-mix(in srgb, var(--accent) 22%, transparent);
+    --accent-border: color-mix(in srgb, var(--accent) 52%, transparent);
+    --accent-hover-bg: color-mix(in srgb, var(--accent) 21%, var(--bg-card));
+    --accent-hover-border: var(--accent);
+    --border-subtle: color-mix(in srgb, var(--accent) 32%, transparent);
+    --glass-bg: var(--bg-overlay-inner);
+    --glass-bg-hover: var(--accent-bg);
+    --glass-border: var(--border-subtle);
+    --glass-blur: var(--space-base);
 
-    /* 强调色 — 深蓝 */
-    --accent: rgba(140, 180, 250, 0.95);
-    --accent-glow: rgba(100, 140, 220, 0.25);
-    --accent-bg: rgba(100, 140, 220, 0.12);
-    --accent-border: rgba(100, 140, 220, 0.15);
-    --accent-hover-bg: rgba(100, 140, 220, 0.18);
-    --accent-hover-border: rgba(100, 140, 220, 0.3);
+    --success-color: light-dark(#156643, #79e5ad);
+    --danger-color: light-dark(#a52646, #ff91a8);
+    --warning-color: light-dark(#7c4900, #f3c772);
+    --success-bg: color-mix(in srgb, var(--success-color) 14%, transparent);
+    --danger-bg: color-mix(in srgb, var(--danger-color) 14%, transparent);
+    --warning-bg: color-mix(in srgb, var(--warning-color) 14%, transparent);
+    --success-border: color-mix(in srgb, var(--success-color) 48%, transparent);
+    --danger-border: color-mix(in srgb, var(--danger-color) 48%, transparent);
+    --warning-border: color-mix(in srgb, var(--warning-color) 48%, transparent);
 
-    /* 背景 */
-    --bg-body: #0a0a0f;
-    --bg-overlay: rgba(10, 10, 25, 0.55);
-    --bg-overlay-inner: rgba(255, 255, 255, 0.15);
-    --bg-card: rgba(10, 10, 20, 0.55);
-    --bg-card-hover: rgba(30, 30, 45, 0.65);
-    --bg-top-column: rgba(10, 10, 20, 0.55);
+    --title-color-start: var(--accent);
+    --title-bg: var(--bg-card);
+    --top-btn-bg: var(--bg-card);
+    --top-btn-color: var(--accent);
+    --top-btn-border: var(--accent-border);
+    --top-btn-hover-bg: var(--accent-hover-bg);
+    --top-btn-hover-color: var(--text-primary);
+    --icon-bg: light-dark(#407078, #27414a);
+    --icon-bg-hover: light-dark(#135660, #27635f);
+    --icon-opacity: 0.94;
 
-    /* Loading cover */
-    --bg-cover: #0a0a0f;
-
-    /* 标题 */
-    --title-color-start: rgba(180, 215, 255, 0.9);
-    --title-color-mid: rgba(200, 220, 255, 0.8);
-    --title-bg: rgba(10, 10, 25, var(--outer-alpha, 0.55));
-
-    /* 边框 & 阴影 */
-    --border-subtle: rgba(255, 255, 255, 0.12);
-    --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.25);
-    --shadow-card-strong: 0 8px 40px rgba(0, 0, 0, 0.3);
-
-    /* 遮罩 (Mask) */
+    --shadow-ink: light-dark(rgb(9 47 48 / 18%), rgb(0 7 13 / 42%));
+    --shadow-card: var(--space-2xs) var(--space-2xs) var(--shadow-ink);
+    --shadow-card-strong: var(--space-xs) var(--space-xs) var(--shadow-ink);
+    --link-icon-shadow: var(--shadow-card);
+    --link-icon-hover-shadow: 0 0 var(--space-sm) var(--accent-glow);
+    --divider: linear-gradient(to right, var(--accent-border), var(--border-subtle));
     --mask-solid: #000;
     --mask-clear: transparent;
 
-    /* 按钮图标背景 */
-    --icon-bg: rgba(255, 255, 255, 0.15);
-    --icon-bg-hover: rgba(100, 140, 220, 0.15);
-    --icon-opacity: 0.8;
-    --link-icon-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --link-icon-hover-shadow: 0 8px 28px var(--accent-glow);
-
-    /* 滚动条 & 分隔线 */
-    --divider: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.10) 20%,
-            rgba(255, 255, 255, 0.10) 80%,
-            transparent);
-
-    /* 顶部栏交互按钮 */
-    --top-btn-bg: rgba(10, 10, 25, 0.55);
-    --top-btn-border: rgba(255, 255, 255, 0.12);
-    --top-btn-color: rgba(255, 255, 255, 0.92);
-    --top-btn-hover-bg: rgba(255, 255, 255, 0.13);
-    --top-btn-hover-color: rgba(255, 255, 255, 1);
+    /* 外框刻线作为背景绘制，不占空间，也不覆盖内容或捕获点击。 */
+    --frame-trace: linear-gradient(var(--accent), var(--accent));
+    --frame-signal: linear-gradient(var(--signal), var(--signal));
+    --frame-hatch: repeating-linear-gradient(115deg, var(--border-subtle) 0 var(--border-width-lg), var(--mask-clear) var(--border-width-lg) var(--space-xs));
+    --frame-focus: var(--border-width-md) solid var(--accent);
 }
 
-/* ===== 浅色主题 ===== */
 @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-        /* 毛玻璃 */
-        --glass-bg: rgba(255, 255, 255, 0.50);
-        --glass-bg-hover: rgba(255, 255, 255, 0.65);
-        --glass-border: rgba(0, 0, 0, 0.06);
-
-        /* 文字 */
-        --text-primary: rgba(20, 20, 40, 1);
-        --text-secondary: rgba(20, 20, 40, 0.85);
-        --text-muted: rgba(20, 20, 40, 0.55);
-
-        /* 状态色 (Status Colors) */
-        --success-color: rgba(39, 174, 96, 0.95);
-        --danger-color: rgba(192, 57, 43, 0.95);
-        --warning-color: rgba(243, 156, 18, 0.95);
-        --success-bg: rgba(39, 174, 96, 0.15);
-        --danger-bg: rgba(192, 57, 43, 0.15);
-        --warning-bg: rgba(243, 156, 18, 0.15);
-        --success-border: rgba(39, 174, 96, 0.3);
-        --danger-border: rgba(192, 57, 43, 0.3);
-        --warning-border: rgba(243, 156, 18, 0.3);
-
-        /* 强调色 — 亮蓝 */
-        --accent: rgba(20, 95, 200, 0.95);
-        --accent-glow: rgba(50, 120, 220, 0.20);
-        --accent-bg: rgba(50, 120, 220, 0.15);
-        --accent-border: rgba(50, 120, 220, 0.18);
-        --accent-hover-bg: rgba(50, 120, 220, 0.15);
-        --accent-hover-border: rgba(50, 120, 220, 0.3);
-
-        /* 背景 */
-        --bg-body: #eef1f6;
-        --bg-overlay: rgba(255, 255, 255, 0.55);
-        --bg-overlay-inner: rgba(0, 0, 0, 0.15);
-        --bg-card: rgba(255, 255, 255, 0.55);
-        --bg-card-hover: rgba(255, 255, 255, 0.75);
-
-        /* Loading cover */
-        --bg-cover: #eef1f6;
-
-        /* 标题 */
-        --title-color-start: rgba(50, 100, 180, 0.9);
-        --title-color-mid: rgba(60, 110, 190, 0.85);
-        --title-bg: rgba(255, 255, 255, var(--outer-alpha, 0.55));
-
-        /* 边框 & 阴影 */
-        --border-subtle: rgba(0, 0, 0, 0.06);
-        --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.12);
-        --shadow-card-strong: 0 8px 40px rgba(0, 0, 0, 0.10);
-
-        /* 按钮图标背景 */
-        --icon-bg: rgba(0, 0, 0, 0.4);
-        --icon-bg-hover: rgba(50, 120, 220, 0.80);
-        --icon-opacity: 0.9;
-        --link-icon-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-        --link-icon-hover-shadow: 0 8px 28px var(--accent-glow);
-
-        /* 滚动条 & 分隔线 */
-        --divider: linear-gradient(90deg,
-                transparent,
-                rgba(0, 0, 0, 0.12) 20%,
-                rgba(0, 0, 0, 0.12) 80%,
-                transparent);
-
-        /* 顶部栏交互按钮 */
-        --top-btn-bg: rgba(255, 255, 255, 0.55);
-        --top-btn-border: rgba(0, 0, 0, 0.06);
-        --top-btn-color: rgba(20, 20, 40, 0.85);
-        --top-btn-hover-bg: rgba(255, 255, 255, 0.65);
-        --top-btn-hover-color: rgba(20, 20, 40, 1);
-    }
+    :root:not([data-theme="dark"]) { color-scheme: light; }
 }
 
-/* ===== 手动强制浅色主题 ===== */
-:root[data-theme="light"] {
-    /* 毛玻璃 */
-    --glass-bg: rgba(255, 255, 255, 0.50);
-    --glass-bg-hover: rgba(255, 255, 255, 0.65);
-    --glass-border: rgba(0, 0, 0, 0.06);
-
-    /* 文字 */
-    --text-primary: rgba(20, 20, 40, 1);
-    --text-secondary: rgba(20, 20, 40, 0.85);
-    --text-muted: rgba(20, 20, 40, 0.55);
-
-    /* 状态色 (Status Colors) */
-    --success-color: rgba(39, 174, 96, 0.95);
-    --danger-color: rgba(192, 57, 43, 0.95);
-    --warning-color: rgba(243, 156, 18, 0.95);
-    --success-bg: rgba(39, 174, 96, 0.15);
-    --danger-bg: rgba(192, 57, 43, 0.15);
-    --warning-bg: rgba(243, 156, 18, 0.15);
-    --success-border: rgba(39, 174, 96, 0.3);
-    --danger-border: rgba(192, 57, 43, 0.3);
-    --warning-border: rgba(243, 156, 18, 0.3);
-
-    /* 强调色 — 亮蓝 */
-    --accent: rgba(20, 95, 200, 0.95);
-    --accent-glow: rgba(50, 120, 220, 0.20);
-    --accent-bg: rgba(50, 120, 220, 0.12);
-    --accent-border: rgba(50, 120, 220, 0.18);
-    --accent-hover-bg: rgba(50, 120, 220, 0.15);
-    --accent-hover-border: rgba(50, 120, 220, 0.3);
-
-    /* 背景 */
-    --bg-body: #eef1f6;
-    --bg-overlay: rgba(255, 255, 255, 0.55);
-    --bg-overlay-inner: rgba(0, 0, 0, 0.15);
-    --bg-card: rgba(255, 255, 255, 0.55);
-    --bg-card-hover: rgba(255, 255, 255, 0.75);
-
-    /* Loading cover */
-    --bg-cover: #eef1f6;
-
-    /* 标题 */
-    --title-color-start: rgba(50, 100, 180, 0.9);
-    --title-color-mid: rgba(60, 110, 190, 0.85);
-    --title-bg: rgba(255, 255, 255, var(--outer-alpha, 0.55));
-
-    /* 边框 & 阴影 */
-    --border-subtle: rgba(0, 0, 0, 0.06);
-    --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.15);
-    --shadow-card-strong: 0 8px 40px rgba(0, 0, 0, 0.10);
-
-    /* 按钮图标背景 */
-    --icon-bg: rgba(0, 0, 0, 0.4);
-    --icon-bg-hover: rgba(50, 120, 220, 0.80);
-    --icon-opacity: 0.9;
-    --link-icon-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    --link-icon-hover-shadow: 0 8px 28px var(--accent-glow);
-
-    /* 滚动条 & 分隔线 */
-    --divider: linear-gradient(90deg,
-            transparent,
-            rgba(0, 0, 0, 0.12) 20%,
-            rgba(0, 0, 0, 0.12) 80%,
-            transparent);
-
-    /* 顶部栏交互按钮 */
-    --top-btn-bg: rgba(255, 255, 255, 0.55);
-    --top-btn-border: rgba(0, 0, 0, 0.06);
-    --top-btn-color: rgba(20, 20, 40, 0.85);
-    --top-btn-hover-bg: rgba(255, 255, 255, 0.65);
-    --top-btn-hover-color: rgba(20, 20, 40, 1);
-}
+:root[data-theme="light"] { color-scheme: light; }
 
 /* 浅色主题 → 显示月亮 */
 @media (prefers-color-scheme: light) {
@@ -338,4 +177,34 @@ body.themed-bg[data-body-theme="dark"]::before {
 
 .solid-effect {
     background-color: var(--bg-overlay);
+}
+
+/* 主面板保留溢出行为。切角只用于显式标记的独立展示面。 */
+.cyber-frame {
+    border: var(--border-width-sm) solid var(--border-subtle);
+    border-radius: var(--ui-radius);
+    background-color: var(--bg-card);
+    background-image: var(--frame-trace), var(--frame-trace), var(--frame-signal), var(--frame-hatch);
+    background-position: left top, left top, right bottom, right top;
+    background-size: var(--space-lg) var(--border-width-lg), var(--border-width-lg) var(--space-sm), var(--space-md) var(--border-width-md), var(--space-lg) var(--space-2xs);
+    background-repeat: no-repeat;
+    box-shadow: var(--shadow-card);
+}
+
+.cyber-cut {
+    clip-path: polygon(0 0, calc(100% - var(--frame-notch)) 0, 100% var(--frame-notch), 100% 100%, var(--frame-notch) 100%, 0 calc(100% - var(--frame-notch)));
+}
+
+.cyber-control {
+    border-radius: var(--ui-radius);
+}
+
+.cyber-control:where(:hover:not(:disabled)) {
+    border-color: var(--accent);
+    box-shadow: inset var(--border-width-md) 0 var(--accent);
+}
+
+body :is(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: var(--frame-focus);
+    outline-offset: var(--border-width-md);
 }

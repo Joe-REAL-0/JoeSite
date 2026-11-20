@@ -18,18 +18,16 @@
     <div class="CenterContainer">
         <div class="page-header">
         </div>
-        <button id="sidebar-toggle" aria-label="切换侧边栏">
-            ☰
-        </button>
-        <div id="oc_introduce_panel" class="glass-effect">
-            <div id="sidebar">
+        <div id="oc_introduce_panel" class="glass-effect cyber-frame">
+            <button id="sidebar-toggle" class="cyber-control" type="button" aria-label="切换侧边栏" aria-controls="sidebar" aria-expanded="false">☰</button>
+            <div id="sidebar" class="cyber-frame">
                 <ul id="title-list">
                     {% for title in titleList %}
-                    <li class="TextTitle" data-title="{{loop.index}} {{title}}">{{title}}</li>
+                    <li><button type="button" class="TextTitle cyber-control" data-title="{{loop.index}} {{title}}">{{title}}</button></li>
                     {% endfor %}
                 </ul>
             </div>
-            <div id="content-container">
+            <div id="content-container" class="cyber-frame">
                 <div id="output"></div>
             </div>
         </div>

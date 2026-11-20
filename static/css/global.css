@@ -60,6 +60,8 @@
     --border-width-sm: 1px;
     --border-width-md: 2px;
     --border-width-lg: 3px;
+    --frame-radius: 0;
+    --frame-notch: 14px;
 
     /* 字体大小 (Font Sizes) */
     --font-size-xs: 12px;
@@ -80,6 +82,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     --local-mask-height-top: var(--mask-height-top);
+    --ui-radius: var(--frame-radius);
 }
 
 /* ===========================
@@ -143,7 +146,6 @@ body {
     position: relative;
     padding: 12px 32px;
     width: auto;
-    border-radius: calc(var(--title-height) / 2);
     background-color: var(--title-bg);
     color: var(--title-color-start);
     text-align: center;
@@ -174,6 +176,7 @@ body {
 
 #title_container h1.resources-loaded {
     opacity: 1;
+    color: var(--text-primary);
     animation: titleZoom 0.6s 0.2s forwards;
 }
 
@@ -308,14 +311,12 @@ body {
     width: var(--title-height);
     height: var(--title-height);
     padding: 0;
-    border-radius: 50%;
     background-color: var(--top-btn-bg);
     border: 1px solid var(--top-btn-border);
     color: var(--top-btn-color);
     text-decoration: none;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    outline: none;
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.3s ease,
         border-color 0.3s ease,

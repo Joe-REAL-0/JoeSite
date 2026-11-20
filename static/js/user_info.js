@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             nicknameCheckTimeout = setTimeout(() => {
                 nicknameStatus.textContent = '检查昵称中...';
-                nicknameStatus.style.color = 'var(--text-muted, #999)';
+                delete nicknameStatus.dataset.state;
 
                 fetch('/check_nickname', {
                     method: 'POST',
@@ -173,12 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     .then((data) => {
                         newNicknameInput.dataset.available = data.available ? 'true' : 'false';
                         nicknameStatus.textContent = data.message || '';
-                        nicknameStatus.style.color = data.available ? 'green' : 'red';
+                        nicknameStatus.dataset.state = data.available ? 'success' : 'error';
                     })
                     .catch(() => {
                         newNicknameInput.dataset.available = 'false';
                         nicknameStatus.textContent = '检查昵称时出错';
-                        nicknameStatus.style.color = 'red';
+                        nicknameStatus.dataset.state = 'error';
                     });
             }, 350);
         });
@@ -188,14 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!nickname) {
                 event.preventDefault();
                 nicknameStatus.textContent = '昵称不能为空';
-                nicknameStatus.style.color = 'red';
+                nicknameStatus.dataset.state = 'error';
                 return;
             }
 
             if (newNicknameInput.dataset.available === 'false') {
                 event.preventDefault();
                 nicknameStatus.textContent = '该昵称已被其他用户使用，请选择其他昵称';
-                nicknameStatus.style.color = 'red';
+                nicknameStatus.dataset.state = 'error';
             }
         });
     }
@@ -210,21 +210,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!newEmail) {
                 event.preventDefault();
                 document.getElementById('email-status').textContent = '邮箱不能为空';
-                document.getElementById('email-status').style.color = 'red';
+                document.getElementById('email-status').dataset.state = 'error';
                 return;
             }
 
             if (!password) {
                 event.preventDefault();
                 document.getElementById('email-status').textContent = '请输入密码';
-                document.getElementById('email-status').style.color = 'red';
+                document.getElementById('email-status').dataset.state = 'error';
                 return;
             }
 
             if (newEmail === currentEmail) {
                 event.preventDefault();
                 document.getElementById('email-status').textContent = '新邮箱不能与当前邮箱相同';
-                document.getElementById('email-status').style.color = 'red';
+                document.getElementById('email-status').dataset.state = 'error';
                 return;
             }
 
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!emailRegex.test(newEmail)) {
                 event.preventDefault();
                 document.getElementById('email-status').textContent = '请输入有效的邮箱地址';
-                document.getElementById('email-status').style.color = 'red';
+                document.getElementById('email-status').dataset.state = 'error';
             }
         });
     }
@@ -247,21 +247,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!currentPassword || !newPassword || !confirmPassword) {
                 event.preventDefault();
                 document.getElementById('password-status').textContent = '所有密码字段都必须填写';
-                document.getElementById('password-status').style.color = 'red';
+                document.getElementById('password-status').dataset.state = 'error';
                 return;
             }
 
             if (newPassword !== confirmPassword) {
                 event.preventDefault();
                 document.getElementById('password-status').textContent = '两次输入的新密码不一致';
-                document.getElementById('password-status').style.color = 'red';
+                document.getElementById('password-status').dataset.state = 'error';
                 return;
             }
 
             if (newPassword.length < 6) {
                 event.preventDefault();
                 document.getElementById('password-status').textContent = '密码长度必须至少为6个字符';
-                document.getElementById('password-status').style.color = 'red';
+                document.getElementById('password-status').dataset.state = 'error';
             }
         });
     }

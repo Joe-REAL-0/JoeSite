@@ -18,35 +18,35 @@
 <div class="CenterContainer">
     <div id="user_panel">
         <section id="menu_section" class="panel-section section-menu" aria-label="用户中心菜单">
-            <div class="section-surface menu-surface glass-effect">
+            <div class="section-surface menu-surface cyber-frame">
                 <nav class="menu-list" aria-label="功能列表">
-                    <button class="menu-item" type="button" data-section="profile" data-title="个人信息">
+                    <button class="menu-item cyber-control" type="button" data-section="profile" data-title="个人信息">
                         <span class="menu-text">个人信息</span>
                     </button>
-                    <button class="menu-item" type="button" data-section="avatar" data-title="更换头像">
+                    <button class="menu-item cyber-control" type="button" data-section="avatar" data-title="更换头像">
                         <span class="menu-text">更换头像</span>
                     </button>
-                    <button class="menu-item" type="button" data-section="password" data-title="修改密码">
+                    <button class="menu-item cyber-control" type="button" data-section="password" data-title="修改密码">
                         <span class="menu-text">修改密码</span>
                     </button>
-                    <button class="menu-item" type="button" data-section="nickname" data-title="修改昵称">
+                    <button class="menu-item cyber-control" type="button" data-section="nickname" data-title="修改昵称">
                         <span class="menu-text">修改昵称</span>
                     </button>
-                    <button class="menu-item" type="button" data-section="email" data-title="修改邮箱">
+                    <button class="menu-item cyber-control" type="button" data-section="email" data-title="修改邮箱">
                         <span class="menu-text">修改邮箱</span>
                     </button>
-                    <button class="menu-item" type="button" data-section="friendlink" data-title="友情链接">
+                    <button class="menu-item cyber-control" type="button" data-section="friendlink" data-title="友情链接">
                         <span class="menu-text">友情链接</span>
                     </button>
                 </nav>
             </div>
-            <div id="return-content-hint" class="return-content-hint glass-effect" role="status" hidden>
+            <div id="return-content-hint" class="return-content-hint cyber-frame" role="status" hidden>
                 <span aria-hidden="true">↓</span> 再次向下滚动，回到刚才的内容
             </div>
         </section>
 
         <section id="content_section" class="panel-section section-detail" aria-label="内容区" aria-hidden="true">
-            <div class="section-surface content-surface glass-effect">
+            <div class="section-surface content-surface cyber-frame">
                 <div class="content-header">
                     <div class="content-title-group">
                         <div id="section-title" class="content-title">个人信息</div>
@@ -100,7 +100,7 @@
                             </div>
                             <div id="password-status" class="status-message">{{ status }}</div>
                             <div class="form-submit-group">
-                                <button type="submit" class="submit-btn">修改密码</button>
+                                <button type="submit" class="submit-btn cyber-control">修改密码</button>
                             </div>
                         </form>
                     </div>
@@ -118,7 +118,7 @@
                             </div>
                             <div id="nickname-status" class="status-message"></div>
                             <div class="form-submit-group">
-                                <button type="submit" class="submit-btn">修改昵称</button>
+                                <button type="submit" class="submit-btn cyber-control">修改昵称</button>
                             </div>
                         </form>
                     </div>
@@ -143,7 +143,7 @@
                             </div>
                             <div id="email-status" class="status-message">{{ email_status }}</div>
                             <div class="form-submit-group">
-                                <button type="submit" class="submit-btn">修改邮箱</button>
+                                <button type="submit" class="submit-btn cyber-control">修改邮箱</button>
                             </div>
                         </form>
                     </div>
@@ -161,7 +161,7 @@
                                 <p>免责声明：您填写的链接如果包含任何非法要素，导致任何违法行为，均与本站及站长无关，责任由用户自行承担，本站会积极配合相关部门进行调查。</p>
                             </div>
                             <div class="form-submit-group">
-                                <button type="submit" class="submit-btn">保存友链</button>
+                                <button type="submit" class="submit-btn cyber-control">保存友链</button>
                             </div>
                         </form>
                     </div>
@@ -176,7 +176,7 @@
                             <form id="avatar_form" action="/update_avatar" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="avatar_upload" id="avatar_upload_label"
-                                        class="file-upload-btn">选择新头像</label>
+                                        class="file-upload-btn cyber-control">选择新头像</label>
                                     <input type="file" id="avatar_upload" name="avatar"
                                         accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                                         capture="environment" style="display: none;">
@@ -184,7 +184,7 @@
                                 </div>
                                 <div id="avatar-status" class="status-message"></div>
                                 <div class="form-submit-group" style="margin-top: var(--space-sm);">
-                                    <button type="submit" id="avatar_submit" class="submit-btn">上传头像</button>
+                                    <button type="submit" id="avatar_submit" class="submit-btn cyber-control">上传头像</button>
                                 </div>
                             </form>
                         </div>

@@ -1,38 +1,21 @@
-/* ===========================
-   OC Introduce Page Styles
-   =========================== */
-
-/* Local Variable Mapping */
+/* Character archive layout */
 body {
-    /* Title Button Variables */
-    --title-padding: 0 var(--space-md);
-    --title-radius: var(--pill-radius-md);
-    --title-height: var(--pill-height-md);
-
-    /* Sidebar Variables */
-    --sidebar-padding: var(--space-sm);
-    --sidebar-radius: calc(var(--title-radius) + var(--sidebar-padding));
-    --sidebar-gap: var(--space-xs);
-
-    /* Output Variables */
-    --output-padding: var(--space-lg);
-    --output-radius: var(--sidebar-radius);
-
-    /* Panel Variables */
-    --panel-padding: var(--space-md);
-    --panel-radius: calc(var(--output-radius) + var(--panel-padding));
-
-    /* Toggle Variables */
-    --toggle-padding: var(--space-sm);
-    --toggle-radius: var(--pill-radius-sm);
-    --toggle-height: var(--pill-height-sm);
+    --oc-panel-padding: var(--space-md);
+    --oc-panel-gap: var(--space-base);
+    --oc-panel-height: var(--panel-height-mobile);
+    --oc-list-padding: var(--space-sm);
+    --oc-list-gap: var(--space-xs);
+    --oc-title-padding: var(--space-xs) var(--space-md);
+    --oc-title-height: var(--pill-height-md);
+    --oc-output-padding: var(--space-base) var(--space-lg);
+    --oc-toggle-padding: var(--space-xs) var(--space-sm);
+    --oc-toggle-height: var(--pill-height-sm);
 }
 
-/* Center Container */
 .CenterContainer {
     width: 100%;
-    height: 100vh;
-    max-width: 1200px;
+    min-height: 100vh;
+    max-width: var(--max-width-lg);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -41,173 +24,127 @@ body {
     position: relative;
 }
 
-/* OC介绍面板样式 */
 #oc_introduce_panel {
+    box-sizing: border-box;
     width: 80%;
-    max-width: 1000px;
-    height: 70vh;
-    margin: 0 auto;
-    border-radius: var(--panel-radius);
+    max-width: calc(var(--panel-width-md) * 5 / 3);
+    height: var(--oc-panel-height);
+    margin-top: var(--space-2xl);
     display: flex;
-    padding: var(--panel-padding);
-    margin-top: 80px;
-    position: relative;
-    overflow: hidden;
-    animation: slideUp 1s ease-out;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-card-strong);
+    gap: var(--oc-panel-gap);
+    padding: var(--oc-panel-padding);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    #oc_introduce_panel {
+        animation: slideUp 1s ease-out;
+    }
+}
+
+#sidebar,
+#content-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
 }
 
 #sidebar {
-    width: 250px;
-    min-width: 250px;
-    height: 100%;
-    overflow-y: auto;
-    border-radius: var(--sidebar-radius);
-    background: var(--bg-overlay-inner);
-    margin-right: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: var(--sidebar-padding);
-    box-sizing: border-box;
+    flex: 0 1 calc(var(--panel-height-md) / 2);
 }
 
 #title-list {
     list-style: none;
-    padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--sidebar-gap);
+    gap: var(--oc-list-gap);
+    padding: var(--oc-list-padding);
+}
+
+.TextTitle,
+#sidebar-toggle {
+    box-sizing: border-box;
+    font: inherit;
+    background-color: var(--bg-overlay-inner);
+    color: var(--text-primary);
+    border: var(--border-width-sm) solid var(--border-subtle);
+    cursor: pointer;
 }
 
 .TextTitle {
-    display: flex;
-    align-items: center;
-    height: var(--title-height);
-    padding: var(--title-padding);
-    margin: 0;
-    background: var(--bg-overlay-inner);
-    border-radius: var(--title-radius);
-    cursor: pointer;
-    transition: all 0.25s ease;
-    font-weight: normal;
-    color: var(--text-primary);
-    font-family: 'YuanTi', sans-serif;
-    font-size: 16px;
-    border: 1px solid transparent;
-    box-sizing: border-box;
-}
-
-.TextTitle:hover {
-    background: var(--glass-bg-hover);
-    color: var(--accent);
-    transform: translateX(4px);
+    width: 100%;
+    min-height: var(--oc-title-height);
+    padding: var(--oc-title-padding);
+    font-size: var(--font-size-md);
+    text-align: start;
+    overflow-wrap: anywhere;
 }
 
 .TextTitle.active {
-    background: var(--accent-bg);
-    border: 1px solid var(--accent-border);
+    background-color: var(--accent-bg);
+    border-color: var(--accent-border);
     color: var(--accent);
 }
 
-#content-container {
+#content-container,
+#output {
     flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
 }
 
 #output {
-    flex: 1;
-    padding: 0 var(--output-padding);
-    overflow-y: auto;
+    padding: var(--oc-output-padding);
     line-height: 1.6;
-    border-radius: var(--output-radius);
-    font-size: 16px;
-    background-color: var(--bg-overlay-inner);
+    font-size: var(--font-size-md);
     color: var(--text-secondary);
+    overflow-wrap: anywhere;
 }
 
 #output p {
-    margin-bottom: 20px;
+    margin: 0 0 var(--space-base);
+    white-space: pre-line;
 }
 
-/* 隐藏滚动条但保留滚动功能 */
-#sidebar,
+#title-list,
 #output {
-    scrollbar-width: none;
-    /* Firefox */
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
-::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari and Opera */
-}
-
-/* 侧边栏切换按钮样式 */
 #sidebar-toggle {
     display: none;
-    /* 默认在桌面端不显示 */
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 100;
-    background: var(--bg-overlay-inner);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--toggle-radius);
-    padding: var(--toggle-padding);
-    height: var(--toggle-height);
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: 18px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    align-items: center;
-    justify-content: center;
+    align-self: flex-start;
+    min-height: var(--oc-toggle-height);
+    padding: var(--oc-toggle-padding);
+    font-size: var(--font-size-lg);
 }
 
-#sidebar-toggle:hover {
-    background: var(--glass-bg-hover);
-}
-
-/* 移动端适配 */
 @media (max-width: 768px) {
     body {
-        --title-height: var(--pill-height-sm);
-        --title-radius: var(--pill-radius-sm);
-    }
-
-    #sidebar-toggle {
-        display: flex;
+        --oc-panel-height: calc(var(--panel-height-mobile) + 15vh);
+        --oc-panel-padding: var(--space-sm);
+        --oc-panel-gap: var(--space-xs);
+        --oc-title-height: var(--pill-height-sm);
+        --oc-output-padding: var(--space-sm);
     }
 
     #oc_introduce_panel {
         flex-direction: column;
-        height: 85vh;
-        width: 90%;
-        padding: 15px;
+        width: var(--panel-width-mobile);
+    }
+
+    #sidebar-toggle {
+        display: block;
     }
 
     #sidebar {
-        width: 100%;
-        min-width: 100%;
-        height: auto;
+        flex: 0 1 auto;
         max-height: 0;
-        overflow: hidden;
-        margin-right: 0;
-        margin-bottom: 15px;
-        transition: max-height 0.5s ease;
+        visibility: hidden;
     }
 
     #sidebar.expanded {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    #content-container {
-        height: 100%;
+        visibility: visible;
+        max-height: min(45%, calc(var(--panel-width-md) / 2));
     }
 }

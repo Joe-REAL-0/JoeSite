@@ -70,32 +70,6 @@
     }
 }
 
-/* 按钮悬停波纹效果 */
-.action-btn, .page-btn, .back-home-btn, .back-btn, .new-blog-btn, .action-button {
-    position: relative;
-    overflow: hidden;
-}
-
-.action-btn::before, .page-btn::before, 
-.back-home-btn::before, .back-btn::before, .new-blog-btn::before, .action-button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%);
-    transition: width 0.5s, height 0.5s;
-}
-
-.action-btn:hover::before, .page-btn:hover::before,
-.back-home-btn:hover::before, .back-btn:hover::before, .new-blog-btn:hover::before, .action-button:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
 /* 卡片悬停提升效果 */
 .blog-card {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -246,4 +220,18 @@
         opacity: 1;
         transform: translateX(0);
     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .CenterContainer,
+    .CenterContainer *,
+    .right-sidebar,
+    .right-sidebar *,
+    .comment-modal-overlay,
+    .comment-modal-overlay * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .blog-card { opacity: 1; }
 }

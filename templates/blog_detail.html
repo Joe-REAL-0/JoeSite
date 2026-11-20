@@ -6,9 +6,6 @@
 <link rel="stylesheet" href="{{ url_for('static',filename = 'css/html-style/blog_detail.css' ) }}">
 <link rel="stylesheet" href="{{ url_for('static',filename = 'css/animations/animation-blog.css' ) }}">
 <link rel="stylesheet" href="{{ url_for('static',filename = 'css/mobile-adaption.css' ) }}">
-
-<!-- 代码高亮样式 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 {% endblock %}
 
 {% block head_js %}
@@ -36,7 +33,7 @@
     data-login-url="{{ login_url }}" data-likes-count="{{ likes_count }}" data-comments-count="{{ comments_count }}"
     data-has-liked="{{ 'true' if has_liked else 'false' }}">
 
-    <div class="blog-detail-container glass-effect">
+    <div class="blog-detail-container cyber-frame">
         <div class="blog-header">
             <h1 class="blog-title">{{ blog.title }}</h1>
 
@@ -64,9 +61,9 @@
         </div>
 
         <div class="blog-footer">
-            <a href="{{ url_for('blog.blog_list') }}" class="back-btn">← 返回博客列表</a>
+            <a href="{{ url_for('blog.blog_list') }}" class="back-btn cyber-control">← 返回博客列表</a>
             {% if is_admin %}
-            <a href="{{ url_for('blog.blog_edit', blog_id=blog.id) }}" class="edit-btn">编辑文章</a>
+            <a href="{{ url_for('blog.blog_edit', blog_id=blog.id) }}" class="edit-btn cyber-control">编辑文章</a>
             {% endif %}
         </div>
     </div>
@@ -74,10 +71,10 @@
 
 <aside class="right-sidebar" id="rightSidebar">
     <!-- TOC 目录导航 -->
-    <div class="toc-section" id="tocSection">
+    <div class="toc-section cyber-frame" id="tocSection">
         <div class="toc-header">
             <span class="toc-title">📑 目录</span>
-            <button class="toc-toggle" id="tocToggle" title="收起目录">▲</button>
+            <button class="toc-toggle cyber-control" id="tocToggle" title="收起目录" aria-controls="tocContent">▲</button>
         </div>
         <div class="toc-content" id="tocContent">
             <!-- TOC会通过JS动态生成 -->
@@ -86,15 +83,15 @@
 
     <!-- 操作按钮组 -->
     <div class="action-buttons">
-        <button class="sidebar-btn like-btn" id="likeBtn" title="点赞">
+        <button class="sidebar-btn like-btn cyber-control" id="likeBtn" title="点赞">
             <span class="btn-icon" id="likeIcon">🤍</span>
             <span class="btn-count" id="likeCount">{{ likes_count }}</span>
         </button>
-        <button class="sidebar-btn comment-btn" id="commentBtn" title="评论">
+        <button class="sidebar-btn comment-btn cyber-control" id="commentBtn" title="评论">
             <span class="btn-icon">💬</span>
             <span class="btn-count" id="commentBtnCount">{{ comments_count }}</span>
         </button>
-        <button class="sidebar-btn top-btn" id="topBtn" title="回到顶部">
+        <button class="sidebar-btn top-btn cyber-control" id="topBtn" title="回到顶部">
             <span class="btn-icon">⬆️</span>
         </button>
     </div>
@@ -102,18 +99,18 @@
 
 <!-- 评论弹窗 -->
 <div class="comment-modal-overlay" id="commentModal">
-    <div class="comment-modal glass-effect">
+    <div class="comment-modal cyber-frame" role="dialog" aria-modal="true" aria-labelledby="commentModalTitle">
         <div class="modal-header">
-            <h3>发表评论</h3>
-            <button class="modal-close" id="modalClose">✕</button>
+            <h3 id="commentModalTitle">发表评论</h3>
+            <button class="modal-close cyber-control" id="modalClose" aria-label="关闭">✕</button>
         </div>
         <div class="modal-body">
-            <textarea class="comment-input" id="commentInput" placeholder="写下你的想法..." maxlength="500"></textarea>
+            <textarea class="comment-input" id="commentInput" aria-label="评论内容" placeholder="写下你的想法..." maxlength="500"></textarea>
             <div class="comment-char-count"><span id="charCount">0</span>/500</div>
         </div>
         <div class="modal-footer">
-            <button class="modal-cancel" id="modalCancel">取消</button>
-            <button class="modal-submit" id="modalSubmit">发表评论</button>
+            <button class="modal-cancel cyber-control" id="modalCancel">取消</button>
+            <button class="modal-submit cyber-control" id="modalSubmit">发表评论</button>
         </div>
     </div>
 </div>

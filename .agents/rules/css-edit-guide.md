@@ -20,4 +20,8 @@ When writing or modifying CSS for this project, you must strictly adhere to the 
 
     The target elements must then reference these locally mapped variables for their actual styling.
 
+    Shared frames: Apply `cyber-frame` to panels, cards, and dialogs. It supplies the border, surface color, corner markings, and shadow. Keep page layout in its own stylesheet. A page-specific `background` shorthand can erase the markings; set `background-color` when only the fill changes.
+
+    Apply `cyber-control` to action buttons and links. Use `--ui-radius` for other hard-edged UI. Reserve `cyber-cut` for isolated display surfaces where clipping cannot hide focus rings, menus, or overlays.
+
     Important: Do NOT add any extra, unrelated structural or visual styling rules to the body selector. It should only be used as a scope container for these variable definitions.

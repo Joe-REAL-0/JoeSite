@@ -57,7 +57,7 @@
 {% block content %}
 <!-- ========== Section 1: Hero 首屏 ========== -->
 <section class="page-section hero-section" id="hero_section">
-    <div class="hero-content glass-effect" id="hero_content">
+    <div class="hero-content cyber-frame cyber-cut glass-effect" id="hero_content">
         <!-- 欢迎语（纯中文，2行） -->
         <div class="welcome_messages_container">
             <p id="welcome_message_1" class="welcome-line">{{ nickname|default('你好') }}，欢迎来到</p>
@@ -65,44 +65,50 @@
         </div>
 
         <!-- 社交链接 -->
-        <div id="link_column">
-            <a class="LinkContainer"
+        <div class="link-heading">站外链接</div>
+        <nav id="link_column" aria-label="站外链接">
+            <a class="LinkContainer cyber-control"
                 href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">
-                <img title="点击加入我的QQ聊天群" class="LinkIcon"
+                <img alt="" title="点击加入我的QQ聊天群" class="LinkIcon"
                     src="{{ url_for('static',filename = 'images/link_image/QQ_Icon.jpg' ) }}">
+                <span>QQ 群</span>
             </a>
-            <a class="LinkContainer" href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0">
-                <img title="很没有意思的B站主页" class="LinkIcon"
+            <a class="LinkContainer cyber-control" href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0">
+                <img alt="" title="很没有意思的B站主页" class="LinkIcon"
                     src="{{ url_for('static',filename = 'images/link_image/bilibili_Icon.jpg' ) }}">
+                <span>Bilibili</span>
             </a>
-            <a class="LinkContainer" href="https://github.com/Joe-REAL-0/">
-                <img title="乱糟糟很丢人的GitHub主页" class="LinkIcon"
+            <a class="LinkContainer cyber-control" href="https://github.com/Joe-REAL-0/">
+                <img alt="" title="乱糟糟很丢人的GitHub主页" class="LinkIcon"
                     src="{{ url_for('static',filename = 'images/link_image/GitHub_Icon.jpg' ) }}">
+                <span>GitHub</span>
             </a>
-            <a class="LinkContainer" href="https://play.mcmod.cn/sv20187377.html">
-                <img title="我运营的Minecraft服务器" class="LinkIcon"
+            <a class="LinkContainer cyber-control" href="https://play.mcmod.cn/sv20187377.html">
+                <img alt="" title="我运营的Minecraft服务器" class="LinkIcon"
                     src="{{ url_for('static',filename = 'images/link_image/Minecraft_Icon.jpg' ) }}">
+                <span>Minecraft</span>
             </a>
-            <a class="LinkContainer" href="https://joe-real-0.itch.io/">
-                <img title="itch主页" class="LinkIcon"
+            <a class="LinkContainer cyber-control" href="https://joe-real-0.itch.io/">
+                <img alt="" title="itch主页" class="LinkIcon"
                     src="{{ url_for('static',filename = 'images/link_image/itch_Icon.jpg' ) }}">
+                <span>itch.io</span>
             </a>
-        </div>
+        </nav>
     </div>
 
     <!-- 滚动指示器 -->
-    <div class="scroll-indicator" id="scroll_indicator">
+    <button type="button" class="scroll-indicator cyber-control" id="scroll_indicator">
         <span>向下探索</span>
-        <div class="scroll-arrow"></div>
-    </div>
+        <span class="scroll-arrow" aria-hidden="true"></span>
+    </button>
 </section>
 
 <!-- ========== Section 2: Hub 内容区 ========== -->
 <section class="page-section content-section" id="content_section">
-    <div class="content-panel glass-effect" id="main_screen">
+    <div class="content-panel cyber-frame glass-effect" id="main_screen">
         <!-- 导航菜单 -->
         <nav id="side_list" class="nav-menu">
-            <a class="ButtonContainer" href="{{ url_for('main.introduce') }}">
+            <a class="ButtonContainer cyber-control" href="{{ url_for('main.introduce') }}">
                 <div class="ButtonIcon">
                     <img class="ButtonImg"
                         src="{{ url_for('static',filename = 'images/button_image/oc_introduce.png' ) }}">
@@ -110,14 +116,14 @@
                 <span class="SideButton">角色介绍</span>
             </a>
 
-            <a class="ButtonContainer" href="{{ url_for('blog.blog_list') }}">
+            <a class="ButtonContainer cyber-control" href="{{ url_for('blog.blog_list') }}">
                 <div class="ButtonIcon">
                     <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/diary.png' ) }}">
                 </div>
                 <span class="SideButton">我的博客</span>
             </a>
 
-            <a class="ButtonContainer" href="{{ url_for('message.friend_link') }}">
+            <a class="ButtonContainer cyber-control" href="{{ url_for('message.friend_link') }}">
                 <div class="ButtonIcon">
                     <img class="ButtonImg"
                         src="{{ url_for('static',filename = 'images/button_image/friend_link.png' ) }}">
@@ -125,7 +131,7 @@
                 <span class="SideButton">友情链接</span>
             </a>
 
-            <a class="ButtonContainer" href="https://cloud.furryjoe.site">
+            <a class="ButtonContainer cyber-control" href="https://cloud.furryjoe.site">
                 <div class="ButtonIcon">
                     <img class="ButtonImg"
                         src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">

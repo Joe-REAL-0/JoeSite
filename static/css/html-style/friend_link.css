@@ -1,339 +1,185 @@
-/* ===========================
-   Friend Link Page Variables
-   =========================== */
 body {
-    /* Avatar Variables (Innermost) */
-    --avatar-size-local: var(--circle-size-md);
-    --avatar-radius: var(--circle-radius-md);
-    --avatar-border-width: var(--border-width-md);
-
-    /* Link Item Variables (Wraps Avatar) */
-    --link-item-padding: var(--space-sm);
-    --link-item-gap: var(--space-sm);
-    --link-item-radius: calc(var(--avatar-radius) + var(--link-item-padding));
-
-    /* Wrapper Variables (Wraps Link Items Container) */
-    --wrapper-padding: var(--link-item-gap);
-    --wrapper-radius: calc(var(--link-item-radius) + var(--wrapper-padding));
-
-    /* Main Panel Variables (Wraps Wrapper) */
-    --panel-width: var(--panel-width-md);
-    --panel-height: var(--panel-height-md);
-    --panel-padding: var(--space-md);
-    --panel-radius: calc(var(--wrapper-radius) + var(--panel-padding));
-
-    /* Add Link Button Variables (Independent Circular Element) */
-    --btn-margin: var(--link-item-padding);
-    --btn-size: calc(var(--avatar-size-local) + var(--link-item-padding) * 2 - var(--btn-margin) * 2);
-    --btn-radius: calc(var(--link-item-radius) - var(--btn-margin));
-    --btn-bottom: var(--space-md);
-    --btn-right: var(--space-md);
-
-    /* Loading Variables */
-    --loading-padding: var(--space-md);
-    --spinner-size: var(--space-md);
+    --friend-panel-width: var(--panel-width-md);
+    --friend-panel-height: var(--panel-height-md);
+    --friend-padding: var(--space-md);
+    --friend-row-space: var(--space-sm);
+    --friend-gap: var(--space-xs);
+    --friend-avatar: var(--circle-size-md);
+    --friend-avatar-radius: calc(var(--friend-avatar) / 2);
+    --friend-control-height: var(--circle-size-sm);
+    --friend-control-padding: 0 var(--space-sm);
+    --friend-radius: var(--ui-radius);
+    --friend-spinner: var(--circle-size-xs);
+    --friend-spinner-radius: var(--circle-radius-xs);
 }
 
-/* ===========================
-   Base / Layout
-   =========================== */
-.page-section {
-    height: 100vh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#friend_link_section .CenterContainer {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
 }
 
-.CenterContainer {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-/* ===========================
-   友链面板样式
-   =========================== */
 #friend_link_panel {
-    width: var(--panel-width);
-    height: var(--panel-height);
-    border-radius: var(--panel-radius);
-    padding: var(--panel-padding);
-    background-color: var(--bg-card);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    box-shadow: var(--shadow-card-strong);
+    box-sizing: border-box;
+    width: min(100%, var(--friend-panel-width));
+    height: var(--friend-panel-height);
+    max-height: calc(100dvh - var(--title-height) - var(--space-md));
+    padding: var(--friend-padding);
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
+    gap: var(--friend-row-space);
 }
 
 #friend_link_container_wrapper {
-    flex: 1;
     display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-radius: var(--wrapper-radius);
-    padding: var(--wrapper-padding);
-    position: relative;
+    flex: 1;
+    min-height: 0;
+    padding: var(--friend-gap);
+    background-color: var(--bg-body);
 }
 
 #friend_link_container {
     flex: 1;
+    min-width: 0;
     overflow-y: auto;
-    scrollbar-width: none;
-    /* Firefox */
-    gap: var(--space-sm);
     display: flex;
     flex-direction: column;
-    border-radius: var(--link-item-radius);
+    gap: var(--friend-gap);
+    padding: var(--friend-gap);
 }
 
-/* 隐藏 WebKit 浏览器的滚动条 */
-#friend_link_container::-webkit-scrollbar {
-    display: none;
-}
-
-/* ===========================
-   友链项样式
-   =========================== */
 .FriendLink {
     display: flex;
+    flex: none;
     align-items: center;
-    gap: var(--link-item-gap);
-    padding: var(--link-item-padding);
-    border-radius: var(--link-item-radius);
+    gap: var(--friend-row-space);
+    padding: var(--friend-row-space);
     background-color: var(--bg-overlay-inner);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    transition: all 0.3s ease;
-    text-decoration: none;
 }
 
-.FriendLink:hover {
-    transform: translateY(-2px);
-    background-color: var(--glass-bg-hover);
-    border-color: var(--accent-border);
+.FriendLink:hover,
+.FriendLink:focus-within,
+#friend_link_container .FriendLink:active {
+    border-color: var(--accent);
+    background-color: var(--accent-bg);
 }
 
 .FriendLink img {
-    width: var(--avatar-size-local);
-    height: var(--avatar-size-local);
-    border-radius: var(--avatar-radius);
+    box-sizing: border-box;
+    flex: none;
+    width: var(--friend-avatar);
+    height: var(--friend-avatar);
+    border-radius: var(--friend-avatar-radius);
     object-fit: cover;
-    border: var(--avatar-border-width) solid var(--border-subtle);
-    box-shadow: var(--link-icon-shadow);
-    flex-shrink: 0;
 }
 
 .FriendLink .info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .FriendLink .nickname {
     font-weight: bold;
-    font-size: 1.1rem;
-    margin: 0 0 4px 0;
-    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    margin: 0 0 var(--space-2xs);
 }
 
 .FriendLink .link {
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
     margin: 0;
-    word-break: break-all;
 }
 
-.FriendLink .link a {
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+.FriendLink a { color: var(--accent); }
+.no-links { text-align: center; }
 
-.FriendLink .link a:hover {
-    color: var(--accent);
-    text-decoration: underline;
-}
-
-.no-links {
-    text-align: center;
-    padding: var(--panel-padding);
-    color: var(--text-muted);
-    font-size: 1.1rem;
-}
-
-/* ===========================
-   添加友链区域
-   =========================== */
 #add_link_container {
-    align-self: flex-end;
-    margin: var(--btn-margin);
     display: flex;
-    gap: var(--space-xs);
     align-items: center;
-    z-index: 10;
+    justify-content: flex-end;
+    gap: var(--friend-gap);
+}
+
+#quick_friend_link_input,
+#add_link_button,
+#login_for_link_btn {
+    box-sizing: border-box;
+    min-height: var(--friend-control-height);
+    font: inherit;
 }
 
 #quick_friend_link_input {
-    height: var(--btn-size);
-    border-radius: var(--btn-radius);
-    padding: 0 var(--space-md);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    background-color: var(--bg-overlay-inner);
+    flex: 1;
+    min-width: 0;
+    padding: var(--friend-control-padding);
+    border: var(--border-width-sm) solid var(--text-muted);
+    border-radius: var(--friend-radius);
     color: var(--text-primary);
-    font-size: 0.95rem;
-    outline: none;
-    transition: all 0.3s ease;
-    width: 220px;
-    box-sizing: border-box;
+    background: var(--bg-body);
+    font-size: var(--font-size-md);
 }
 
-#quick_friend_link_input:focus {
-    border-color: var(--accent-border);
-    background-color: var(--glass-bg-hover);
-}
+#quick_friend_link_input::placeholder { color: var(--text-secondary); }
 
-#quick_friend_link_input::placeholder {
-    color: var(--text-muted);
-}
-
+#add_link_button,
 #login_for_link_btn {
-    height: var(--btn-size);
-    border-radius: var(--btn-radius);
-    padding: 0 var(--space-md);
+    display: inline-grid;
+    place-items: center;
+    padding: var(--friend-control-padding);
+    border: var(--border-width-sm) solid var(--accent-border);
     background-color: var(--bg-overlay-inner);
-    border: var(--border-width-sm) solid var(--border-subtle);
     color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    box-sizing: border-box;
-}
-
-#login_for_link_btn:hover {
-    background-color: var(--accent);
-    border-color: var(--accent-hover-border);
-    color: white;
 }
 
 #add_link_button {
-    flex-shrink: 0;
-    width: var(--btn-size);
-    height: var(--btn-size);
-    background-color: var(--bg-overlay-inner);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    color: var(--text-primary);
-    border-radius: var(--btn-radius);
+    min-width: var(--friend-control-height);
+    font-size: var(--font-size-xl);
+    cursor: pointer;
+}
+
+#friend_link_panel :focus-visible {
+    outline: var(--border-width-md) solid var(--accent);
+    outline-offset: var(--border-width-sm);
+}
+
+#add_link_container :disabled { opacity: .6; }
+#add_link_button:disabled { cursor: wait; }
+
+#loading.hidden {
+    display: none;
+}
+
+#loading:not(.hidden) {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
-    box-shadow: var(--shadow-card);
-    transition: all 0.3s ease;
-    z-index: 10;
-    font-size: 24px;
-    font-weight: bold;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
-
-#add_link_button:hover {
-    transform: scale(1.1);
-    background-color: var(--accent);
-    border-color: var(--accent-hover-border);
-    box-shadow: var(--shadow-card-strong);
-    color: var(--text-primary);
-}
-
-/* ===========================
-   加载动画
-   =========================== */
-#loading {
-    position: absolute;
-    bottom: var(--panel-padding);
-    left: 50%;
-    transform: translateX(-50%);
-    padding: var(--loading-padding);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    background-color: var(--bg-card);
-    border-radius: var(--pill-radius-sm);
-    z-index: 5;
-}
-
-.hidden {
-    display: none !important;
+    gap: var(--friend-gap);
+    color: var(--text-secondary);
 }
 
 .spinner {
-    width: var(--spinner-size);
-    height: var(--spinner-size);
+    box-sizing: border-box;
+    width: var(--friend-spinner);
+    height: var(--friend-spinner);
     border: var(--border-width-md) solid var(--border-subtle);
-    border-radius: 50%;
-    border-top-color: var(--text-secondary);
-    animation: spin 0.8s linear infinite;
-    margin-bottom: var(--space-xs);
+    border-top-color: var(--accent);
+    border-radius: var(--friend-spinner-radius);
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* ===========================
-   响应式设计
-   =========================== */
 @media (max-width: 768px) {
     body {
-        --panel-width: var(--panel-width-mobile);
-        --panel-height: var(--panel-height-mobile);
-        --panel-padding: var(--space-sm);
-
-        --avatar-size-local: var(--circle-size-sm);
-        --avatar-radius: var(--circle-radius-sm);
-
-        --btn-size: var(--circle-size-sm);
-        --btn-bottom: var(--space-sm);
-        --btn-right: var(--space-sm);
+        --friend-panel-width: var(--panel-width-mobile);
+        --friend-panel-height: var(--panel-height-mobile);
+        --friend-padding: var(--space-sm);
+        --friend-avatar: var(--circle-size-sm);
     }
 
-    #friend_link_panel {
-        margin-top: 60px;
-    }
-
-    .FriendLink .nickname {
-        font-size: 1rem;
-    }
-
-    .FriendLink .link {
-        font-size: 0.8rem;
-    }
-
-    #add_link_button {
-        font-size: 20px;
-    }
+    #friend_link_panel { margin-top: var(--title-height-mobile); }
 }
 
 @media (max-width: 480px) {
     body {
-        --panel-height: var(--panel-height-sm);
-        --panel-width: var(--panel-width-sm);
+        --friend-panel-width: var(--panel-width-sm);
+        --friend-panel-height: var(--panel-height-sm);
     }
 }

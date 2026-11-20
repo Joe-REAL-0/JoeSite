@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('expanded');
+            this.setAttribute('aria-expanded', String(sidebar.classList.contains('expanded')));
             // Change button text based on sidebar state
             this.textContent = sidebar.classList.contains('expanded') ? '✕' : '☰';
         });
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isMobile && sidebar.classList.contains('expanded')) {
                 sidebar.classList.remove('expanded');
                 sidebarToggle.textContent = '☰';
+                sidebarToggle.setAttribute('aria-expanded', 'false');
             }
         });
     });

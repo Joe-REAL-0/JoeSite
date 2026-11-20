@@ -13,33 +13,32 @@ body {
 
     --blog-header-padding: var(--space-base);
     --blog-header-gap: var(--space-sm);
-    --blog-header-radius: var(--pill-radius-sm);
 
     --blog-list-gap: var(--space-lg);
 
     --blog-card-padding: var(--space-md);
-    --blog-card-radius: var(--pill-radius-md);
     --blog-card-gap: var(--space-sm);
     --blog-card-min-height: var(--panel-height-xs);
 
-    --timeline-gap: var(--space-lg);
     --timeline-dot-size: var(--circle-size-xs);
     --timeline-line-width: var(--border-width-lg);
     --timeline-date-padding-v: var(--space-xs);
     --timeline-date-padding-h: var(--space-base);
-    --timeline-date-radius: var(--pill-radius-xs);
 
     --tag-padding-v: var(--space-2xs);
     --tag-padding-h: var(--space-sm);
-    --tag-radius: var(--pill-radius-xs);
 
     --btn-padding-v: var(--space-xs);
     --btn-padding-h: var(--space-base);
-    --btn-radius: var(--pill-radius-sm);
 
     --title-font-size: var(--font-size-2xl);
     --summary-font-size: var(--font-size-md);
     --meta-font-size: var(--font-size-sm);
+    --blog-tight-gap: var(--space-xs);
+    --blog-meta-gap: var(--space-xs) var(--space-base);
+    --blog-rule-padding: var(--space-xs);
+    --blog-empty-padding: var(--space-2xl) var(--space-base);
+    --timeline-padding: var(--space-base) 0;
 }
 
 /* ===========================
@@ -74,12 +73,6 @@ body {
     flex-wrap: wrap;
     gap: var(--blog-header-gap);
     padding: var(--blog-header-padding);
-    border-radius: var(--blog-header-radius);
-
-    /* 样式仿照 index.css 中的 main_screen 或是透明化面板 */
-    background-color: var(--bg-card);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    box-shadow: var(--shadow-card);
 }
 
 .blog-count {
@@ -96,7 +89,7 @@ body {
     padding: var(--btn-padding-v) var(--btn-padding-h);
     background-color: var(--accent-bg);
     border: var(--border-width-sm) solid var(--accent-border);
-    border-radius: var(--btn-radius);
+    border-radius: var(--ui-radius);
     text-decoration: none;
     color: var(--accent);
     transition: all 0.3s ease;
@@ -110,8 +103,7 @@ body {
 .action-button:hover {
     background-color: var(--accent-hover-bg);
     border-color: var(--accent-hover-border);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--accent-glow);
+    box-shadow: var(--shadow-card);
 }
 
 .header-actions {
@@ -144,26 +136,20 @@ body {
     display: block;
 }
 
-/* 卡片本体仿照主面板 */
 .blog-card {
     padding: var(--blog-card-padding);
-    border-radius: var(--blog-card-radius);
     transition: all 0.3s ease;
     animation: fadeInUp 0.5s ease-out;
-    cursor: pointer;
     width: 100%;
     box-sizing: border-box;
     min-height: var(--blog-card-min-height);
     display: flex;
     flex-direction: column;
-
-    background-color: var(--bg-card);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    box-shadow: var(--shadow-card);
 }
 
-.blog-card:hover {
-    transform: translateX(-8px);
+.blog-card-link:hover .blog-card,
+.blog-card-link:focus-visible .blog-card {
+    border-color: var(--accent-border);
     box-shadow: var(--shadow-card-strong);
     background-color: var(--bg-card-hover);
 }
@@ -175,7 +161,7 @@ body {
     margin-bottom: var(--blog-card-gap);
     flex-wrap: wrap;
     gap: var(--blog-card-gap);
-    padding-bottom: var(--space-xs);
+    padding-bottom: var(--blog-rule-padding);
     border-bottom: var(--border-width-sm) solid var(--border-subtle);
     flex-shrink: 0;
 }
@@ -187,7 +173,14 @@ body {
     transition: color 0.3s ease;
 }
 
-.blog-card:hover .blog-title {
+.blog-title a {
+    color: inherit;
+}
+
+.blog-card-link:hover .blog-title,
+.blog-card-link:focus-visible .blog-title,
+.blog-title a:hover,
+.blog-title a:focus-visible {
     color: var(--accent);
 }
 
@@ -210,7 +203,7 @@ body {
 .blog-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xs);
+    gap: var(--blog-tight-gap);
     margin: var(--space-xs) 0;
 }
 
@@ -219,7 +212,7 @@ body {
     padding: var(--tag-padding-v) var(--tag-padding-h);
     background-color: var(--accent-bg);
     border: var(--border-width-sm) solid var(--accent-border);
-    border-radius: var(--tag-radius);
+    border-radius: var(--ui-radius);
     font-size: var(--font-size-xs);
     color: var(--accent);
     font-weight: 500;
@@ -234,13 +227,13 @@ body {
 /* 元信息 */
 .blog-meta {
     display: flex;
-    gap: var(--space-xs) var(--space-base);
+    gap: var(--blog-meta-gap);
     font-size: var(--meta-font-size);
     color: var(--text-muted);
     flex-wrap: wrap;
     flex-shrink: 0;
     margin-top: auto;
-    padding-top: var(--space-xs);
+    padding-top: var(--blog-rule-padding);
 }
 
 .blog-views,
@@ -258,9 +251,9 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--space-sm);
+    gap: var(--blog-header-gap);
     position: relative;
-    padding: var(--space-base) 0;
+    padding: var(--timeline-padding);
 }
 
 /* 时间轴线条 - 连接相邻的dot */
@@ -272,7 +265,7 @@ body {
     transform: translateY(50%);
     width: var(--timeline-line-width);
     height: calc(100% + var(--blog-card-min-height));
-    background: linear-gradient(180deg, var(--accent) 0%, transparent 100%);
+    background: var(--accent-border);
     opacity: 0.5;
     z-index: 1;
 }
@@ -281,10 +274,10 @@ body {
 .timeline-dot {
     width: var(--timeline-dot-size);
     height: var(--timeline-dot-size);
-    border-radius: 50%;
+    border-radius: var(--ui-radius);
     background-color: var(--accent);
     border: var(--border-width-lg) solid var(--bg-overlay);
-    box-shadow: 0 0 12px var(--accent-glow);
+    box-shadow: var(--shadow-card);
     position: relative;
     z-index: 2;
     transition: all 0.3s ease;
@@ -294,16 +287,16 @@ body {
 
 .blog-item-wrapper:hover .timeline-dot {
     transform: scale(1.3);
-    box-shadow: 0 0 20px var(--accent-glow);
+    box-shadow: var(--shadow-card-strong);
 }
 
 /* 时间轴日期 */
 .timeline-date {
     font-size: var(--meta-font-size);
     color: var(--text-primary);
-    background-color: var(--accent-bg);
+    background-color: var(--bg-card);
     padding: var(--timeline-date-padding-v) var(--timeline-date-padding-h);
-    border-radius: var(--timeline-date-radius);
+    border-radius: var(--ui-radius);
     border: var(--border-width-sm) solid var(--accent-border);
     white-space: nowrap;
     transition: all 0.3s ease;
@@ -315,34 +308,22 @@ body {
     transform: scale(1.05);
 }
 
-@keyframes pulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 10px var(--accent-glow);
-    }
-
-    50% {
-        box-shadow: 0 0 20px var(--accent-glow);
-    }
-}
-
 /* ===========================
    博客操作按钮 & 徽章 (Manage page)
    =========================== */
 .blog-actions {
     margin-top: var(--space-sm);
     display: flex;
-    gap: var(--space-xs);
+    gap: var(--blog-tight-gap);
     flex-wrap: wrap;
-    padding-top: var(--space-xs);
+    padding-top: var(--blog-rule-padding);
     border-top: var(--border-width-sm) solid var(--border-subtle);
 }
 
 .action-btn {
     padding: var(--btn-padding-v) var(--btn-padding-h);
     border: var(--border-width-sm) solid var(--border-subtle);
-    border-radius: var(--btn-radius);
+    border-radius: var(--ui-radius);
     background-color: var(--bg-overlay-inner);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -353,8 +334,7 @@ body {
 }
 
 .action-btn:hover {
-    background-color: var(--glass-bg-hover);
-    transform: scale(1.05);
+    background-color: var(--bg-card-hover);
 }
 
 .edit-btn {
@@ -369,19 +349,33 @@ body {
 .publish-btn {
     border-color: var(--success-border);
     color: var(--success-color);
+    background-color: var(--success-bg);
 }
 
 .publish-btn:hover {
-    background-color: var(--success-bg);
+    border-color: var(--success-color);
+}
+
+.publish-btn[data-published="True"],
+.publish-btn[data-published="1"] {
+    color: var(--warning-color);
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.publish-btn[data-published="True"]:hover,
+.publish-btn[data-published="1"]:hover {
+    border-color: var(--warning-color);
 }
 
 .delete-btn {
     border-color: var(--danger-border);
     color: var(--danger-color);
+    background-color: var(--danger-bg);
 }
 
 .delete-btn:hover {
-    background-color: var(--danger-bg);
+    border-color: var(--danger-color);
 }
 
 .draft-badge {
@@ -390,7 +384,7 @@ body {
     background-color: var(--warning-bg);
     border: var(--border-width-sm) solid var(--warning-border);
     color: var(--warning-color);
-    border-radius: var(--tag-radius);
+    border-radius: var(--ui-radius);
     font-size: var(--font-size-xs);
     margin-left: var(--space-xs);
 }
@@ -399,11 +393,8 @@ body {
    其他状态 & 分页
    =========================== */
 .no-blogs {
-    padding: var(--space-2xl) var(--space-base);
+    padding: var(--blog-empty-padding);
     text-align: center;
-    border-radius: var(--blog-card-radius);
-    background-color: var(--bg-card);
-    border: var(--border-width-sm) solid var(--border-subtle);
 }
 
 .no-blogs p {
@@ -418,7 +409,7 @@ body {
     font-size: var(--font-size-lg);
     padding: var(--btn-padding-v) var(--btn-padding-h);
     background-color: var(--accent-bg);
-    border-radius: var(--btn-radius);
+    border-radius: var(--ui-radius);
     display: inline-block;
     transition: all 0.3s;
     border: var(--border-width-sm) solid var(--accent-border);
@@ -433,16 +424,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--space-base);
+    gap: var(--blog-header-padding);
+    flex-wrap: wrap;
     margin-top: var(--space-lg);
-    padding: var(--space-base);
+    padding: var(--blog-header-padding);
 }
 
 .page-btn {
     padding: var(--btn-padding-v) var(--btn-padding-h);
     background-color: var(--bg-card);
     border: var(--border-width-sm) solid var(--border-subtle);
-    border-radius: var(--btn-radius);
+    border-radius: var(--ui-radius);
     text-decoration: none;
     color: var(--text-primary);
     transition: all 0.3s ease;
@@ -450,8 +442,8 @@ body {
 }
 
 .page-btn:hover {
-    background-color: var(--glass-bg-hover);
-    transform: translateY(-2px);
+    background-color: var(--accent-hover-bg);
+    border-color: var(--accent-hover-border);
     color: var(--accent);
 }
 
@@ -468,6 +460,9 @@ body {
         --blog-container-padding-top: calc(var(--mask-height-top) + var(--space-sm));
         --blog-container-padding-x: var(--space-xs);
         --blog-container-padding-bottom: var(--space-md);
+        --timeline-padding: 0;
+        --timeline-date-padding-v: var(--space-2xs);
+        --timeline-date-padding-h: var(--space-xs);
     }
 
     .CenterContainer {
@@ -489,15 +484,15 @@ body {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        gap: var(--space-xs);
+        gap: var(--blog-tight-gap);
     }
 
     .timeline-section {
         width: 100%;
         justify-content: flex-end;
-        padding: 0;
+        padding: var(--timeline-padding);
         margin: 0;
-        gap: var(--space-xs);
+        gap: var(--blog-tight-gap);
     }
 
     .timeline-section::after {
@@ -510,7 +505,6 @@ body {
 
     .timeline-date {
         font-size: var(--font-size-xs);
-        padding: var(--space-2xs) var(--space-xs);
         text-align: right;
     }
 
@@ -532,14 +526,14 @@ body {
 
 @media (max-width: 480px) {
     .blog-item-wrapper {
-        gap: var(--space-xs);
+        gap: var(--blog-tight-gap);
     }
 
     .blog-title {
         font-size: var(--font-size-lg);
     }
 
-    .blog-meta {
-        gap: var(--space-2xs) var(--space-sm);
+    body {
+        --blog-meta-gap: var(--space-2xs) var(--space-sm);
     }
 }
