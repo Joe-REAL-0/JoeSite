@@ -63,6 +63,8 @@
     --panel-height-mobile: 70vh;
     --panel-width-sm: 95%;
     --panel-height-sm: 65vh;
+    --window-opacity: 90%;
+    --window-scanline: color-mix(in srgb, var(--accent) 4%, transparent);
 
     /* bkg-h.png 为 1670 × 941；cover 后剑下方、尾巴右侧的留白。 */
     --home-background-ratio: calc(1670 / 941);
@@ -110,6 +112,22 @@ body {
     --cover-cut-gap: var(--space-2xs);
     --title-loading-top: calc(var(--cover-half) - var(--space-md));
     --top-column-padding: var(--space-md) var(--space-base);
+    --title-surface-inset: calc(-1 * var(--border-width-sm));
+}
+
+/* 内容窗口：角标与静态扫描线都绘制在内容下方。 */
+.cyber-frame {
+    --window-fill: var(--bg-card);
+    border: var(--border-width-sm) solid var(--border-subtle);
+    border-radius: var(--ui-radius);
+    box-shadow: var(--shadow-card);
+    background-color: color-mix(in srgb, var(--window-fill) var(--window-opacity), transparent);
+    background-image: var(--frame-trace), var(--frame-trace), var(--frame-signal), var(--frame-hatch),
+        repeating-linear-gradient(to bottom, var(--window-scanline) 0 1px, transparent 1px 4px);
+    background-position: left top, left top, right bottom, right top, left top;
+    background-size: var(--space-lg) var(--border-width-lg), var(--border-width-lg) var(--space-sm),
+        var(--space-md) var(--border-width-md), var(--space-lg) var(--space-2xs), 100% 100%;
+    background-repeat: no-repeat;
 }
 
 /* ===========================
@@ -233,7 +251,9 @@ body {
     position: relative;
     padding: 12px 32px;
     width: auto;
-    background-color: var(--title-bg);
+    /* 保留边框占位，显隐只作用于独立底板，不影响文字与标题尺寸。 */
+    border: var(--border-width-sm) solid var(--mask-clear);
+    background-color: var(--mask-clear);
     color: var(--title-color-start);
     text-align: center;
     white-space: nowrap;
@@ -242,6 +262,21 @@ body {
     margin: 0;
     z-index: 1001;
     /* 确保title在cover上面 */
+}
+
+#title_container .title-surface {
+    /* 标题使用纯色主题底板，随标题一起淡入。 */
+    position: absolute;
+    inset: var(--title-surface-inset);
+    z-index: -1;
+    pointer-events: none;
+    background: var(--title-bg);
+    opacity: 0;
+}
+
+/* 底板淡入与 titleMove 同时开始、同时结束。 */
+#title_container h1.resources-loaded .title-surface {
+    animation: globalTitleFadeIn 0.5s 0.2s both;
 }
 
 #loading_text {

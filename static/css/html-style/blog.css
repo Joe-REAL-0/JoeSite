@@ -151,7 +151,7 @@ body {
 .blog-card-link:focus-visible .blog-card {
     border-color: var(--accent-border);
     box-shadow: var(--shadow-card-strong);
-    background-color: var(--bg-card-hover);
+    --window-fill: var(--bg-card-hover);
 }
 
 .blog-card-header {

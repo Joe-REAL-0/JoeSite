@@ -47,17 +47,20 @@
             <div class="top-side left-side">
                 <!-- 返回主页按钮 -->
                 {% block home_btn %}
-                <a id="global-home-btn" class="top-btn cyber-control glass-effect" href="{{ url_for('main.hello') }}" title="返回主页">
+                <a id="global-home-btn" class="top-btn cyber-control" href="{{ url_for('main.hello') }}" title="返回主页">
                     <span class="home-btn-icon"></span>
                 </a>
                 {% endblock %}
             </div>
 
-            <h1 class="cyber-frame cyber-cut glass-effect">{% block page_title %}JoE's Site{% endblock %}</h1>
+            <h1>
+                <span class="title-surface cyber-frame cyber-cut" aria-hidden="true"></span>
+                {% block page_title %}JoE's Site{% endblock %}
+            </h1>
 
             <div class="top-side right-side">
                 <!-- 主题切换按钮 -->
-                <button id="theme-toggle" class="top-btn cyber-control glass-effect" title="切换浅色/深色主题" aria-label="切换主题">
+                <button id="theme-toggle" class="top-btn cyber-control" title="切换浅色/深色主题" aria-label="切换主题">
                     <span class="theme-icon-sun"></span>
                     <span class="theme-icon-moon"></span>
                 </button>
@@ -70,13 +73,13 @@
     <div id="mobile_controls">
         <!-- 移动端返回主页按钮 -->
         {% block home_btn_mobile %}
-        <a id="global-home-btn-mobile" class="top-btn cyber-control glass-effect" href="{{ url_for('main.hello') }}" title="返回主页">
+        <a id="global-home-btn-mobile" class="top-btn cyber-control" href="{{ url_for('main.hello') }}" title="返回主页">
             <span class="home-btn-icon"></span>
         </a>
         {% endblock %}
 
         <!-- 移动端主题切换按钮 -->
-        <button id="theme-toggle-mobile" class="top-btn cyber-control glass-effect" title="切换浅色/深色主题" aria-label="切换主题">
+        <button id="theme-toggle-mobile" class="top-btn cyber-control" title="切换浅色/深色主题" aria-label="切换主题">
             <span class="theme-icon-sun"></span>
             <span class="theme-icon-moon"></span>
         </button>

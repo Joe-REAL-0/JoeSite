@@ -35,7 +35,6 @@ body {
     flex: 1;
     min-height: 0;
     padding: var(--friend-gap);
-    background-color: var(--bg-body);
 }
 
 #friend_link_container {
@@ -54,14 +53,14 @@ body {
     align-items: center;
     gap: var(--friend-row-space);
     padding: var(--friend-row-space);
-    background-color: var(--bg-overlay-inner);
+    --window-fill: var(--bg-overlay-inner);
 }
 
 .FriendLink:hover,
 .FriendLink:focus-within,
 #friend_link_container .FriendLink:active {
     border-color: var(--accent);
-    background-color: var(--accent-bg);
+    --window-fill: var(--accent-bg);
 }
 
 .FriendLink img {

@@ -77,8 +77,6 @@
 
     100% {
         font-size: 36px;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         padding: 0 calc(var(--title-height) / 2 + 10px);
         height: var(--title-height);
         line-height: var(--title-height);
@@ -108,8 +106,6 @@
 
     100% {
         font-size: 26px;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         padding: 0 calc(var(--title-height-mobile) / 2);
         text-align: center;
         width: auto;

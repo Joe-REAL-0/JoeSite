@@ -74,7 +74,7 @@ body {
     border-bottom: var(--border-width-sm) solid var(--border-subtle);
     overflow-wrap: anywhere;
 }
-:is(.manage-layout, .modal) tbody tr:hover { background: var(--glass-bg-hover); }
+:is(.manage-layout, .modal) tbody tr:hover { background: var(--accent-bg); }
 
 :where(.manage-layout, .modal) .cyber-control {
     color: var(--text-primary);

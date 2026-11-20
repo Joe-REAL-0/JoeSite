@@ -189,7 +189,6 @@ body.home-page {
     padding: var(--home-menu-padding);
     box-sizing: border-box;
     color: var(--text-primary);
-    background-color: var(--bg-home-menu);
 }
 .home-menu::backdrop { background-color: var(--bg-home-backdrop); }
 .home-menu-header {

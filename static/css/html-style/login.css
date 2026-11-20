@@ -64,7 +64,6 @@ body {
 .auth-card {
     min-width: 0;
     padding: var(--auth-card-padding);
-    background-color: var(--bg-overlay-inner);
     border: var(--auth-rule-size) solid var(--border-subtle);
 }
 

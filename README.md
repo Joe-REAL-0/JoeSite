@@ -17,6 +17,8 @@ Joe_Site/
 └── README.md      # 项目说明
 ```
 
+内容面板和弹窗共用 `static/css/global.css` 的 `.cyber-frame`。调整 `--window-opacity` 可改变底色的不透明度，调整 `--window-scanline` 可改变终端扫描线的颜色和强度。
+
 ## 快速开始
 
 1. 安装依赖：

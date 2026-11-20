@@ -8,33 +8,28 @@
     --text-muted: light-dark(#48616a, #9bb6bd);
 
     --bg-body: light-dark(#e4edec, #061016);
-    --bg-overlay: light-dark(rgb(239 249 248 / 95%), rgb(6 21 29 / 94%));
+    --bg-overlay: light-dark(#eff9f8, #06151d);
     --bg-card: var(--bg-overlay);
     --bg-card-hover: light-dark(#f7fffe, #132f38);
-    --bg-overlay-inner: light-dark(rgb(0 78 81 / 8%), rgb(109 234 221 / 7%));
+    --bg-overlay-inner: light-dark(#dcebeb, #0d242a);
     --bg-cover: var(--bg-body);
     --character-silhouette: light-dark(#000, #fff);
     --bg-top-column: var(--mask-clear);
-    --bg-home-menu: light-dark(#eff9f8, #06151d);
     --bg-home-backdrop: light-dark(rgb(19 42 49 / 35%), rgb(0 7 13 / 65%));
 
-    --accent-bg: color-mix(in srgb, var(--accent) 13%, transparent);
+    --accent-bg: color-mix(in srgb, var(--accent) 13%, var(--bg-card));
     --accent-glow: color-mix(in srgb, var(--accent) 22%, transparent);
     --accent-border: color-mix(in srgb, var(--accent) 52%, transparent);
     --accent-hover-bg: color-mix(in srgb, var(--accent) 21%, var(--bg-card));
     --accent-hover-border: var(--accent);
     --border-subtle: color-mix(in srgb, var(--accent) 32%, transparent);
-    --glass-bg: var(--bg-overlay-inner);
-    --glass-bg-hover: var(--accent-bg);
-    --glass-border: var(--border-subtle);
-    --glass-blur: var(--space-base);
 
     --success-color: light-dark(#156643, #79e5ad);
     --danger-color: light-dark(#a52646, #ff91a8);
     --warning-color: light-dark(#7c4900, #f3c772);
-    --success-bg: color-mix(in srgb, var(--success-color) 14%, transparent);
-    --danger-bg: color-mix(in srgb, var(--danger-color) 14%, transparent);
-    --warning-bg: color-mix(in srgb, var(--warning-color) 14%, transparent);
+    --success-bg: color-mix(in srgb, var(--success-color) 14%, var(--bg-card));
+    --danger-bg: color-mix(in srgb, var(--danger-color) 14%, var(--bg-card));
+    --warning-bg: color-mix(in srgb, var(--warning-color) 14%, var(--bg-card));
     --success-border: color-mix(in srgb, var(--success-color) 48%, transparent);
     --danger-border: color-mix(in srgb, var(--danger-color) 48%, transparent);
     --warning-border: color-mix(in srgb, var(--warning-color) 48%, transparent);
@@ -141,25 +136,8 @@ body.themed-bg.character-revealed::after {
 /* ===========================
    全局组件类
    =========================== */
-.glass-effect {
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-}
-
 .solid-effect {
     background-color: var(--bg-overlay);
-}
-
-/* 主面板保留溢出行为。切角只用于显式标记的独立展示面。 */
-.cyber-frame {
-    border: var(--border-width-sm) solid var(--border-subtle);
-    border-radius: var(--ui-radius);
-    background-color: var(--bg-card);
-    background-image: var(--frame-trace), var(--frame-trace), var(--frame-signal), var(--frame-hatch);
-    background-position: left top, left top, right bottom, right top;
-    background-size: var(--space-lg) var(--border-width-lg), var(--border-width-lg) var(--space-sm), var(--space-md) var(--border-width-md), var(--space-lg) var(--space-2xs);
-    background-repeat: no-repeat;
-    box-shadow: var(--shadow-card);
 }
 
 .cyber-cut {
