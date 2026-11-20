@@ -93,15 +93,16 @@
 }
 
 /* ===========================
-   背景图片切换
+   纯色底层与背景图片叠加
    =========================== */
-/* 使用 body::before 叠加背景，方便切换 */
 body.themed-bg {
     background-image: none !important;
     background-color: var(--bg-body);
     position: relative;
+    isolation: isolate;
 }
 
+/* 独立层叠上下文确保图片位于纯色底层之上、页面内容之下。 */
 body.themed-bg::before {
     content: '';
     position: fixed;
@@ -110,61 +111,11 @@ body.themed-bg::before {
     width: 100%;
     height: 100%;
     z-index: -1;
+    background-image: url('../images/backgrounds/bkg-h.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    transition: opacity 0.5s ease;
     pointer-events: none;
-}
-
-/* 暗色主题背景 */
-body.themed-bg::before {
-    background-image: url('../images/backgrounds/bkg-h\ \(1\).webp');
-}
-
-/* 浅色主题背景 — 通过 media query */
-@media (prefers-color-scheme: light) {
-    body.themed-bg:not([data-body-theme="dark"])::before {
-        background-image: url('../images/backgrounds/bkg-h\ \(2\).webp');
-    }
-}
-
-/* 手动浅色主题背景 */
-body.themed-bg[data-body-theme="light"]::before {
-    background-image: url('../images/backgrounds/bkg-h\ \(2\).webp');
-}
-
-/* 手动暗色主题背景 */
-body.themed-bg[data-body-theme="dark"]::before {
-    background-image: url('../images/backgrounds/bkg-h\ \(1\).webp');
-}
-
-/* ===========================
-   移动端背景图片切换
-   =========================== */
-@media screen and (max-width: 768px) {
-
-    /* 暗色主题 — 移动端竖版背景 */
-    body.themed-bg::before {
-        background-image: url('../images/backgrounds/bkg-v\ \(1\).webp');
-    }
-
-    /* 手动暗色 — 移动端 */
-    body.themed-bg[data-body-theme="dark"]::before {
-        background-image: url('../images/backgrounds/bkg-v\ \(1\).webp');
-    }
-
-    /* 浅色主题 — 移动端（系统偏好） */
-    @media (prefers-color-scheme: light) {
-        body.themed-bg:not([data-body-theme="dark"])::before {
-            background-image: url('../images/backgrounds/bkg-v\ \(3\).webp');
-        }
-    }
-
-    /* 手动浅色 — 移动端 */
-    body.themed-bg[data-body-theme="light"]::before {
-        background-image: url('../images/backgrounds/bkg-v\ \(3\).webp');
-    }
 }
 
 /* ===========================

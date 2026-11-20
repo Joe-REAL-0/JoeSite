@@ -3,11 +3,7 @@
    =========================== */
 body {
     /* --- Hero Section --- */
-    --hero-icon-size: var(--circle-size-md);
-
-    --link-column-gap: var(--space-xs);
-    --social-tile-padding: var(--space-xs) 0;
-    --social-tile-gap: var(--space-xs);
+    --link-column-gap: var(--space-sm);
     --hero-width: var(--panel-width-md);
 
     --hero-content-padding: var(--space-lg);
@@ -153,7 +149,7 @@ html::-webkit-scrollbar {
 /* 社交链接 */
 #link_column {
     display: grid;
-    grid-template-columns: repeat(5, minmax(max-content, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: var(--link-column-gap);
     width: 100%;
     box-sizing: border-box;
@@ -165,29 +161,64 @@ html::-webkit-scrollbar {
 }
 
 .LinkContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: var(--social-tile-padding);
-    gap: var(--social-tile-gap);
-    background-color: var(--bg-overlay-inner);
-    border: var(--border-width-sm) solid var(--border-subtle);
-    color: var(--text-secondary);
+    display: grid;
+    place-items: center;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    box-sizing: border-box;
+    background-color: var(--link-bg);
+    border: none;
+    color: var(--link-color);
     text-decoration: none;
-    font: var(--font-size-xs) monospace;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.link-qq {
+    --link-bg: #ffffff;
+    --link-color: #7dd3fc;
+}
+
+.link-bilibili {
+    --link-bg: #fb7299;
+    --link-color: #ffffff;
+}
+
+.link-github {
+    --link-bg: #444444;
+    --link-color: #eeeeee;
+}
+
+.link-minecraft {
+    --link-bg: #3b6b35;
+    --link-color: #000000;
+}
+
+.link-itch {
+    --link-bg: #fa5c5c;
+    --link-color: #ffffff;
+}
+
+/* 使用 SVG 遮罩，让图标颜色独立于按钮底色。 */
 .LinkIcon {
-    width: var(--hero-icon-size);
-    height: var(--hero-icon-size);
-    max-width: 80%;
-    object-fit: contain;
+    width: 70%;
+    height: 70%;
+    background-color: currentColor;
+    -webkit-mask: var(--link-icon) center / contain no-repeat;
+    mask: var(--link-icon) center / contain no-repeat;
 }
 
-.LinkContainer:hover {
-    background-color: var(--accent-bg);
-    color: var(--accent);
+.LinkContainer:hover,
+.LinkContainer:focus-visible {
+    transform: scale(1.2);
+    z-index: 1;
+    box-shadow: 0 4px 12px var(--shadow-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .LinkContainer {
+        transition: none;
+    }
 }
 
 /* 滚动指示器 — 面板外部，绝对定位在hero底部 */
@@ -375,8 +406,7 @@ html::-webkit-scrollbar {
    =========================== */
 @media screen and (max-width: 768px) {
     body {
-        --hero-icon-size: var(--space-lg);
-        --link-column-gap: var(--space-2xs);
+        --link-column-gap: var(--space-xs);
         --hero-content-padding: var(--space-sm);
         --hero-content-gap: var(--space-sm);
 
@@ -396,10 +426,6 @@ html::-webkit-scrollbar {
     #welcome_message_2 {
         font-size: var(--font-size-3xl);
         letter-spacing: 2px;
-    }
-
-    .LinkContainer {
-        font-size: calc(var(--font-size-xs) - var(--border-width-sm));
     }
 
     .scroll-indicator {

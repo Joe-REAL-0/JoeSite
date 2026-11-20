@@ -67,31 +67,31 @@
         <!-- 社交链接 -->
         <div class="link-heading">站外链接</div>
         <nav id="link_column" aria-label="站外链接">
-            <a class="LinkContainer cyber-control"
-                href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105">
-                <img alt="" title="点击加入我的QQ聊天群" class="LinkIcon"
-                    src="{{ url_for('static',filename = 'images/link_image/QQ_Icon.jpg' ) }}">
-                <span>QQ 群</span>
+            <a class="LinkContainer cyber-control link-qq"
+                href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105"
+                aria-label="QQ 群" title="点击加入我的QQ聊天群">
+                <span class="LinkIcon" aria-hidden="true"
+                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/QQ.svg') }}');"></span>
             </a>
-            <a class="LinkContainer cyber-control" href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0">
-                <img alt="" title="很没有意思的B站主页" class="LinkIcon"
-                    src="{{ url_for('static',filename = 'images/link_image/bilibili_Icon.jpg' ) }}">
-                <span>Bilibili</span>
+            <a class="LinkContainer cyber-control link-bilibili" href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0"
+                aria-label="Bilibili" title="很没有意思的B站主页">
+                <span class="LinkIcon" aria-hidden="true"
+                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/bilibili.svg') }}');"></span>
             </a>
-            <a class="LinkContainer cyber-control" href="https://github.com/Joe-REAL-0/">
-                <img alt="" title="乱糟糟很丢人的GitHub主页" class="LinkIcon"
-                    src="{{ url_for('static',filename = 'images/link_image/GitHub_Icon.jpg' ) }}">
-                <span>GitHub</span>
+            <a class="LinkContainer cyber-control link-github" href="https://github.com/Joe-REAL-0/"
+                aria-label="GitHub" title="乱糟糟很丢人的GitHub主页">
+                <span class="LinkIcon" aria-hidden="true"
+                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/github.svg') }}');"></span>
             </a>
-            <a class="LinkContainer cyber-control" href="https://play.mcmod.cn/sv20187377.html">
-                <img alt="" title="我运营的Minecraft服务器" class="LinkIcon"
-                    src="{{ url_for('static',filename = 'images/link_image/Minecraft_Icon.jpg' ) }}">
-                <span>Minecraft</span>
+            <a class="LinkContainer cyber-control link-minecraft" href="https://play.mcmod.cn/sv20187377.html"
+                aria-label="Minecraft" title="我运营的Minecraft服务器">
+                <span class="LinkIcon" aria-hidden="true"
+                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/minecraft.svg') }}');"></span>
             </a>
-            <a class="LinkContainer cyber-control" href="https://joe-real-0.itch.io/">
-                <img alt="" title="itch主页" class="LinkIcon"
-                    src="{{ url_for('static',filename = 'images/link_image/itch_Icon.jpg' ) }}">
-                <span>itch.io</span>
+            <a class="LinkContainer cyber-control link-itch" href="https://joe-real-0.itch.io/"
+                aria-label="itch.io" title="itch主页">
+                <span class="LinkIcon" aria-hidden="true"
+                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/itch-io.svg') }}');"></span>
             </a>
         </nav>
     </div>
