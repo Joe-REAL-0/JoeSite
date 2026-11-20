@@ -13,6 +13,7 @@
     --bg-card-hover: light-dark(#f7fffe, #132f38);
     --bg-overlay-inner: light-dark(rgb(0 78 81 / 8%), rgb(109 234 221 / 7%));
     --bg-cover: var(--bg-body);
+    --character-silhouette: light-dark(#000, #fff);
     --bg-top-column: var(--bg-card);
 
     --accent-bg: color-mix(in srgb, var(--accent) 13%, transparent);
@@ -103,19 +104,36 @@ body.themed-bg {
 }
 
 /* 独立层叠上下文确保图片位于纯色底层之上、页面内容之下。 */
-body.themed-bg::before {
+body.themed-bg::before,
+body.themed-bg::after {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: var(--cover-zero);
+    left: var(--cover-zero);
+    width: var(--cover-full);
+    height: var(--character-background-height);
     z-index: -1;
+    pointer-events: none;
+}
+
+body.themed-bg::before {
     background-image: url('../images/backgrounds/bkg-h.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    pointer-events: none;
+}
+
+/* 与原图使用同一透明轮廓和定位；淡出主题剪影层，原图自然显现。 */
+body.themed-bg::after {
+    background-color: var(--character-silhouette);
+    -webkit-mask: url('../images/backgrounds/bkg-h.png') center / cover no-repeat;
+    mask: url('../images/backgrounds/bkg-h.png') center / cover no-repeat;
+    opacity: 1;
+    transition: opacity 0.85s ease-in-out 0.16s;
+}
+
+body.themed-bg.character-revealed::after {
+    opacity: 0;
 }
 
 /* ===========================

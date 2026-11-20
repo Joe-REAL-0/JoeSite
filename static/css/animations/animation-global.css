@@ -54,11 +54,13 @@
    =========================== */
 @keyframes titleMove {
     0% {
-        top: 50%;
+        top: var(--title-loading-top);
+        transform: translate(calc(-1 * var(--cover-half)), calc(-1 * var(--cover-full)));
     }
 
     100% {
-        top: 12%;
+        top: var(--title-rest-top);
+        transform: translate(calc(-1 * var(--cover-half)), calc(-1 * var(--cover-half)));
     }
 }
 
@@ -83,11 +85,13 @@
    =========================== */
 @keyframes titleMoveMobile {
     0% {
-        top: 50%;
+        top: var(--title-loading-top);
+        transform: translate(calc(-1 * var(--cover-half)), calc(-1 * var(--cover-full)));
     }
 
     100% {
-        top: calc(5% + 10px);
+        top: var(--title-rest-top-mobile);
+        transform: translate(calc(-1 * var(--cover-half)), calc(-1 * var(--cover-half)));
     }
 }
 
@@ -107,4 +111,44 @@
         line-height: var(--title-height-mobile);
         box-sizing: border-box;
     }
+}
+/* 先闪断，再提亮成切口；避免整屏闪白。 */
+@keyframes coverLineFlash {
+    0%, 100% { opacity: 1; }
+    35% { opacity: 0.15; }
+    70%, 100% {
+        background-color: var(--text-primary);
+        box-shadow: var(--cover-zero) var(--cover-zero) var(--space-xs) var(--accent),
+                    var(--cover-zero) var(--cover-zero) var(--space-md) var(--accent-glow);
+    }
+}
+
+/* 先裂开一条窄缝，再迅速拉开，最后减速离场。 */
+@keyframes coverSplitTop {
+    0% {
+        transform: translateY(var(--cover-zero));
+        animation-timing-function: ease-out;
+    }
+    22% {
+        transform: translateY(calc(-1 * var(--cover-cut-gap)));
+        animation-timing-function: cubic-bezier(0.65, 0, 0.2, 1);
+    }
+    100% { transform: translateY(calc(-1 * var(--cover-exit))); }
+}
+
+@keyframes coverSplitBottom {
+    0% {
+        transform: translateY(var(--cover-zero));
+        animation-timing-function: ease-out;
+    }
+    22% {
+        transform: translateY(var(--cover-cut-gap));
+        animation-timing-function: cubic-bezier(0.65, 0, 0.2, 1);
+    }
+    100% { transform: translateY(var(--cover-exit)); }
+}
+
+@keyframes coverCutEdge {
+    0%, 30% { opacity: 1; }
+    100% { opacity: 0; }
 }

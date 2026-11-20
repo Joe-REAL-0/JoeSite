@@ -72,7 +72,7 @@ html::-webkit-scrollbar {
    =========================== */
 .hero-section {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
 }
 
@@ -83,7 +83,6 @@ html::-webkit-scrollbar {
     gap: var(--hero-content-gap);
     text-align: left;
     padding: var(--hero-content-padding);
-    margin-inline-start: max(var(--space-lg), calc((100% - var(--max-width-lg)) / 2));
     width: min(var(--hero-width), 48%);
     box-sizing: border-box;
     opacity: 0;
@@ -415,7 +414,6 @@ html::-webkit-scrollbar {
 
     .hero-content {
         width: min(var(--hero-width), calc(100% - var(--space-md)));
-        margin: var(--space-xl) auto 0;
     }
 
     #welcome_message_1 {

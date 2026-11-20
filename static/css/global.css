@@ -7,6 +7,14 @@
    Design Tokens (global)
    =========================== */
 :root {
+    --cover-full: 100%;
+    --cover-half: 50%;
+    --cover-zero: 0;
+    --title-rest-top: 12%;
+    --title-rest-top-mobile: calc(5% + 10px);
+    --cover-exit: 110%;
+    --cover-split-duration: 0.42s;
+
     /* 间距 */
     --space-2xs: 4px;
     --space-xs: 8px;
@@ -81,45 +89,111 @@ body {
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    --local-mask-height-top: var(--mask-height-top);
     --ui-radius: var(--frame-radius);
-}
-
-/* ===========================
-   顶部模糊遮罩
-   =========================== */
-#top_blur_mask {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--local-mask-height-top);
-    z-index: 999;
-    pointer-events: none;
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    -webkit-mask-image: linear-gradient(to bottom, var(--mask-solid) 40%, var(--mask-clear) 100%);
-    mask-image: linear-gradient(to bottom, var(--mask-solid) 40%, var(--mask-clear) 100%);
+    --cover-height: var(--cover-full);
+    --character-background-height: var(--cover-full);
+    --cover-panel-height: var(--cover-half);
+    --cover-line-height: var(--border-width-sm);
+    --cover-cut-height: var(--border-width-sm);
+    --cover-cut-gap: var(--space-2xs);
+    --title-loading-top: calc(var(--cover-half) - var(--space-md));
 }
 
 /* ===========================
    Loading Cover & Title
    =========================== */
 #cover {
+    --loading-progress: 0;
     position: fixed;
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg-cover);
-    z-index: 1000;
-    /* 确保cover覆盖所有元素 */
+    inset: var(--cover-zero);
+    height: var(--cover-height);
+    z-index: 1002;
+    overflow: hidden;
+    pointer-events: auto;
 }
 
-#cover.resources-loaded {
-    animation: fadeOut 0.6s 0.2s forwards;
+#cover .cover-half {
+    position: absolute;
+    left: var(--cover-zero);
+    width: var(--cover-full);
+    height: var(--cover-panel-height);
+    background-color: var(--bg-cover);
+    will-change: transform;
 }
+
+#cover .cover-top { top: var(--cover-zero); }
+#cover .cover-bottom { bottom: var(--cover-zero); }
+
+#cover .cover-progress {
+    position: absolute;
+    top: var(--cover-half);
+    width: var(--cover-full);
+    height: var(--cover-line-height);
+    color: var(--accent);
+}
+
+#cover .cover-line {
+    position: absolute;
+    width: var(--cover-half);
+    height: var(--cover-line-height);
+    background-color: var(--accent);
+    transform: scaleX(var(--loading-progress));
+}
+
+#cover .cover-line-left {
+    left: var(--cover-zero);
+    transform-origin: left center;
+}
+
+#cover .cover-line-right {
+    right: var(--cover-zero);
+    transform-origin: right center;
+}
+
+#cover-percentage {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--cover-half);
+    transform: translateX(calc(-1 * var(--cover-half)));
+    font-family: monospace;
+    font-size: var(--font-size-sm);
+    font-variant-numeric: tabular-nums;
+}
+
+#cover.progress-complete .cover-line {
+    animation: coverLineFlash 0.12s linear;
+}
+
+/* 切口附着在两块遮罩的内边缘，随上下两半一起离场。 */
+#cover .cover-half::after {
+    content: "";
+    position: absolute;
+    left: var(--cover-zero);
+    width: var(--cover-full);
+    height: var(--cover-cut-height);
+    background-color: var(--text-primary);
+    box-shadow: var(--cover-zero) var(--cover-zero) var(--space-xs) var(--accent),
+                var(--cover-zero) var(--cover-zero) var(--space-md) var(--accent-glow);
+    opacity: 0;
+}
+
+#cover .cover-top::after { bottom: var(--cover-zero); }
+#cover .cover-bottom::after { top: var(--cover-zero); }
+
+#cover.resources-loaded .cover-half::after {
+    animation: coverCutEdge var(--cover-split-duration) linear both;
+}
+
+#cover.resources-loaded .cover-top {
+    animation: coverSplitTop var(--cover-split-duration) both;
+}
+
+#cover.resources-loaded .cover-bottom {
+    animation: coverSplitBottom var(--cover-split-duration) both;
+}
+
+#cover.resources-loaded .cover-progress { visibility: hidden; }
+#cover.resources-loaded { pointer-events: none; }
 
 #title_container {
     display: flex;
@@ -129,16 +203,16 @@ body {
     align-items: center;
     /* 水平居中排列子元素 */
     position: fixed;
-    top: 50%;
+    top: var(--title-loading-top);
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(calc(-1 * var(--cover-half)), calc(-1 * var(--cover-full)));
     width: 100%;
     height: auto;
     min-height: 120px;
     /* 确保容器有足够高度容纳两个元素 */
-    z-index: 1001;
+    z-index: 1003;
     opacity: 0;
-    animation: slideIn 0.5s forwards;
+    animation: fadeIn 0.3s forwards;
     /* 添加动画效果 */
 }
 
@@ -182,7 +256,7 @@ body {
 
 #title_container.resources-loaded {
     opacity: 1;
-    animation: titleMove 0.5s 0.2s forwards;
+    animation: titleMove 0.5s 0.2s both;
 }
 
 #loading_text.resources-loaded {
@@ -204,7 +278,7 @@ body {
     }
 
     #title_container.resources-loaded {
-        animation: titleMoveMobile 0.5s 0.2s forwards;
+        animation: titleMoveMobile 0.5s 0.2s both;
         width: calc(100% - 40px);
         justify-content: flex-start;
         min-height: auto;

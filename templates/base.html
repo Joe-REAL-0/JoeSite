@@ -32,11 +32,16 @@
 </head>
 
 <body class="themed-bg">
-    <!-- 顶部模糊遮罩 -->
-    <div id="top_blur_mask"></div>
-
     <!-- 加载遮罩 -->
-    <div id="cover"></div>
+    <div id="cover" role="progressbar" aria-label="资源加载进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="cover-half cover-top" aria-hidden="true"></div>
+        <div class="cover-half cover-bottom" aria-hidden="true"></div>
+        <div class="cover-progress" aria-hidden="true">
+            <span class="cover-line cover-line-left"></span>
+            <span class="cover-line cover-line-right"></span>
+            <span id="cover-percentage">0%</span>
+        </div>
+    </div>
     <div id="title_container">
         <div id="top_column">
             <div class="top-side left-side">

@@ -36,6 +36,7 @@ class GlobalResourceLoader {
     start(resources) {
         this.requiredResources = resources;
         this.totalResources = resources.length;
+        this.animateProgress();
         this.loadAllResources();
     }
 
@@ -133,47 +134,49 @@ class GlobalResourceLoader {
         return 'Arial';
     }
 
-    async loadAllResources() {
-        if (this.requiredResources.length === 0) {
-            this.triggerAnimation();
-            return;
-        }
-
-        let completedCount = 0;
-        const promises = this.requiredResources.map((url, index) =>
-            this.checkResource(url).then(
-                (loadedUrl) => {
-                    this.loadedResources.add(loadedUrl);
-                    completedCount++;
-                    return loadedUrl;
-                },
-                (failedUrl) => {
-                    completedCount++;
-                    return failedUrl; // 返回失败的URL以继续处理
-                }
-            ).catch(error => {
-                completedCount++;
-                return url; // 即使异常也返回URL继续处理
-            })
-        );
-
-        try {
-            const results = await Promise.allSettled(promises); // 使用allSettled代替all
-
-            // 不管成功失败都触发动画
-            this.triggerAnimation();
-        } catch (error) {
-            // 即使有错误也触发动画，避免永久等待
-            setTimeout(() => this.triggerAnimation(), 2000);
-        }
-
-        // 备用机制：如果15秒内没有触发动画，强制触发
-        setTimeout(() => {
-            const titleH1 = document.querySelector('#title_container h1');
-            if (titleH1 && !titleH1.classList.contains('resources-loaded')) {
-                this.triggerAnimation();
+    animateProgress() {
+        const cover = document.getElementById('cover');
+        const percentage = document.getElementById('cover-percentage');
+        this._targetProgress = 0;
+        let displayed = 0;
+        let previousTime;
+        // 从首个可绘制帧计时，缓存命中或空列表也至少走满 100ms。
+        const frame = (time) => {
+            if (previousTime === undefined) previousTime = time;
+            displayed = Math.min(this._targetProgress, displayed + (time - previousTime) / 100);
+            previousTime = time;
+            const percent = Math.floor(displayed * 100);
+            if (cover) {
+                cover.style.setProperty('--loading-progress', displayed);
+                cover.setAttribute('aria-valuenow', percent);
             }
-        }, 15000);
+            if (percentage) percentage.textContent = `${percent}%`;
+            if (displayed < 1) {
+                requestAnimationFrame(frame);
+            } else {
+                // 留一帧绘制完整线条和 100%，然后闪烁，再分开遮罩。
+                requestAnimationFrame(() => {
+                    if (cover) cover.classList.add('progress-complete');
+                    setTimeout(() => this.triggerAnimation(), 120);
+                });
+            }
+        };
+        requestAnimationFrame(frame);
+    }
+
+    async loadAllResources() {
+        let completedCount = 0;
+        await Promise.allSettled(this.requiredResources.map(async (url) => {
+            try {
+                const loadedUrl = await this.checkResource(url);
+                this.loadedResources.add(loadedUrl);
+            } finally {
+                completedCount++;
+                // 失败、超时沿用原有放行策略，也计入已处理资源。
+                this._targetProgress = completedCount / this.totalResources;
+            }
+        }));
+        this._targetProgress = 1;
     }
 
     triggerAnimation() {
@@ -198,7 +201,17 @@ class GlobalResourceLoader {
 
             title_container.classList.add('resources-loaded');
             titleH1.classList.add('resources-loaded');
+            // 按实际动画结束清理，避免截断切口离场效果。
+            const removeCover = (event) => {
+                if (event && event.animationName !== 'coverSplitBottom') return;
+                cover.removeEventListener('animationend', removeCover);
+                cover.remove();
+                document.body.classList.add('character-revealed');
+            };
+            cover.addEventListener('animationend', removeCover);
             cover.classList.add('resources-loaded');
+            // 动画被外部样式禁用时仍能清理遮罩。
+            setTimeout(() => removeCover(), 1000);
             loadingText.classList.add('resources-loaded');
         }
 
