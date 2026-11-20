@@ -1,103 +1,29 @@
-// 首页特有逻辑
-// ResourceLoadManager 已移至 global-loader.js
-
-// 滚动指示器点击处理
-function setupScrollIndicator() {
-    const scrollIndicator = document.getElementById('scroll_indicator');
-    if (scrollIndicator) {
-        scrollIndicator.addEventListener('click', () => {
-            const contentSection = document.getElementById('content_section');
-            if (contentSection) {
-                contentSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-}
-
-// 欢迎语动画
-function triggerWelcomeMessages() {
-    const welcomeMessage1 = document.getElementById('welcome_message_1');
-    const welcomeMessage2 = document.getElementById('welcome_message_2');
-
-    if (welcomeMessage1) {
-        welcomeMessage1.classList.add('welcome-start');
-    }
-    
-    if (welcomeMessage2) {
-        welcomeMessage2.classList.add('welcome-start');
-    }
-}
-
-// 设置 IntersectionObserver 监听第二屏
-function setupScrollObserver() {
-    const heroSection = document.getElementById('hero_section');
-    const contentSection = document.getElementById('content_section');
-    const heroContent = document.getElementById('hero_content');
-    const mainScreen = document.getElementById('main_screen');
-
-    if (!heroSection || !contentSection || !heroContent || !mainScreen) return;
-
-    let contentLoaded = false;
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // 进入视口 → 对应内容容器淡入
-                if (entry.target === heroSection) {
-                    heroContent.classList.remove('section-fade-out');
-                } else if (entry.target === contentSection) {
-                    mainScreen.classList.remove('section-fade-out');
-                    // 第二屏首次进入时触发内容入场动画
-                    if (!contentLoaded) {
-                        mainScreen.classList.add('loaded');
-                        contentLoaded = true;
-                    }
-                }
-            } else {
-                // 离开视口 → 对应内容容器淡出
-                if (entry.target === heroSection) {
-                    heroContent.classList.add('section-fade-out');
-                } else if (entry.target === contentSection) {
-                    mainScreen.classList.add('section-fade-out');
-                }
-            }
-        });
-    }, { threshold: 0.15 });
-
-    observer.observe(heroSection);
-    observer.observe(contentSection);
-}
-
-// 首页初始化 — 注册到全局加载器的回调中
+// 首页只在公共加载器完成后显现；公共标题、遮罩和角色显现逻辑保持不变。
 function initializeHomePage() {
-    // 设置滚动指示器
-    setupScrollIndicator();
-
-    // 注册加载完成后的回调
-    window.globalLoader.onReady(() => {
-        // Hero 首屏内容入场
-        const heroContent = document.getElementById('hero_content');
-        const linkColumn = document.getElementById('link_column');
-        const scrollIndicator = document.getElementById('scroll_indicator');
-
-        if (heroContent) heroContent.classList.add('loaded');
-        if (linkColumn) linkColumn.classList.add('loaded');
-        if (scrollIndicator) scrollIndicator.classList.add('loaded');
-
-        // 触发欢迎语动画
-        triggerWelcomeMessages();
-
-        // 入场动画完成后，启用 section 切换的淡入淡出过渡
-        setTimeout(() => {
-            if (heroContent) heroContent.classList.add('section-fade-ready');
-            const mainScreen = document.getElementById('main_screen');
-            if (mainScreen) mainScreen.classList.add('section-fade-ready');
-        }, 1000);
-
-        // 设置 IntersectionObserver 监听第二屏
-        setupScrollObserver();
-    });
+    const trigger = document.getElementById('home_menu_trigger');
+    const menu = document.getElementById('home_menu');
+    if (trigger && menu) {
+        trigger.addEventListener('click', () => {
+            if (!menu.open) {
+                menu.showModal();
+                trigger.setAttribute('aria-expanded', 'true');
+            }
+        });
+        menu.addEventListener('close', () => {
+            trigger.setAttribute('aria-expanded', 'false');
+            if (trigger.getClientRects().length) trigger.focus();
+        });
+        menu.addEventListener('click', event => {
+            if (event.target !== menu) return;
+            const rect = menu.getBoundingClientRect();
+            if (event.clientX < rect.left || event.clientX > rect.right ||
+                event.clientY < rect.top || event.clientY > rect.bottom) menu.close();
+        });
+        const compactLayout = window.matchMedia('(max-width: 1024px), (max-height: 700px), (max-aspect-ratio: 3/2)');
+        compactLayout.addEventListener('change', event => {
+            if (!event.matches && menu.open) menu.close();
+        });
+    }
+    window.globalLoader.onReady(() => document.body.classList.add('home-ready'));
 }
-
-// 导出到全局作用域
 window.initializeHomePage = initializeHomePage;

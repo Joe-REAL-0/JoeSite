@@ -10,8 +10,8 @@
     --cover-full: 100%;
     --cover-half: 50%;
     --cover-zero: 0;
-    --title-rest-top: 12%;
-    --title-rest-top-mobile: calc(5% + 10px);
+    --title-rest-top: var(--cover-zero);
+    --title-rest-top-mobile: var(--cover-zero);
     --cover-exit: 110%;
     --cover-split-duration: 0.42s;
 
@@ -64,6 +64,18 @@
     --panel-width-sm: 95%;
     --panel-height-sm: 65vh;
 
+    /* bkg-h.png 为 1670 × 941；cover 后剑下方、尾巴右侧的留白。 */
+    --home-background-ratio: calc(1670 / 941);
+    --home-safe-x-offset: 0.02;
+    --home-safe-y-offset: 0.12;
+    --home-nav-x-offset: 0.29;
+    --home-headline-size: clamp(32px, 4.5vw, 72px);
+    --home-headline-size-mobile: clamp(24px, 7vw, 40px);
+    --home-menu-width: 420px;
+    --home-menu-max-height: 85dvh;
+    --home-viewport-width: 100vw;
+    --home-viewport-height: 100vh;
+
     /* 边框宽度 (Border Widths) */
     --border-width-sm: 1px;
     --border-width-md: 2px;
@@ -97,6 +109,7 @@ body {
     --cover-cut-height: var(--border-width-sm);
     --cover-cut-gap: var(--space-2xs);
     --title-loading-top: calc(var(--cover-half) - var(--space-md));
+    --top-column-padding: var(--space-md) var(--space-base);
 }
 
 /* ===========================
@@ -212,7 +225,7 @@ body {
     /* 确保容器有足够高度容纳两个元素 */
     z-index: 1003;
     opacity: 0;
-    animation: fadeIn 0.3s forwards;
+    animation: globalTitleFadeIn 0.3s forwards;
     /* 添加动画效果 */
 }
 
@@ -241,7 +254,7 @@ body {
     width: 100%;
     color: var(--text-muted);
     opacity: 0;
-    animation: fadeIn 0.3s 0.5s forwards;
+    animation: globalTitleFadeIn 0.3s 0.5s forwards;
     z-index: 1001;
     letter-spacing: 3px;
     font-family: 'YuanTi';
@@ -256,6 +269,9 @@ body {
 
 #title_container.resources-loaded {
     opacity: 1;
+    justify-content: flex-start;
+    min-height: var(--cover-zero);
+    pointer-events: none;
     animation: titleMove 0.5s 0.2s both;
 }
 
@@ -268,6 +284,10 @@ body {
    移动端适配
    =========================== */
 @media screen and (max-width: 768px) {
+    body {
+        --top-column-padding: var(--space-sm) var(--space-base);
+    }
+
     #title_container h1 {
         font-size: 48px;
         padding: 10px 20px;
@@ -279,7 +299,7 @@ body {
 
     #title_container.resources-loaded {
         animation: titleMoveMobile 0.5s 0.2s both;
-        width: calc(100% - 40px);
+        width: var(--cover-full);
         justify-content: flex-start;
         min-height: auto;
     }
@@ -288,10 +308,6 @@ body {
         font-size: 13px;
     }
 
-    #top_column {
-        display: contents;
-        /* on mobile, make top_column layout invisible */
-    }
 }
 
 /* ===========================
@@ -303,6 +319,14 @@ body {
     align-items: center;
     width: 100%;
     z-index: 1001;
+}
+
+/* 标题移到顶部后形成通栏，保留标题与按钮原有的尺寸和动画。 */
+#title_container.resources-loaded #top_column {
+    background-color: var(--bg-top-column);
+    box-sizing: border-box;
+    padding: var(--top-column-padding);
+    pointer-events: auto;
 }
 
 .top-side {

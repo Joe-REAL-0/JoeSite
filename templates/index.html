@@ -36,6 +36,7 @@
 {% endblock %}
 
 {% block title %}Joe的个人小站 | 主页{% endblock %}
+{% block body_class %}home-page{% endblock %}
 
 {% block preload %}
 {% endblock %}
@@ -55,110 +56,69 @@
 {% block home_btn_mobile %}{% endblock %}
 
 {% block content %}
-<!-- ========== Section 1: Hero 首屏 ========== -->
-<section class="page-section hero-section" id="hero_section">
-    <div class="hero-content cyber-frame cyber-cut glass-effect" id="hero_content">
-        <!-- 欢迎语（纯中文，2行） -->
-        <div class="welcome_messages_container">
-            <p id="welcome_message_1" class="welcome-line">{{ nickname|default('你好') }}，欢迎来到</p>
-            <p id="welcome_message_2" class="welcome-line">我的世界</p>
-        </div>
+{% macro site_navigation() %}
+<nav class="home-nav" aria-label="站内导航">
+    <a href="{{ url_for('main.introduce') }}"><span>角色介绍</span><span aria-hidden="true">↗</span></a>
+    <a href="{{ url_for('blog.blog_list') }}"><span>我的博客</span><span aria-hidden="true">↗</span></a>
+    <a href="{{ url_for('message.friend_link') }}"><span>友情链接</span><span aria-hidden="true">↗</span></a>
+    <a href="https://cloud.furryjoe.site"><span>我的网盘</span><span aria-hidden="true">↗</span></a>
+</nav>
+<div class="home-account">
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('user.user_info') }}">Joe 通行证 · 个人信息</a>
+    <a href="{{ url_for('auth.login') }}">注销账号 ↗</a>
+    {% else %}
+    <a href="{{ url_for('auth.login') }}">Joe 通行证 · 登录 ↗</a>
+    {% endif %}
+</div>
+{% endmacro %}
 
-        <!-- 社交链接 -->
-        <div class="link-heading">站外链接</div>
-        <nav id="link_column" aria-label="站外链接">
-            <a class="LinkContainer cyber-control link-qq"
-                href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105"
-                aria-label="QQ 群" title="点击加入我的QQ聊天群">
-                <span class="LinkIcon" aria-hidden="true"
-                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/QQ.svg') }}');"></span>
-            </a>
-            <a class="LinkContainer cyber-control link-bilibili" href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0"
-                aria-label="Bilibili" title="很没有意思的B站主页">
-                <span class="LinkIcon" aria-hidden="true"
-                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/bilibili.svg') }}');"></span>
-            </a>
-            <a class="LinkContainer cyber-control link-github" href="https://github.com/Joe-REAL-0/"
-                aria-label="GitHub" title="乱糟糟很丢人的GitHub主页">
-                <span class="LinkIcon" aria-hidden="true"
-                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/github.svg') }}');"></span>
-            </a>
-            <a class="LinkContainer cyber-control link-minecraft" href="https://play.mcmod.cn/sv20187377.html"
-                aria-label="Minecraft" title="我运营的Minecraft服务器">
-                <span class="LinkIcon" aria-hidden="true"
-                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/minecraft.svg') }}');"></span>
-            </a>
-            <a class="LinkContainer cyber-control link-itch" href="https://joe-real-0.itch.io/"
-                aria-label="itch.io" title="itch主页">
-                <span class="LinkIcon" aria-hidden="true"
-                    style="--link-icon: url('{{ url_for('static', filename='images/link_image/itch-io.svg') }}');"></span>
-            </a>
+<main class="home-poster" id="home_poster">
+    <aside class="home-directory" aria-label="探索小站">
+        <p class="home-eyebrow">EXPLORE / JOE</p>
+        {{ site_navigation() }}
+    </aside>
+
+    <section class="home-intro" aria-labelledby="welcome_message_2">
+        <button type="button" class="home-menu-trigger cyber-control" id="home_menu_trigger"
+            aria-haspopup="dialog" aria-controls="home_menu" aria-expanded="false">探索小站 <span aria-hidden="true">↗</span></button>
+        <p class="home-welcome" id="welcome_message_1">{{ nickname|default('你好') }}，欢迎来到</p>
+        <h2 class="home-headline" id="welcome_message_2">我的世界</h2>
+        <p class="home-caption">角色 · 创作 · 生活</p>
+        <nav class="home-socials" id="link_column" aria-label="站外链接">
+                <a class="home-social-link cyber-control" href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105" aria-label="QQ 群" title="QQ 群">
+                    <span class="home-social-icon" aria-hidden="true"
+                        style="--social-icon: url('{{ url_for('static', filename='images/link_image/QQ.svg') }}');"></span>
+                </a>
+                <a class="home-social-link cyber-control" href="https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0" aria-label="Bilibili" title="Bilibili">
+                    <span class="home-social-icon" aria-hidden="true"
+                        style="--social-icon: url('{{ url_for('static', filename='images/link_image/bilibili.svg') }}');"></span>
+                </a>
+                <a class="home-social-link cyber-control" href="https://github.com/Joe-REAL-0/" aria-label="GitHub" title="GitHub">
+                    <span class="home-social-icon" aria-hidden="true"
+                        style="--social-icon: url('{{ url_for('static', filename='images/link_image/github.svg') }}');"></span>
+                </a>
+                <a class="home-social-link cyber-control" href="https://play.mcmod.cn/sv20187377.html" aria-label="Minecraft" title="Minecraft">
+                    <span class="home-social-icon" aria-hidden="true"
+                        style="--social-icon: url('{{ url_for('static', filename='images/link_image/minecraft.svg') }}');"></span>
+                </a>
+                <a class="home-social-link cyber-control" href="https://joe-real-0.itch.io/" aria-label="itch.io" title="itch.io">
+                    <span class="home-social-icon" aria-hidden="true"
+                        style="--social-icon: url('{{ url_for('static', filename='images/link_image/itch-io.svg') }}');"></span>
+                </a>
         </nav>
+    </section>
+</main>
+
+<dialog class="home-menu cyber-frame" id="home_menu" aria-labelledby="home_menu_title">
+    <div class="home-menu-header">
+        <h2 id="home_menu_title">探索小站</h2>
+        <form method="dialog"><button class="home-menu-close cyber-control" aria-label="关闭导航">关闭 ×</button></form>
     </div>
-
-    <!-- 滚动指示器 -->
-    <button type="button" class="scroll-indicator cyber-control" id="scroll_indicator">
-        <span>向下探索</span>
-        <span class="scroll-arrow" aria-hidden="true"></span>
-    </button>
-</section>
-
-<!-- ========== Section 2: Hub 内容区 ========== -->
-<section class="page-section content-section" id="content_section">
-    <div class="content-panel cyber-frame glass-effect" id="main_screen">
-        <!-- 导航菜单 -->
-        <nav id="side_list" class="nav-menu">
-            <a class="ButtonContainer cyber-control" href="{{ url_for('main.introduce') }}">
-                <div class="ButtonIcon">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/oc_introduce.png' ) }}">
-                </div>
-                <span class="SideButton">角色介绍</span>
-            </a>
-
-            <a class="ButtonContainer cyber-control" href="{{ url_for('blog.blog_list') }}">
-                <div class="ButtonIcon">
-                    <img class="ButtonImg" src="{{ url_for('static',filename = 'images/button_image/diary.png' ) }}">
-                </div>
-                <span class="SideButton">我的博客</span>
-            </a>
-
-            <a class="ButtonContainer cyber-control" href="{{ url_for('message.friend_link') }}">
-                <div class="ButtonIcon">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/friend_link.png' ) }}">
-                </div>
-                <span class="SideButton">友情链接</span>
-            </a>
-
-            <a class="ButtonContainer cyber-control" href="https://cloud.furryjoe.site">
-                <div class="ButtonIcon">
-                    <img class="ButtonImg"
-                        src="{{ url_for('static',filename = 'images/button_image/could_storage.png' ) }}">
-                </div>
-                <span class="SideButton">我的网盘</span>
-            </a>
-        </nav>
-
-        <!-- 分隔线 -->
-        <div class="panel-divider"></div>
-
-        <!-- 用户信息 -->
-        <div id="user_info">
-            <a id="login_link" href="{{url_for('auth.login')}}">{{ nickname | default('你尚未登录Joe通行证')}} |
-                点击{{status|default('进行登录')}}</a>
-            <h4 id="login_text">{{signature|default('登录Joe通行证后才可以在博客中留言！')}}</h4>
-            {% if current_user.is_authenticated %}
-            <a id="user_info_link" href="{{url_for('user.user_info')}}">查看/修改个人信息</a>
-            {% endif %}
-        </div>
-    </div>
-</section>
+    {{ site_navigation() }}
+</dialog>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    // 首页特有的入场动画逻辑
-    initializeHomePage();
-</script>
+<script>initializeHomePage();</script>
 {% endblock %}

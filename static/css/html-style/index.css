@@ -1,473 +1,255 @@
-/* ===========================
-   Index Page Variables
-   =========================== */
-body {
-    /* --- Hero Section --- */
-    --link-column-gap: var(--space-sm);
-    --hero-width: var(--panel-width-md);
-
-    --hero-content-padding: var(--space-lg);
-    --hero-content-gap: var(--space-sm);
-
-    --scroll-indicator-gap: var(--space-sm);
-    --scroll-indicator-padding: var(--space-xs) var(--space-sm);
-
-    /* --- Content Section --- */
-    --content-icon-size: var(--circle-size-sm);
-
-    --button-container-padding: var(--space-sm);
-    --button-container-gap: var(--space-sm);
-
-    --user-info-padding: var(--space-md);
-    --user-info-gap: var(--space-sm);
-
-    --info-link-height: var(--pill-height-xs);
-    --info-link-padding: 0 var(--space-md);
-
-    --main-screen-padding: var(--space-sm);
-    --main-screen-gap: var(--space-xs);
+/* 海报式首页：所有坐标围绕原有 center / cover 背景计算，不改变立绘。 */
+body.home-page {
+    --home-image-width: max(var(--home-viewport-width), calc(var(--home-viewport-height) * var(--home-background-ratio)));
+    --home-image-height: max(var(--home-viewport-height), calc(var(--home-viewport-width) / var(--home-background-ratio)));
+    --home-safe-left: calc(var(--home-viewport-width) / 2 + var(--home-image-width) * var(--home-safe-x-offset));
+    --home-safe-top: calc(var(--home-viewport-height) / 2 + var(--home-image-height) * var(--home-safe-y-offset));
+    --home-directory-left: calc(var(--home-viewport-width) / 2 + var(--home-image-width) * var(--home-nav-x-offset));
+    --home-directory-top: calc(var(--title-height) + var(--space-md) * 2 + var(--space-sm));
+    --home-gutter: var(--space-lg);
+    --home-intro-left: calc(var(--home-safe-left) + var(--space-md));
+    --home-intro-padding: var(--cover-zero) var(--cover-zero) var(--space-md);
+    --home-poster-height: var(--home-viewport-height);
+    --home-nav-height: var(--space-lg);
+    --home-nav-gap: var(--space-sm);
+    --home-nav-padding: var(--space-xs) var(--cover-zero);
+    --home-social-gap: var(--space-xs) var(--space-md);
+    --home-social-padding: var(--space-xs);
+    --home-social-control-size: var(--title-height-mobile);
+    --home-social-icon-size: var(--space-md);
+    --home-socials-padding: var(--cover-zero);
+    --home-caption-gap: var(--space-sm);
+    --home-rule-height: var(--border-width-sm);
+    --home-menu-padding: var(--space-lg);
+    --home-menu-header-gap: var(--space-base);
+    --home-menu-control-padding: var(--space-xs) var(--space-sm);
+    --home-menu-trigger-padding: var(--space-xs) var(--cover-zero);
+    --home-menu-control-height: var(--title-height-mobile);
+    --home-account-gap: var(--space-xs);
 }
 
-/* ===========================
-   Base / Reset (Index Page)
-   =========================== */
-html {
-    scroll-snap-type: y mandatory;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    /* Firefox */
-}
-
-html::-webkit-scrollbar {
-    display: none;
-    /* Chrome / Safari */
-}
-
-/* ===========================
-   Section Layout (Scroll Snap)
-   =========================== */
-.page-section {
-    height: 100vh;
-    width: 100%;
-    scroll-snap-align: start;
+.home-poster {
     position: relative;
-    overflow: hidden;
-}
-
-/* Section 切换淡入淡出 — 作用于内容容器而非 section 本身，
-   避免 opacity:0 导致浏览器卸载 backdrop-filter 渲染。
-   .section-fade-ready: 入场动画完成后添加，启用 opacity transition
-   .section-fade-out: 离开视口时添加，触发淡出 */
-.section-fade-ready {
-    transition: opacity 0.5s ease !important;
-}
-
-.section-fade-out {
-    opacity: 0 !important;
-}
-
-/* ===========================
-   Section 1: Hero 首屏
-   =========================== */
-.hero-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-content {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--hero-content-gap);
-    text-align: left;
-    padding: var(--hero-content-padding);
-    width: min(var(--hero-width), 48%);
+    min-height: var(--home-poster-height);
     box-sizing: border-box;
-    opacity: 0;
 }
 
-.hero-content.loaded {
-    animation: scaleFadeIn 0.4s forwards;
+.home-directory {
+    position: absolute;
+    top: var(--home-directory-top);
+    left: var(--home-directory-left);
+    right: var(--home-gutter);
 }
 
-/* 欢迎语 */
-.welcome_messages_container {
-    position: relative;
-    text-align: start;
-    width: 100%;
-    box-sizing: border-box;
-    margin-block: var(--space-sm) var(--space-md);
-}
-
-.welcome-line {
-    margin: 0;
-    opacity: 0;
-}
-
-#welcome_message_1 {
-    font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 6px;
-    color: var(--accent);
-    font-family: 'YuanTi';
-    margin-bottom: var(--space-sm);
-}
-
-#welcome_message_1.welcome-start {
-    animation: fadeIn 0.2s 0.3s ease forwards;
-}
-
-#welcome_message_2 {
-    font-size: calc(var(--font-size-3xl) * 1.65);
-    letter-spacing: 4px;
-    color: var(--text-primary);
-    font-family: 'GunShi';
-}
-
-#welcome_message_2.welcome-start {
-    animation: fadeIn 0.2s 0.6s ease forwards;
-}
-
-.link-heading {
-    display: flex;
-    align-items: center;
-    gap: var(--link-column-gap);
-    color: var(--text-muted);
+.home-eyebrow {
+    margin: var(--cover-zero) var(--cover-zero) var(--space-sm);
     font: var(--font-size-xs) monospace;
     letter-spacing: var(--border-width-md);
-}
-
-.link-heading::after {
-    content: '';
-    flex: 1;
-    border-top: var(--border-width-sm) solid var(--border-subtle);
-}
-
-/* 社交链接 */
-#link_column {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: var(--link-column-gap);
-    width: 100%;
-    box-sizing: border-box;
-    opacity: 0;
-}
-
-#link_column.loaded {
-    animation: fadeIn 0.4s 0.6s forwards;
-}
-
-.LinkContainer {
-    display: grid;
-    place-items: center;
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    box-sizing: border-box;
-    background-color: var(--link-bg);
-    border: none;
-    color: var(--link-color);
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.link-qq {
-    --link-bg: #ffffff;
-    --link-color: #7dd3fc;
-}
-
-.link-bilibili {
-    --link-bg: #fb7299;
-    --link-color: #ffffff;
-}
-
-.link-github {
-    --link-bg: #444444;
-    --link-color: #eeeeee;
-}
-
-.link-minecraft {
-    --link-bg: #3b6b35;
-    --link-color: #000000;
-}
-
-.link-itch {
-    --link-bg: #fa5c5c;
-    --link-color: #ffffff;
-}
-
-/* 使用 SVG 遮罩，让图标颜色独立于按钮底色。 */
-.LinkIcon {
-    width: 70%;
-    height: 70%;
-    background-color: currentColor;
-    -webkit-mask: var(--link-icon) center / contain no-repeat;
-    mask: var(--link-icon) center / contain no-repeat;
-}
-
-.LinkContainer:hover,
-.LinkContainer:focus-visible {
-    transform: scale(1.2);
-    z-index: 1;
-    box-shadow: 0 4px 12px var(--shadow-ink);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .LinkContainer {
-        transition: none;
-    }
-}
-
-/* 滚动指示器 — 面板外部，绝对定位在hero底部 */
-.scroll-indicator {
-    position: absolute;
-    bottom: var(--space-lg);
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: var(--scroll-indicator-gap);
-    padding: var(--scroll-indicator-padding);
-    border: var(--border-width-sm) solid var(--accent-border);
-    background: var(--bg-card);
-    color: var(--accent);
-    font-size: var(--font-size-xs);
-    letter-spacing: var(--border-width-md);
-    font-family: 'YuanTi';
-    cursor: pointer;
-    opacity: 0;
-    transition: color 0.3s ease;
-}
-
-.scroll-indicator.loaded {
-    animation: fadeIn 0.4s forwards;
-}
-
-.scroll-indicator:hover {
-    color: var(--text-secondary);
-}
-
-.scroll-arrow {
-    width: var(--space-xs);
-    height: var(--space-xs);
-    border-right: var(--border-width-md) solid currentColor;
-    border-bottom: var(--border-width-md) solid currentColor;
-    transform: rotate(45deg);
-    animation: scrollHint 2.5s ease-in-out infinite;
-}
-
-/* ===========================
-   Section 2: Content Hub 内容区
-   =========================== */
-.content-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* 站内导航面板 */
-#main_screen {
-    padding: var(--main-screen-padding);
-    width: 85%;
-    max-width: 360px;
-    display: flex;
-    flex-direction: column;
-    gap: var(--main-screen-gap);
-    transform: translateY(30px);
-}
-
-/* 导航菜单 */
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-}
-
-/* 导航按钮 */
-.ButtonContainer {
-    display: flex;
-    align-items: center;
-    gap: var(--button-container-gap);
-    padding: var(--button-container-padding);
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.25s ease;
-    margin: 0;
-}
-
-.ButtonContainer:hover {
-    background-color: var(--glass-bg-hover);
-}
-
-.ButtonIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: var(--content-icon-size);
-    height: var(--content-icon-size);
-    overflow: hidden;
-    background-color: var(--icon-bg);
-    flex-shrink: 0;
-    transition: background-color 0.3s ease;
-}
-
-.ButtonContainer:hover .ButtonIcon {
-    background-color: var(--icon-bg-hover);
-}
-
-.ButtonImg {
-    height: 24px;
-    width: 24px;
-    opacity: var(--icon-opacity);
-    transition: opacity 0.3s ease;
-}
-
-.ButtonContainer:hover .ButtonImg {
-    opacity: 1;
-}
-
-.SideButton {
-    text-decoration: none;
-    color: var(--text-primary);
-    font-size: 20px;
-    font-family: 'YuanTi';
-    white-space: nowrap;
-    transition: color 0.25s ease, transform 0.25s ease;
-}
-
-.ButtonContainer:hover .SideButton {
-    color: var(--accent);
-    transform: translateX(4px);
-}
-
-/* 面板分隔线 */
-.panel-divider {
-    height: 1px;
-    background: var(--divider);
-    margin: var(--space-sm) 0;
-}
-
-/* 用户信息 */
-#user_info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: var(--user-info-gap);
-    padding: var(--user-info-padding);
-    background-color: var(--bg-overlay-inner);
-}
-
-#login_link {
-    text-decoration: none;
-    font-size: 14px;
-    white-space: nowrap;
-    color: var(--text-secondary);
-    transition: color 0.3s ease;
-}
-
-#login_link:hover {
-    color: var(--accent);
-}
-
-#login_text {
-    font-size: 13px;
     color: var(--text-muted);
-    margin: 0;
-    text-align: left;
 }
 
-#user_info_link {
+.home-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-nav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--home-nav-gap);
+    min-height: var(--home-nav-height);
+    padding: var(--home-nav-padding);
+    box-sizing: border-box;
+    color: var(--text-primary);
+    font-family: 'YuanTi', sans-serif;
+    font-size: var(--font-size-md);
+    text-decoration: none;
+    position: relative;
+}
+
+.home-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: var(--cover-zero);
+    left: var(--cover-zero);
+    width: var(--cover-full);
+    height: var(--home-rule-height);
+    background-color: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+
+.home-nav a:hover::after,
+.home-nav a:focus-visible::after { transform: scaleX(1); }
+.home-nav a span:last-child { color: var(--accent); }
+
+.home-account {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--home-account-gap);
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: var(--border-width-sm) solid var(--border-subtle);
+    font-size: var(--font-size-xs);
+}
+
+.home-account a,
+.home-social-link { color: var(--text-muted); text-decoration: none; }
+.home-account a:hover,
+.home-social-link:hover { color: var(--accent); }
+
+.home-intro {
+    position: absolute;
+    top: var(--home-safe-top);
+    left: var(--home-intro-left);
+    right: var(--home-gutter);
+    padding: var(--home-intro-padding);
+    overflow-wrap: anywhere;
+}
+
+.home-welcome {
+    margin: var(--cover-zero) var(--cover-zero) var(--space-sm);
+    font-family: 'YuanTi', sans-serif;
+    font-size: var(--font-size-md);
+    letter-spacing: var(--border-width-md);
+    color: var(--text-secondary);
+}
+
+.home-headline {
+    margin: var(--cover-zero);
+    font-family: 'GunShi', sans-serif;
+    font-size: var(--home-headline-size);
+    font-weight: 400;
+    letter-spacing: var(--space-2xs);
+    color: var(--text-primary);
+}
+
+.home-caption {
+    display: flex;
+    align-items: center;
+    gap: var(--home-caption-gap);
+    margin: var(--space-base) var(--cover-zero) var(--cover-zero);
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    letter-spacing: var(--border-width-md);
+}
+
+.home-caption::before {
+    content: '';
+    width: var(--space-md);
+    height: var(--home-rule-height);
+    flex-shrink: 0;
+    background-color: var(--accent);
+}
+
+.home-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--home-social-gap);
+    margin-top: var(--space-md);
+    padding: var(--home-socials-padding);
+}
+
+.home-social-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
-    font-size: 13px;
-    color: var(--accent);
-    height: var(--info-link-height);
-    padding: var(--info-link-padding);
+    flex-shrink: 0;
+    width: var(--home-social-control-size);
+    height: var(--home-social-control-size);
+    padding: var(--home-social-padding);
     box-sizing: border-box;
-    background-color: var(--accent-bg);
-    border: 1px solid var(--accent-border);
-    border-radius: var(--ui-radius);
-    transition: all 0.3s ease;
-    margin-top: 4px;
 }
 
-#user_info_link:hover {
-    background-color: var(--accent-hover-bg);
-    border-color: var(--accent-hover-border);
+/* SVG 原图为白色，用遮罩让深浅主题都能清晰显示。 */
+.home-social-icon {
+    width: var(--home-social-icon-size);
+    height: var(--home-social-icon-size);
+    background-color: var(--text-secondary);
+    -webkit-mask: var(--social-icon) center / contain no-repeat;
+    mask: var(--social-icon) center / contain no-repeat;
+    transition: background-color 0.2s ease;
 }
 
-/* ===========================
-   移动端适配
-   =========================== */
-@media screen and (max-width: 768px) {
-    body {
-        --link-column-gap: var(--space-xs);
-        --hero-content-padding: var(--space-sm);
-        --hero-content-gap: var(--space-sm);
+.home-social-link:hover .home-social-icon,
+.home-social-link:focus-visible .home-social-icon {
+    background-color: var(--accent);
+}
 
-        --content-icon-size: calc(var(--circle-size-sm) * 0.75);
-    }
+.home-socials .home-social-link:hover {
+    box-shadow: inset var(--cover-zero) calc(-1 * var(--border-width-md)) var(--cover-zero) var(--accent);
+}
 
-    .hero-content {
-        width: min(var(--hero-width), calc(100% - var(--space-md)));
-    }
+.home-menu-trigger { display: none; }
+.home-menu.cyber-frame {
+    width: min(var(--home-menu-width), calc(var(--cover-full) - var(--space-lg)));
+    max-height: var(--home-menu-max-height);
+    padding: var(--home-menu-padding);
+    box-sizing: border-box;
+    color: var(--text-primary);
+    background-color: var(--bg-home-menu);
+}
+.home-menu::backdrop { background-color: var(--bg-home-backdrop); }
+.home-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--home-menu-header-gap);
+    margin-bottom: var(--space-md);
+}
+.home-menu-header h2 { margin: var(--cover-zero); font-size: var(--font-size-xl); }
+.home-menu-header form { margin: var(--cover-zero); }
+.home-menu-close,
+.home-menu-trigger {
+    min-height: var(--home-menu-control-height);
+    padding: var(--home-menu-control-padding);
+    border: none;
+    color: var(--accent);
+    background-color: var(--mask-clear);
+    font: inherit;
+    cursor: pointer;
+}
 
-    #welcome_message_1 {
-        font-size: 16px;
-        letter-spacing: 4px;
-    }
-
-    #welcome_message_2 {
-        font-size: var(--font-size-3xl);
-        letter-spacing: 2px;
-    }
-
-    .scroll-indicator {
-        bottom: var(--space-lg);
-        font-size: 11px;
-    }
-
-    /* 第二屏面板 */
-    #main_screen {
-        width: 80%;
-        max-width: none;
-    }
-
-    .SideButton {
-        font-size: 15px;
-    }
-
-    .ButtonImg {
-        height: 20px;
-        width: 20px;
-    }
-
-    #login_link {
-        font-size: 13px;
+/* 低矮或偏竖的视口没有足够的剑上留白，导航由用户主动展开。 */
+@media (max-width: 1024px), (max-height: 700px), (max-aspect-ratio: 3/2) {
+    .home-directory { display: none; }
+    .home-menu-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--home-nav-gap);
+        padding: var(--home-menu-trigger-padding);
+        margin-bottom: var(--space-sm);
     }
 }
 
-/* ===========================
-   平板端适配
-   =========================== */
-@media screen and (max-width: 1024px) and (min-width: 769px) {
-    #welcome_message_1 {
-        font-size: 18px;
+@media (max-width: 768px) {
+    body.home-page {
+        --home-gutter: var(--space-sm);
+        --home-intro-left: var(--home-safe-left);
+        --home-headline-size: var(--home-headline-size-mobile);
+        --home-social-gap: var(--space-2xs) var(--space-sm);
+        /* 让站外链接避开公共的右下角主题切换按钮。 */
+        --home-socials-padding: var(--cover-zero) var(--circle-size-sm) var(--cover-zero) var(--cover-zero);
+        --home-menu-padding: var(--space-md);
+        --home-nav-height: var(--pill-height-sm);
     }
+    .home-welcome { font-size: var(--font-size-sm); letter-spacing: var(--cover-zero); }
+    .home-headline { letter-spacing: var(--cover-zero); }
+    .home-caption { letter-spacing: var(--cover-zero); font-size: var(--font-size-xs); }
+    .home-caption::before { display: none; }
+    .home-socials { margin-top: var(--space-sm); }
+}
 
-    #welcome_message_2 {
-        font-size: 44px;
-    }
-
-    #main_screen {
-        max-width: 500px;
-    }
-
-    .SideButton {
-        font-size: 15px;
-    }
+/* 页面内容等待公共加载器完成，公共顶栏与遮罩动画不受影响。 */
+.home-page:not(.home-ready) .home-intro,
+.home-page:not(.home-ready) .home-directory { visibility: hidden; }
+.home-ready .home-intro { animation: homeReveal 0.55s ease both; }
+.home-ready .home-directory { animation: homeReveal 0.55s 0.12s ease both; }
+@media (prefers-reduced-motion: reduce) {
+    .home-ready .home-intro,
+    .home-ready .home-directory { animation: none; }
+    .home-nav a::after,
+    .home-social-icon { transition: none; }
 }
