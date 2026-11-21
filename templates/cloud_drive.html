@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}我的网盘 | Joe的个人小站{% endblock %}
+{% block page_title %}数据中心{% endblock %}
+{% block body_class %}cloud-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/html-style/cloud_drive.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="drive-panel cyber-frame">
+    <a class="drive-direct" href="{{ drive_url }}" target="_blank" rel="noopener noreferrer">在新标签页打开网盘 ↗</a>
+    <iframe class="drive-frame" src="{{ drive_url }}" title="我的网盘文件浏览器"></iframe>
+</main>
+{% endblock %}

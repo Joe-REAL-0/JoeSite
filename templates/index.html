@@ -61,7 +61,7 @@
     <a href="{{ url_for('main.introduce') }}"><span>角色介绍</span><span aria-hidden="true">↗</span></a>
     <a href="{{ url_for('blog.blog_list') }}"><span>我的博客</span><span aria-hidden="true">↗</span></a>
     <a href="{{ url_for('message.friend_link') }}"><span>友情链接</span><span aria-hidden="true">↗</span></a>
-    <a href="https://cloud.furryjoe.site"><span>我的网盘</span><span aria-hidden="true">↗</span></a>
+    <a href="{{ url_for('main.cloud_drive') }}"><span>我的网盘</span><span aria-hidden="true">↗</span></a>
 </nav>
 <div class="home-account">
     {% if current_user.is_authenticated %}

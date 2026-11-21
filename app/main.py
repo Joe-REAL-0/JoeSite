@@ -14,6 +14,10 @@ def hello():
                                signature="")
     return render_template('index.html')
 
+@main.route('/cloud')
+def cloud_drive():
+    return render_template('cloud_drive.html', drive_url='https://cloud.furryjoe.site/')
+
 @main.route('/oc_introduce')
 def introduce():
     try:

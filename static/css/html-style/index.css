@@ -223,8 +223,6 @@ body.home-page {
     }
 }
 
-.home-panel-surface { display: none; }
-
 @media (max-width: 768px), (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
     body.home-page {
         --home-gutter: var(--space-sm);
@@ -270,32 +268,16 @@ body.home-page {
         grid-template-rows: repeat(3, var(--home-social-control-size));
         margin: 0;
         padding-top: var(--space-2xs);
+        background: var(--accent-border);
     }
 
-    .home-panel-surface {
-        display: block;
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        clip-path: var(--card-outline);
-        border: var(--border-width-md) solid var(--accent);
-        pointer-events: none;
-    }
-
-    .home-copy > .home-panel-surface {
-        border-right: 0;
-    }
-
-    /* 直边由 border 绘制，沿切口法线补上同宽的斜边。 */
-    .home-socials::before, .home-copy::before {
+    .home-socials::before {
         content: '';
         position: absolute;
-        inset: 0 auto auto 0;
-        width: var(--cut-run);
-        height: var(--cut-rise);
-        background: linear-gradient(calc(180deg - var(--portrait-blade-angle)),
-            transparent 50%, var(--accent) 50% calc(50% + var(--border-width-md)), transparent 0);
-        pointer-events: none;
+        inset: var(--border-width-sm);
+        z-index: -1;
+        clip-path: var(--card-outline);
+        background: var(--bg-card);
     }
 
     .home-social-link:first-child { grid-row: 2; }
@@ -317,6 +299,8 @@ body.home-page {
         padding-right: max(var(--space-sm), env(safe-area-inset-right));
         max-width: 100%;
         box-sizing: border-box;
+        background: color-mix(in srgb, var(--bg-card) 94%, transparent);
+        border-inline-start: var(--border-width-md) solid var(--accent);
     }
 
     .home-welcome {
