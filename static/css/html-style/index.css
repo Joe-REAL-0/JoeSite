@@ -223,22 +223,123 @@ body.home-page {
     }
 }
 
-@media (max-width: 768px) {
+.home-panel-surface { display: none; }
+
+@media (max-width: 768px), (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
     body.home-page {
         --home-gutter: var(--space-sm);
-        --home-intro-left: var(--home-safe-left);
         --home-headline-size: var(--home-headline-size-mobile);
-        --home-social-gap: var(--space-2xs) var(--space-sm);
-        /* 让站外链接避开公共的右下角主题切换按钮。 */
-        --home-socials-padding: var(--cover-zero) var(--circle-size-sm) var(--cover-zero) var(--cover-zero);
+        --home-social-gap: var(--space-2xs);
+        --home-socials-padding: var(--space-xs);
         --home-menu-padding: var(--space-md);
         --home-nav-height: var(--pill-height-sm);
     }
-    .home-welcome { font-size: var(--font-size-sm); letter-spacing: var(--cover-zero); }
-    .home-headline { letter-spacing: var(--cover-zero); }
-    .home-caption { letter-spacing: var(--cover-zero); font-size: var(--font-size-xs); }
+    .home-poster {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: 100dvh;
+        padding: calc(var(--title-height-mobile) + var(--space-xl))
+            0
+            max(var(--home-gutter), env(safe-area-inset-bottom))
+            max(var(--home-gutter), env(safe-area-inset-left));
+    }
+
+    .home-intro {
+        position: static;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: end;
+        gap: var(--space-xs);
+        padding: 0;
+    }
+
+    .home-socials, .home-copy {
+        --cut-rise: calc(var(--cut-run) * tan(var(--portrait-blade-angle)));
+        --card-outline: polygon(0 var(--cut-rise), var(--cut-run) 0, 100% 0, 100% 100%, 0 100%);
+        position: relative;
+        isolation: isolate;
+        clip-path: var(--card-outline);
+    }
+
+    .home-socials {
+        --cut-run: calc(var(--home-socials-padding) + var(--home-social-control-size) + var(--home-social-gap));
+        grid-area: 1 / 1;
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-rows: repeat(3, var(--home-social-control-size));
+        margin: 0;
+        padding-top: var(--space-2xs);
+    }
+
+    .home-panel-surface {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        clip-path: var(--card-outline);
+        border: var(--border-width-md) solid var(--accent);
+        pointer-events: none;
+    }
+
+    .home-copy > .home-panel-surface {
+        border-right: 0;
+    }
+
+    /* 直边由 border 绘制，沿切口法线补上同宽的斜边。 */
+    .home-socials::before, .home-copy::before {
+        content: '';
+        position: absolute;
+        inset: 0 auto auto 0;
+        width: var(--cut-run);
+        height: var(--cut-rise);
+        background: linear-gradient(calc(180deg - var(--portrait-blade-angle)),
+            transparent 50%, var(--accent) 50% calc(50% + var(--border-width-md)), transparent 0);
+        pointer-events: none;
+    }
+
+    .home-social-link:first-child { grid-row: 2; }
+    .home-social-link:nth-child(2) { grid-row: 3; grid-column: 1; }
+
+    /* 右侧留白在刀身与尾巴之间，抬高文案也为右下主题按钮留出空间。 */
+    .home-copy {
+        --cut-run: var(--space-lg);
+        grid-area: 1 / 2;
+        justify-self: end;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: end;
+        text-align: right;
+        gap: var(--space-xs);
+        width: fit-content;
+        margin-bottom: clamp(88px, 24dvh, 256px);
+        padding: var(--space-sm) var(--space-sm);
+        padding-right: max(var(--space-sm), env(safe-area-inset-right));
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .home-welcome {
+        margin: 0;
+        /* 仅首行欢迎语所在区域需要避开左上切角。 */
+        padding-inline-start: calc(var(--cut-run) - var(--space-sm));
+        font-size: var(--font-size-sm);
+        line-height: 1.5;
+        letter-spacing: 0;
+    }
+    .home-headline {
+        font-size: var(--font-size-xl);
+        letter-spacing: 0;
+    }
     .home-caption::before { display: none; }
-    .home-socials { margin-top: var(--space-sm); }
+    .home-caption { grid-column: 1 / -1; margin: 0; color: var(--text-secondary); letter-spacing: 0; }
+    .home-menu-trigger {
+        grid-row: 4;
+        margin: var(--space-2xs) 0 0;
+        padding: var(--home-menu-control-padding);
+        background: var(--accent);
+        color: var(--bg-card);
+    }
 }
 
 /* 页面内容等待公共加载器完成，公共顶栏与遮罩动画不受影响。 */

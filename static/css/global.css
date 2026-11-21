@@ -14,6 +14,7 @@
     --title-rest-top-mobile: var(--cover-zero);
     --cover-exit: 110%;
     --cover-split-duration: 0.42s;
+    --portrait-blade-angle: 38deg;
 
     /* 间距 */
     --space-2xs: 4px;
@@ -117,10 +118,13 @@ body {
 
 /* 内容窗口：角标与静态扫描线都绘制在内容下方。 */
 .cyber-frame {
-    --window-fill: var(--bg-card);
     border: var(--border-width-sm) solid var(--border-subtle);
     border-radius: var(--ui-radius);
     box-shadow: var(--shadow-card);
+}
+
+.cyber-frame, .panel-background {
+    --window-fill: var(--bg-card);
     background-color: color-mix(in srgb, var(--window-fill) var(--window-opacity), transparent);
     background-image: var(--frame-trace), var(--frame-trace), var(--frame-signal), var(--frame-hatch),
         repeating-linear-gradient(to bottom, var(--window-scanline) 0 1px, transparent 1px 4px);
@@ -143,6 +147,11 @@ body {
     pointer-events: auto;
 }
 
+#cover .cover-panels {
+    position: absolute;
+    inset: 0;
+}
+
 #cover .cover-half {
     position: absolute;
     left: var(--cover-zero);
@@ -160,7 +169,6 @@ body {
     top: var(--cover-half);
     width: var(--cover-full);
     height: var(--cover-line-height);
-    color: var(--accent);
 }
 
 #cover .cover-line {
@@ -182,8 +190,9 @@ body {
 }
 
 #cover-percentage {
+    color: var(--accent);
     position: absolute;
-    top: var(--space-sm);
+    top: calc(var(--cover-half) + var(--space-sm));
     left: var(--cover-half);
     transform: translateX(calc(-1 * var(--cover-half)));
     font-family: monospace;
@@ -223,7 +232,8 @@ body {
     animation: coverSplitBottom var(--cover-split-duration) both;
 }
 
-#cover.resources-loaded .cover-progress { visibility: hidden; }
+#cover.resources-loaded .cover-progress,
+#cover.resources-loaded #cover-percentage { visibility: hidden; }
 #cover.resources-loaded { pointer-events: none; }
 
 #title_container {
@@ -321,6 +331,25 @@ body {
 @media screen and (max-width: 768px) {
     body {
         --top-column-padding: var(--space-sm) var(--space-base);
+        /* 941 × 1670 竖图：刀身经过 (470.5, 853)，向右上倾斜约 38°。 */
+        --blade-offset: max(calc(100vw * 18 / 941), calc(100dvh * 18 / 1670));
+        --title-loading-top: calc(50% + var(--blade-offset) - min(30vw, 120px, 24dvh));
+    }
+
+    #cover .cover-panels {
+        transform: translateY(var(--blade-offset)) skewY(calc(-1 * var(--portrait-blade-angle)));
+    }
+
+    #cover .cover-half {
+        /* 延长外边缘以覆盖倾斜后露出的角，内边缘仍贴着进度条。 */
+        height: calc(50% + 40vw + var(--blade-offset));
+    }
+
+    #cover .cover-top { top: auto; bottom: 50%; }
+    #cover .cover-bottom { bottom: auto; top: 50%; }
+
+    #cover-percentage {
+        top: calc(50% + var(--blade-offset) + var(--space-lg));
     }
 
     #title_container h1 {

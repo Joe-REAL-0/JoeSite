@@ -80,11 +80,14 @@
     </aside>
 
     <section class="home-intro" aria-labelledby="welcome_message_2">
-        <button type="button" class="home-menu-trigger cyber-control" id="home_menu_trigger"
-            aria-haspopup="dialog" aria-controls="home_menu" aria-expanded="false">探索小站 <span aria-hidden="true">↗</span></button>
-        <p class="home-welcome" id="welcome_message_1">{{ nickname|default('你好') }}，欢迎来到</p>
-        <h2 class="home-headline" id="welcome_message_2">我的世界</h2>
-        <p class="home-caption">角色 · 创作 · 生活</p>
+        <div class="home-copy">
+            <span class="home-panel-surface panel-background" aria-hidden="true"></span>
+            <button type="button" class="home-menu-trigger cyber-control" id="home_menu_trigger"
+                aria-haspopup="dialog" aria-controls="home_menu" aria-expanded="false">探索小站 <span aria-hidden="true">↗</span></button>
+            <p class="home-welcome" id="welcome_message_1">{{ nickname|default('你好') }}，欢迎来到</p>
+            <h2 class="home-headline" id="welcome_message_2">我的世界</h2>
+            <p class="home-caption">角色 · 创作 · 生活</p>
+        </div>
         <nav class="home-socials" id="link_column" aria-label="站外链接">
                 <a class="home-social-link cyber-control" href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105" aria-label="QQ 群" title="QQ 群">
                     <span class="home-social-icon" aria-hidden="true"
@@ -106,6 +109,7 @@
                     <span class="home-social-icon" aria-hidden="true"
                         style="--social-icon: url('{{ url_for('static', filename='images/link_image/itch-io.svg') }}');"></span>
                 </a>
+            <span class="home-panel-surface panel-background" aria-hidden="true"></span>
         </nav>
     </section>
 </main>

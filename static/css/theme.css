@@ -94,10 +94,17 @@
    纯色底层与背景图片叠加
    =========================== */
 body.themed-bg {
+    --character-art: url('../images/backgrounds/bkg-h.png');
     background-image: none !important;
     background-color: var(--bg-body);
     position: relative;
     isolation: isolate;
+}
+
+@media screen and (max-width: 768px) {
+    body.themed-bg {
+        --character-art: url('../images/backgrounds/bkg-v.png');
+    }
 }
 
 /* 独立层叠上下文确保图片位于纯色底层之上、页面内容之下。 */
@@ -114,7 +121,7 @@ body.themed-bg::after {
 }
 
 body.themed-bg::before {
-    background-image: url('../images/backgrounds/bkg-h.png');
+    background-image: var(--character-art);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -123,8 +130,8 @@ body.themed-bg::before {
 /* 与原图使用同一透明轮廓和定位；淡出主题剪影层，原图自然显现。 */
 body.themed-bg::after {
     background-color: var(--character-silhouette);
-    -webkit-mask: url('../images/backgrounds/bkg-h.png') center / cover no-repeat;
-    mask: url('../images/backgrounds/bkg-h.png') center / cover no-repeat;
+    -webkit-mask: var(--character-art) center / cover no-repeat;
+    mask: var(--character-art) center / cover no-repeat;
     opacity: 1;
     transition: opacity 0.85s ease-in-out 0.16s;
 }
