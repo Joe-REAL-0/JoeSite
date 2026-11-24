@@ -10,6 +10,8 @@ body {
     --oc-output-padding: var(--space-base) var(--space-lg);
     --oc-toggle-padding: var(--space-xs) var(--space-sm);
     --oc-toggle-height: var(--pill-height-sm);
+    --oc-section-gap: var(--space-xl);
+    --oc-heading-margin: var(--space-base);
 }
 
 .CenterContainer {
@@ -100,6 +102,23 @@ body {
     overflow-wrap: anywhere;
 }
 
+/* 目录项是普通链接：没有脚本也能用锚点跳转。 */
+a.TextTitle {
+    display: var(--oc-link-display);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+#output section + section {
+    margin-top: var(--oc-section-gap);
+}
+
+#output h2 {
+    font-size: var(--font-size-xl);
+    color: var(--accent);
+    margin: 0 0 var(--oc-heading-margin);
+}
+
 #output p {
     margin: 0 0 var(--space-base);
     white-space: pre-line;
@@ -144,6 +163,12 @@ body {
     }
 
     #sidebar.expanded {
+        visibility: visible;
+        max-height: min(45%, calc(var(--panel-width-md) / 2));
+    }
+
+    /* 没有脚本时折叠按钮不起作用，目录默认展开。 */
+    html.no-js #sidebar {
         visibility: visible;
         max-height: min(45%, calc(var(--panel-width-md) / 2));
     }

@@ -1,0 +1,42 @@
+---
+layout: base.njk
+permalink: /oc_introduce/index.html
+eleventyExcludeFromCollections: true
+title: "Joe的个人小站 | 档案馆"
+description: "Joe 的角色档案馆：角色、势力、技术与世界设定。"
+canonical: "https://furryjoe.site/oc_introduce/"
+pageTitle: "档案馆"
+styles:
+  - /css/html-style/oc_introduce.css
+  - /css/animations/animation-oc_introduce.css
+  - /css/mobile-adaption.css
+headScripts:
+  - /js/oc_introduce.js
+---
+<div class="CenterContainer">
+    <div class="page-header">
+    </div>
+    <div id="oc_introduce_panel" class="cyber-frame">
+        <button id="sidebar-toggle" class="cyber-control" type="button" aria-label="切换侧边栏" aria-controls="sidebar" aria-expanded="false">☰</button>
+        <nav id="sidebar" class="cyber-frame" aria-label="档案目录">
+            <ul id="title-list">
+                {% for section in oc %}
+                <li><a class="TextTitle cyber-control" href="#{{ section.anchor }}" data-anchor="{{ section.anchor }}">{{ section.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+        <div id="content-container" class="cyber-frame">
+            <div id="output">
+                {% for section in oc %}
+                {# 旧正文是纯文本：保留段落和换行，不当作 HTML 解析。 #}
+                <section id="{{ section.anchor }}" aria-labelledby="{{ section.anchor }}-title">
+                    <h2 id="{{ section.anchor }}-title">{{ section.title }}</h2>
+                    {% for paragraph in section.paragraphs %}
+                    <p class="content-paragraph">{% for line in paragraph %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+                    {% endfor %}
+                </section>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,46 +1,22 @@
-/.conda
-/.vscode
-/SSL
-/__pycache__
+# 依赖与构建产物（dist 由 CI/发布时生成，不入库）
+node_modules/
+dist/
+.tmp-build-*/
+.tmp-import-*/
 
-# 数据库文件
+# 内容快照与私有导出：只留在限权位置，绝不提交
 database.db
 *.db
 *.sqlite
 *.sqlite3
-
-# 日志文件
-app.log
-*.log
-logs/
-
-# Python生成的文件
-*.pyc
-*.pyo
-__pycache__/
-*.py[cod]
-*$py.class
-
-# 虚拟环境
-venv/
-env/
-ENV/
-
-# 其他
 /db_backup/
-/db_control/
-/static/images/avatars
-UpdateSSL.bat
-UpdateDB.bat
-UpdateEnv.bat
-create_admin.py
+*.private.json
 
+# 本地环境
 .env
 .DS_Store
-# 备份文件 / 目录（图片优化等本地操作产生的中间产物）
+*.log
+app.log
 *.bak
-*.bak2
 *.orig
 *.rej
-static/images/backgrounds/.original_backup/
-static/images/background_light.png.bak

@@ -1,0 +1,78 @@
+---
+layout: base.njk
+pagination:
+  data: posts
+  size: 1
+  alias: post
+permalink: "/{{ post.outputPath }}"
+eleventyExcludeFromCollections: true
+ogType: article
+pageTitle: "博客详情"
+styles:
+  - /css/html-style/blog_detail.css
+  - /css/animations/animation-blog.css
+  - /css/mobile-adaption.css
+bodyScripts:
+  - /js/blog_detail.js
+eleventyComputed:
+  title: "{{ post.title }} | Joe的博客"
+  description: "{{ post.summary }}"
+  canonical: "https://furryjoe.site{{ post.url }}"
+inlineHead: |
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+---
+<div class="CenterContainer">
+    <article class="blog-detail-container cyber-frame">
+        <div class="blog-header">
+            <h1 class="blog-title">{{ post.title }}</h1>
+
+            <div class="blog-meta">
+                <span class="blog-date">发布于: {{ post.createdTime }}</span>
+                {% if post.updatedTime and post.updatedDate != post.createdDate %}
+                <span class="blog-updated">更新于: {{ post.updatedTime }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="blog-content markdown-body">
+            {{ post.html | safe }}
+        </div>
+
+        <div class="blog-footer">
+            <a href="/blog/" class="back-btn cyber-control">← 返回博客列表</a>
+        </div>
+    </article>
+</div>
+
+<aside class="right-sidebar" id="rightSidebar">
+    <!-- TOC 目录：构建时生成，禁用 JS 也能跳转 -->
+    <div class="toc-section cyber-frame" id="tocSection"{% if not post.toc.length %} hidden{% endif %}>
+        <div class="toc-header">
+            <span class="toc-title">📑 目录</span>
+            <button class="toc-toggle cyber-control" id="tocToggle" title="收起目录" aria-controls="tocContent" aria-expanded="true">▲</button>
+        </div>
+        <nav class="toc-content" id="tocContent" aria-label="文章目录">
+            {% for item in post.toc %}
+            <a class="toc-item toc-h{{ item.level }}" href="#{{ item.id }}" title="{{ item.text }}">{{ item.text }}</a>
+            {% endfor %}
+        </nav>
+    </div>
+
+    <!-- 操作按钮组 -->
+    <div class="action-buttons" data-mobile-rail>
+        <button class="sidebar-btn top-btn cyber-control" id="topBtn" title="回到顶部" aria-label="回到顶部">
+            <span class="btn-icon icon-mask icon-arrow-up"></span>
+        </button>
+    </div>
+</aside>

@@ -9,8 +9,6 @@ body {
     --friend-control-height: var(--circle-size-sm);
     --friend-control-padding: 0 var(--space-sm);
     --friend-radius: var(--ui-radius);
-    --friend-spinner: var(--circle-size-xs);
-    --friend-spinner-radius: var(--circle-radius-xs);
 }
 
 #friend_link_section .CenterContainer {
@@ -98,29 +96,13 @@ body {
     gap: var(--friend-gap);
 }
 
-#quick_friend_link_input,
-#add_link_button,
-#login_for_link_btn {
+#apply_friend_link {
     box-sizing: border-box;
     min-height: var(--friend-control-height);
     font: inherit;
 }
 
-#quick_friend_link_input {
-    flex: 1;
-    min-width: 0;
-    padding: var(--friend-control-padding);
-    border: var(--border-width-sm) solid var(--text-muted);
-    border-radius: var(--friend-radius);
-    color: var(--text-primary);
-    background: var(--bg-body);
-    font-size: var(--font-size-md);
-}
-
-#quick_friend_link_input::placeholder { color: var(--text-secondary); }
-
-#add_link_button,
-#login_for_link_btn {
+#apply_friend_link {
     display: inline-grid;
     place-items: center;
     padding: var(--friend-control-padding);
@@ -130,40 +112,11 @@ body {
     text-decoration: none;
 }
 
-#add_link_button {
-    min-width: var(--friend-control-height);
-    font-size: var(--font-size-xl);
-    cursor: pointer;
-}
-
 #friend_link_panel :focus-visible {
     outline: var(--border-width-md) solid var(--accent);
     outline-offset: var(--border-width-sm);
 }
 
-#add_link_container :disabled { opacity: .6; }
-#add_link_button:disabled { cursor: wait; }
-
-#loading.hidden {
-    display: none;
-}
-
-#loading:not(.hidden) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--friend-gap);
-    color: var(--text-secondary);
-}
-
-.spinner {
-    box-sizing: border-box;
-    width: var(--friend-spinner);
-    height: var(--friend-spinner);
-    border: var(--border-width-md) solid var(--border-subtle);
-    border-top-color: var(--accent);
-    border-radius: var(--friend-spinner-radius);
-}
 
 @media (max-width: 768px) {
     body {

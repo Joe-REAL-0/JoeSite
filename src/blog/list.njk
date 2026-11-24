@@ -1,0 +1,98 @@
+---
+layout: base.njk
+pagination:
+  data: blogPages
+  size: 1
+  alias: listing
+permalink: "/{{ listing.outputPath }}"
+eleventyExcludeFromCollections: true
+description: "Joe的个人博客 - 技术分享、学习笔记与生活记录。探索编程、设计和创意的世界。"
+keywords: "Joe博客, 技术博客, 编程笔记, 学习分享, 个人网站"
+ogType: blog
+pageTitle: "Joe的博客"
+bodyClass: ""
+styles:
+  - /css/html-style/blog.css
+  - /css/animations/animation-blog.css
+  - /css/mobile-adaption.css
+inlineHead: |
+  <link rel="alternate" type="application/rss+xml" title="Joe的博客 RSS Feed" href="https://furryjoe.site/rss.xml">
+eleventyComputed:
+  title: "{% if listing.number > 1 %}Joe的个人小站 | 博客（第 {{ listing.number }} 页）{% else %}Joe的个人小站 | 博客{% endif %}"
+  canonical: "https://furryjoe.site{{ listing.url }}"
+---
+<div class="CenterContainer">
+    <div class="blog-header cyber-frame">
+        <p class="blog-count">共 {{ listing.totalCount }} 篇文章</p>
+    </div>
+
+    <div class="blog-list-container">
+        {% if listing.posts.length %}
+        {% for post in listing.posts %}
+        <div class="blog-item-wrapper">
+            <!-- 左侧博客卡片 -->
+            <a href="{{ post.url }}" class="blog-card-link">
+                <div class="blog-card cyber-frame">
+                    <div class="blog-card-header">
+                        <h2 class="blog-title">{{ post.title }}</h2>
+                    </div>
+
+                    {% if post.summary %}
+                    <p class="blog-summary">{{ post.summary }}</p>
+                    {% endif %}
+
+                    {% if post.tags.length %}
+                    <div class="blog-tags">
+                        {% for tag in post.tags %}
+                        <span class="blog-tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="blog-meta">
+                        {% if post.updatedDate and post.updatedDate != post.createdDate %}
+                        <span class="blog-updated">🔄 最后更新: {{ post.updatedTime }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+
+            <!-- 右侧时间轴 -->
+            <div class="timeline-section">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">{{ post.createdTime }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="no-blogs cyber-frame">
+            <p>暂无博客文章</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if listing.totalPages > 1 %}
+    <div class="pagination cyber-frame">
+        {% if listing.prevUrl %}
+        <a href="{{ listing.prevUrl }}" class="page-btn cyber-control">上一页</a>
+        {% endif %}
+
+        <span class="page-info">第 {{ listing.number }} / {{ listing.totalPages }} 页</span>
+
+        {% if listing.nextUrl %}
+        <a href="{{ listing.nextUrl }}" class="page-btn cyber-control">下一页</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // 旧地址 /blog?page=N 兼容：有效页码跳到对应静态页，其余保持当前页。
+    (function () {
+        var params = new URLSearchParams(window.location.search);
+        var requested = Number(params.get('page'));
+        var totalPages = {{ listing.totalPages }};
+        if (!Number.isInteger(requested) || requested < 2 || requested > totalPages) return;
+        window.location.replace('/blog/page/' + requested + '/');
+    })();
+</script>

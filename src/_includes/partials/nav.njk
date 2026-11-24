@@ -1,0 +1,9 @@
+{#
+  站内导航：桌面用左侧目录，移动端复用同一份结构放进 dialog。
+  纯链接，禁用 JS 也能跳转。
+#}
+<nav class="home-nav" aria-label="站内导航">
+  {% for item in site.nav %}
+  <a href="{{ item.url }}"><span>{{ item.label }}</span><span aria-hidden="true">↗</span></a>
+  {% endfor %}
+</nav>

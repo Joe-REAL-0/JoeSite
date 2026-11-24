@@ -1,0 +1,17 @@
+---
+layout: base.njk
+permalink: /cloud/index.html
+eleventyExcludeFromCollections: true
+title: "我的网盘 | Joe的个人小站"
+description: "Joe 的网盘入口：在独立站点 cloud.furryjoe.site 打开。"
+canonical: "https://furryjoe.site/cloud/"
+pageTitle: "数据中心"
+bodyClass: "cloud-page"
+styles:
+  - /css/html-style/cloud_drive.css
+  - /css/mobile-adaption.css
+---
+<main class="drive-panel cyber-frame">
+    <a class="drive-direct" href="{{ site.cloudUrl }}" target="_blank" rel="noopener noreferrer">在新标签页打开网盘 ↗</a>
+    <iframe class="drive-frame" src="{{ site.cloudUrl }}" title="我的网盘文件浏览器"></iframe>
+</main>
