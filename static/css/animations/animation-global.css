@@ -9,6 +9,17 @@
     to { opacity: 1; }
 }
 
+/* 光点沿右上方匀速漂移；位移量由 particles.js 按视口尺寸计算。 */
+@keyframes particle-rise {
+    from {
+        transform: translate3d(var(--cover-zero), var(--cover-zero), var(--cover-zero));
+    }
+
+    to {
+        transform: translate3d(var(--particle-drift-x), var(--particle-drift-y), var(--cover-zero));
+    }
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;

@@ -19,6 +19,9 @@
 
     --accent-bg: color-mix(in srgb, var(--accent) 13%, var(--bg-card));
     --accent-glow: color-mix(in srgb, var(--accent) 22%, transparent);
+    --particle-color: light-dark(#1b5fbf, #5fb0ff);
+    --particle-glow: color-mix(in srgb, var(--particle-color) 34%, transparent);
+    --particle-halo: color-mix(in srgb, var(--particle-color) 18%, transparent);
     --accent-border: color-mix(in srgb, var(--accent) 52%, transparent);
     --accent-hover-bg: color-mix(in srgb, var(--accent) 21%, var(--bg-card));
     --accent-hover-border: var(--accent);
@@ -138,6 +141,73 @@ body.themed-bg::after {
 
 body.themed-bg.character-revealed::after {
     opacity: 0;
+}
+
+/* ===========================
+   角色背景：左侧蓝色柔光与右侧漂浮光点
+   =========================== */
+/* 位于立绘下方：柔光和光点都不会盖住角色。 */
+.portrait-atmosphere {
+    position: fixed;
+    inset: var(--cover-zero);
+    z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* 左侧蓝色柔光，角色显现后在原位整体渐入。 */
+.portrait-atmosphere::before {
+    content: '';
+    position: absolute;
+    inset: var(--cover-zero);
+    background:
+        radial-gradient(ellipse 70% 85% at 0% 78%, var(--particle-glow), var(--mask-clear) 62%),
+        radial-gradient(ellipse 50% 65% at 0% 15%, var(--particle-halo), var(--mask-clear) 58%);
+    opacity: 0;
+    transition: opacity 1.3s ease-out var(--particle-intro);
+}
+
+body.character-revealed .portrait-atmosphere::before {
+    opacity: 1;
+}
+
+/* 起点由 particles.js 限定在右侧；右上角渐隐，粒子漂到那里自然消散。 */
+.portrait-particles {
+    position: absolute;
+    inset: var(--cover-zero);
+    -webkit-mask-image: radial-gradient(ellipse at 100% 0%, var(--mask-clear) 12%, var(--mask-solid) 58%);
+    mask-image: radial-gradient(ellipse at 100% 0%, var(--mask-clear) 12%, var(--mask-solid) 58%);
+}
+
+/* 入场前完全隐形且暂停，等剪影淡出、立绘完整后才逐个显形并开始漂移。 */
+.portrait-particles span {
+    position: absolute;
+    top: var(--particle-y);
+    left: var(--particle-x);
+    width: var(--particle-size);
+    height: var(--particle-size);
+    border-radius: var(--particle-shape);
+    background-color: var(--particle-color);
+    box-shadow: var(--cover-zero) var(--cover-zero) var(--particle-size) var(--particle-glow);
+    opacity: 0;
+    animation: particle-rise var(--particle-duration) linear var(--particle-delay) infinite;
+    animation-play-state: paused;
+    transition: opacity 0.6s ease-out var(--particle-fade-delay, var(--particle-intro));
+}
+
+body.character-revealed .portrait-particles span {
+    opacity: var(--particle-opacity);
+    animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .portrait-atmosphere::before {
+        transition: none;
+    }
+
+    .portrait-particles span {
+        animation: none;
+    }
 }
 
 /* ===========================

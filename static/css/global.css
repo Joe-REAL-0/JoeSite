@@ -57,6 +57,16 @@
     /* 面板与布局尺寸 (Panel & Layout Sizes) */
     --max-width-lg: 1200px;
     --panel-height-xs: 240px;
+
+    /* 背景光点：尺寸、数量、漂移速度与入场节奏，供 particles.js 读取。 */
+    --particle-size-min: 2px;
+    --particle-size-max: 5px;
+    --particle-count: 46;
+    --particle-speed-min: 40px;
+    --particle-speed-max: 110px;
+    /* 剪影淡出用 0.85s + 0.16s 延迟；粒子与柔光再晚 1.1s 入场，确保立绘已完全显现。 */
+    --particle-intro: 1.1s;
+    --particle-fade-spread: 0.7s;
     --mask-height-top: 200px;
     --panel-width-md: 600px;
     --panel-height-md: 500px;
@@ -66,7 +76,6 @@
     --panel-height-sm: 65vh;
     --window-opacity: 90%;
     --window-scanline: color-mix(in srgb, var(--accent) 4%, transparent);
-
     /* bkg-h.png 为 1670 × 941；cover 后剑下方、尾巴右侧的留白。 */
     --home-background-ratio: calc(1670 / 941);
     --home-safe-x-offset: 0.02;
@@ -94,6 +103,12 @@
     --font-size-xl: 24px;
     --font-size-2xl: 32px;
     --font-size-3xl: 48px;
+}
+
+@media screen and (max-width: 768px) {
+    :root {
+        --particle-count: 16;
+    }
 }
 
 /* ===========================
