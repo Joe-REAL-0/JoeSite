@@ -2,6 +2,29 @@
 
 这是我的个人网站项目，前端使用 HTML 和 CSS + JavaScript，从零开始开发，后端采用 Python 的 Flask 框架进行路由配置。
 
+## 分支工作流
+
+- `dev` 是日常开发分支，所有改动（功能、修复、样式、实验）都在这里提交并 push 到 `origin/dev`。
+- `main` 是稳定分支，只接受 Pull Request 合并，禁止直接 push。
+- `dev` 合并回 `main` 必须先开 PR，确认无误后再合并。
+- 需要长期隔离的改动可以另开 `feature/*` 分支，同样向 `dev` 提 PR。
+
+```bash
+git checkout dev
+git pull --rebase origin dev
+# ...修改代码...
+git add -A && git commit -m "说明"
+git push origin dev
+```
+
+从 `dev` 向 `main` 发 PR：
+
+```bash
+gh pr create --base main --head dev --title "标题" --body "改动说明"
+```
+
+仓库设置里应为 `main` 开启分支保护（Require a pull request before merging），从远端层面挡住直接 push。
+
 ## 技术栈
 
 - 前端：HTML、CSS、JavaScript
