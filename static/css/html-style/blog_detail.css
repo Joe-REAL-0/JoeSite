@@ -562,6 +562,34 @@ body {
 .sidebar-btn:active { transform: scale(0.95); }
 
 .btn-icon { font-size: var(--font-size-md); line-height: 1; }
+
+/* 评论 / 回到顶部用掩膜图标，跟随主题色而非系统 emoji 配色 */
+.btn-icon.icon-mask {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: currentColor;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+.btn-icon.icon-comment {
+    -webkit-mask-image: url('../../images/button_image/comment.svg');
+    mask-image: url('../../images/button_image/comment.svg');
+}
+
+.btn-icon.icon-arrow-up {
+    -webkit-mask-image: url('../../images/button_image/arrow_up.svg');
+    mask-image: url('../../images/button_image/arrow_up.svg');
+}
+
+/* 爱心用文字字形，点赞后转用警示色 */
+.like-btn .btn-icon { font-size: var(--font-size-lg); line-height: 1; }
+.like-btn.liked .btn-icon { color: var(--danger-color); }
 .btn-count { font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1; }
 
 .like-btn.liked {
@@ -765,6 +793,23 @@ body {
     .sidebar-btn { font-size: var(--font-size-lg); }
     .btn-icon { font-size: var(--font-size-sm); }
     .btn-count { font-size: var(--font-size-xs); }
+
+    /* 操作按钮已并入全局竖栏：右侧栏不再占位 */
+    .right-sidebar.rail-detached { display: none; }
+
+    /* 竖栏内的点赞 / 评论 / 回到顶部：与栏内其它按钮同间距、无外边距 */
+    #mobile_controls .action-buttons {
+        margin: 0;
+        gap: var(--space-xs);
+    }
+
+    #mobile_controls .sidebar-btn { gap: 0; }
+
+    /* 竖栏玻璃底色会盖掉点赞态配色，这里显式还原 */
+    #mobile_controls .like-btn.liked {
+        background-color: var(--danger-bg);
+        border-color: var(--danger-border);
+    }
 }
 
 @media (max-width: 480px) {

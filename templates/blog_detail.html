@@ -82,17 +82,17 @@
     </div>
 
     <!-- 操作按钮组 -->
-    <div class="action-buttons">
-        <button class="sidebar-btn like-btn cyber-control" id="likeBtn" title="点赞">
-            <span class="btn-icon" id="likeIcon">🤍</span>
+    <div class="action-buttons" data-mobile-rail>
+        <button class="sidebar-btn like-btn cyber-control" id="likeBtn" title="点赞" aria-label="点赞">
+            <span class="btn-icon" id="likeIcon">♡</span>
             <span class="btn-count" id="likeCount">{{ likes_count }}</span>
         </button>
-        <button class="sidebar-btn comment-btn cyber-control" id="commentBtn" title="评论">
-            <span class="btn-icon">💬</span>
+        <button class="sidebar-btn comment-btn cyber-control" id="commentBtn" title="评论" aria-label="评论">
+            <span class="btn-icon icon-mask icon-comment"></span>
             <span class="btn-count" id="commentBtnCount">{{ comments_count }}</span>
         </button>
-        <button class="sidebar-btn top-btn cyber-control" id="topBtn" title="回到顶部">
-            <span class="btn-icon">⬆️</span>
+        <button class="sidebar-btn top-btn cyber-control" id="topBtn" title="回到顶部" aria-label="回到顶部">
+            <span class="btn-icon icon-mask icon-arrow-up"></span>
         </button>
     </div>
 </aside>

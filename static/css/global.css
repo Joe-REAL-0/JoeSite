@@ -556,6 +556,12 @@ body {
 
 /* 移动端 */
 @media screen and (max-width: 768px) {
+    /* 页面末尾的竖栏占位块：高度由 mobile-rail.js 按竖栏实测值内联写入，
+       滚到底部时最后一段内容不会被竖栏压住 */
+    .mobile-rail-spacer {
+        pointer-events: none;
+    }
+
     .top-side {
         display: none !important;
     }
@@ -564,25 +570,69 @@ body {
         display: flex;
         flex-direction: column-reverse;
         /* 自下而上纵向排列 */
-        gap: 15px;
+        gap: var(--space-xs);
         /* 按钮间距 */
         position: fixed;
-        bottom: 5%;
-        right: 12px;
+        right: max(var(--space-xs), env(safe-area-inset-right));
+        bottom: max(var(--space-base), calc(env(safe-area-inset-bottom) + var(--space-xs)));
         z-index: 1002;
         opacity: 0;
         pointer-events: none;
+        transform: translateX(0);
+        transition: opacity 0.3s ease, transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+    /* 资源就绪后入场 */
     #mobile_controls.resources-loaded {
-        animation: sideFadeIn 0.3s 0.8s forwards;
+        opacity: 1;
+        pointer-events: auto;
     }
 
-    #mobile_controls .top-btn {
+    /* 向下阅读时整条竖栏滑出屏幕，把正文让出来；向上回看或滚到首尾时复现 */
+    #mobile_controls.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(calc(100% + var(--space-sm)));
+    }
+
+    /* 栏内按钮统一尺寸与玻璃质感；.sidebar-btn 来自并入竖栏的页面级操作组 */
+    #mobile_controls :is(.top-btn, .sidebar-btn) {
+        box-sizing: border-box;
+        flex: none;
         width: var(--title-height-mobile);
         height: var(--title-height-mobile);
+        border-radius: var(--ui-radius);
+        background-color: color-mix(in srgb, var(--top-btn-bg) 72%, transparent);
+        -webkit-backdrop-filter: blur(10px) saturate(150%);
+        backdrop-filter: blur(10px) saturate(150%);
+        box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
     }
 
+    /* 竖栏内按钮不做悬停放大，避免移出屏幕边缘时抖动 */
+    #mobile_controls :is(.top-btn, .sidebar-btn):hover {
+        transform: none;
+    }
+
+    /* 图标居中，计数改为角标，使栏内所有按钮的光学重心一致 */
+    #mobile_controls .sidebar-btn {
+        position: relative;
+        gap: 0;
+    }
+
+    #mobile_controls .btn-icon {
+        font-size: var(--font-size-md);
+        line-height: 1;
+        filter: drop-shadow(0 1px 1px rgb(0 0 0 / 45%));
+    }
+
+    #mobile_controls .btn-count {
+        position: absolute;
+        top: var(--space-2xs);
+        right: calc(-1 * var(--border-width-sm) + var(--space-2xs));
+        font-size: 10px;
+        line-height: 1;
+        color: var(--top-btn-color);
+    }
     .home-btn-icon {
         width: 18px;
         height: 18px;
@@ -592,5 +642,12 @@ body {
     .theme-icon-moon {
         width: 20px;
         height: 20px;
+    }
+}
+
+/* 系统减弱动效时取消竖栏滑出动画 */
+@media screen and (max-width: 768px) and (prefers-reduced-motion: reduce) {
+    #mobile_controls {
+        transition-duration: 0.01ms;
     }
 }

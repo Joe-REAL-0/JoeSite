@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 初始化点赞状态
     if (hasLiked && likeBtn) {
         likeBtn.classList.add('liked');
-        likeIcon.textContent = '❤️';
+        likeIcon.textContent = '♥';
     }
 
     if (likeBtn) {
@@ -151,14 +151,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         if (hasLiked) {
                             likeBtn.classList.add('liked', 'animate');
-                            likeIcon.textContent = '❤️';
+                            likeIcon.textContent = '♥';
                             setTimeout(function () {
                                 likeBtn.classList.remove('animate');
                             }, 600);
                         }
                         } else {
                             likeBtn.classList.remove('liked');
-                            likeIcon.textContent = '🤍';
+                            likeIcon.textContent = '♡';
                     }
                 })
                 .catch(function (err) {
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     hasLiked = data.has_liked;
                     if (hasLiked) {
                         likeBtn.classList.add('liked');
-                        likeIcon.textContent = '❤️';
+                        likeIcon.textContent = '♥';
                     }
 
                     // 渲染评论

@@ -48,7 +48,6 @@
             <div class="auth-meta">
                 <a class="auth-link cyber-control" href="{{ url_for('auth.register') }}" data-auth-switch="register">没有Joe通行证？立即注册</a>
             </div>
-            <p class="auth-hint">第三方登录后仍需绑定邮箱，同邮箱下的数据会自动共享。</p>
             <div class="auth-oauth">
                 <div class="auth-oauth-divider"><span>第三方登录</span></div>
                 <div class="auth-oauth-grid">
@@ -71,7 +70,6 @@
         </form>
         <form id="forgot_form" class="auth-form" data-auth-panel="forgot"
             aria-hidden="{{ 'false' if active_mode == 'forgot' else 'true' }}" action="{{ url_for('auth.forgot_password') }}" method="POST">
-            <p class="auth-hint">输入注册邮箱，我们会向该邮箱发送密码重置链接。</p>
             <div class="auth-field">
                 <input placeholder="注册邮箱" type="email" name="email" class="auth-input" required autocomplete="email">
             </div>
@@ -84,7 +82,6 @@
 
         <form id="reset_form" class="auth-form" data-auth-panel="reset"
             aria-hidden="{{ 'false' if active_mode == 'reset' else 'true' }}" action="{{ url_for('auth.reset_password', token=reset_token) }}" method="POST">
-            <p class="auth-hint">设置新的登录密码。</p>
             <div class="auth-field">
                 <input placeholder="新密码" type="password" class="auth-input" name="new_password" required autocomplete="new-password">
             </div>
@@ -115,7 +112,6 @@
             <div class="auth-meta">
                 <a class="auth-link cyber-control" href="{{ url_for('auth.login') }}" data-auth-switch="login">已有Joe通行证？去登录</a>
             </div>
-            <p class="auth-hint">点击“下一步”进行邮箱验证</p>
             <p id="register_status" class="auth-status{% if register_status %} is-active{% endif %}" aria-live="polite">{{ register_status|default('') }}</p>
             <button class="auth-submit cyber-control" type="submit">下一步</button>
         </form>
