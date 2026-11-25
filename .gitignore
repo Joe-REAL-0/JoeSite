@@ -21,3 +21,5 @@ app.log
 *.bak
 *.orig
 *.rej
+
+.wrangler/

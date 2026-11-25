@@ -209,6 +209,8 @@ body.home-page {
         padding: var(--home-menu-trigger-padding);
         margin-bottom: var(--space-sm);
     }
+    html.js .home-menu-trigger { display: inline-flex; }
+    html.js .home-directory { display: none; }
 }
 
 @media (max-width: 768px), (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
@@ -313,6 +315,8 @@ body.home-page {
         color: var(--bg-card);
     }
 }
+html.no-js .home-page .home-directory { display: block; }
+html.no-js .home-page .home-menu-trigger { display: none; }
 
 /* 页面内容等待公共加载器完成，公共顶栏与遮罩动画不受影响。 */
 .home-page:not(.home-ready) .home-intro,

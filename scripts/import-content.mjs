@@ -85,8 +85,8 @@ function exportPosts(db, outDir, report) {
 
   for (const row of rows) {
     const tags = tagStmt.all(row.id).map((t) => t.tag_name);
-    const content = String(row.content ?? "").replace(/\r\n/g, "\n").trim();
-    if (!content) report.posts.emptyBodies.push(row.id);
+    const content = String(row.content ?? "").replace(/\r\n/g, "\n");
+    if (!content.trim()) report.posts.emptyBodies.push(row.id);
 
     const front = [
       "---",

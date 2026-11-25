@@ -37,7 +37,7 @@ const { post } = Astro.props;
         <h1 class="blog-title">{post.title}</h1>
         <div class="blog-meta">
           <span class="blog-date">发布于: {post.createdTime}</span>
-          {post.updatedTime && post.updatedDate !== post.createdDate && (
+          {post.updatedTime && post.updatedTime !== post.createdTime && (
             <span class="blog-updated">更新于: {post.updatedTime}</span>
           )}
         </div>

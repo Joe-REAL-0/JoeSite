@@ -40,7 +40,6 @@ const ALLOWED_ATTRIBUTES = {
  */
 function mathPlugin(md) {
   const escapeHtml = md.utils.escapeHtml;
-
   md.block.ruler.before("fence", "math_block", (state, startLine, endLine, silent) => {
     const start = state.bMarks[startLine] + state.tShift[startLine];
     const max = state.eMarks[startLine];
@@ -80,7 +79,7 @@ function mathPlugin(md) {
   });
 
   md.renderer.rules.math_block = (tokens, idx) =>
-    `<div class="math-display">${escapeHtml(tokens[idx].content)}</div>\n`;
+    `$$${escapeHtml(tokens[idx].content)}$$`;
 
   md.inline.ruler.after("escape", "math_inline", (state, silent) => {
     const start = state.pos;
@@ -107,7 +106,7 @@ function mathPlugin(md) {
   });
 
   md.renderer.rules.math_inline = (tokens, idx) =>
-    `<span class="math-inline">${escapeHtml(tokens[idx].content)}</span>`;
+    `<span class="math-inline">$${escapeHtml(tokens[idx].content)}$</span>`;
 }
 
 /**
@@ -129,6 +128,7 @@ const md = new MarkdownIt({
   html: true,
   linkify: false,
   typographer: false,
+  breaks: true,
   highlight(code, lang) {
     const language = lang && hljs.getLanguage(lang) ? lang : null;
     let inner;
@@ -182,10 +182,10 @@ export function extractToc(html) {
     const level = match[1];
     const idMatch = /\bid="([^"]+)"/.exec(match[2]);
     if (!idMatch) continue;
-    const text = match[3]
+    const text = md.utils.unescapeAll(match[3]
       .replace(/<a[^>]*class="headerlink"[^>]*>[\s\S]*?<\/a>/g, "")
       .replace(/<[^>]+>/g, "")
-      .trim();
+      .trim());
     if (!text) continue;
     items.push({ id: idMatch[1], level, text });
   }

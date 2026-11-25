@@ -39,11 +39,16 @@ test("标题：生成锚点与可选目录条目", () => {
   assert.equal(toc[0].id, "第一节");
 });
 
-test("公式：$ 与 $$ 内容原样保留，不被强调语法吃掉", () => {
-  const html = renderMarkdown("行内 $a*b*c$ 与块级\n\n$$\nx_1 + y_2\n$$");
-  assert.match(html, /<span class="math-inline">a\*b\*c<\/span>/);
-  assert.match(html, /<div class="math-display">x_1 \+ y_2<\/div>/);
+test("公式：保留 MathJax 分隔符且段内换行输出为硬换行", () => {
+  const html = renderMarkdown("行内 $a*b*c$ 与块级\n\n$$\nx_1 + y_2\n$$\n\n第一行\n第二行");
+  assert.match(html, /<span class="math-inline">\$a\*b\*c\$<\/span>/);
+  assert.match(html, /\$\$x_1 \+ y_2\$\$/);
+  assert.match(html, /第一行<br\s*\/>\s*第二行/);
   assert.ok(!html.includes("<em>"), "公式里的星号不能变成强调");
+});
+test("目录标题：解码 HTML 实体", () => {
+  const toc = extractToc(renderMarkdown("## A & B"));
+  assert.equal(toc[0].text, "A & B");
 });
 
 test("站内图片：src 保留，属性不丢", () => {

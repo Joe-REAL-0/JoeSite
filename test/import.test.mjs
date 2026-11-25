@@ -24,7 +24,7 @@ function makeSnapshot(dir) {
   const insertBlog = db.prepare(
     "INSERT INTO blogs (id, title, content, summary, created_time, updated_time, author_email, is_published, view_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
   );
-  insertBlog.run(42, "已发布文章", "第一段。\n\n第二段。", "摘要", "2024-05-06 08:00:00", "2024-05-07 09:30:00", "owner@example.com", 1, 7);
+  insertBlog.run(42, "已发布文章", "    第一段。\n\n第二段。", "摘要", "2024-05-06 08:00:00", "2024-05-07 09:30:00", "owner@example.com", 1, 7);
   insertBlog.run(43, "草稿文章", "不该出现", "", "2024-05-08 08:00:00", null, "owner@example.com", 0, 0);
 
   db.exec("INSERT INTO blog_tags (id, tag_name, created_time) VALUES (1, '随笔', '2024-01-01 00:00:00')");
@@ -66,7 +66,7 @@ test("导出：只带出公开字段，草稿与非 http(s) 友链留账不出�
   assert.match(post, /^title: "已发布文章"$/m);
   assert.match(post, /^created_time: "2024-05-06 08:00:00"$/m);
   assert.match(post, /tags: \["随笔"\]/);
-  assert.match(post, /第一段。/);
+  assert.match(post, /\n    第一段。\n\n第二段。\n/);
   assert.ok(!post.includes("owner@example.com"), "不得导出作者邮箱");
   assert.ok(!post.includes("view_count"));
 
@@ -90,7 +90,7 @@ test("导出：只带出公开字段，草稿与非 http(s) 友链留账不出�
   assert.equal(report.posts.published, 1);
   assert.equal(report.posts.draftsExcluded, 1);
   assert.deepEqual(report.posts.ids, [42]);
-  assert.match(report.posts.hashes["42"], /^[a-f0-9]{64}$/);
+  assert.equal(report.posts.hashes["42"], "729f5914236cfbe2eeb84f6f278218152373d5674a8bf1143a9fd9695129b27c");
   assert.deepEqual(report.friends.rejected.map((item) => item.name), ["裸域名"]);
   assert.deepEqual(report.urls, [{ old: "/blog/42", new: "/blog/42/" }]);
 });

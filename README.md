@@ -89,6 +89,21 @@ npx serve dist        # 或 python -m http.server -d dist
 
 ## 发布
 
+### Cloudflare Workers
+
+首次部署前，在 Cloudflare 账号中登录并创建 Workers 项目。项目已配置 Workers Static Assets，构建后的 `dist/` 会作为静态资源部署，未命中的 URL 返回 `dist/404.html` 和 404 状态。
+
+```bash
+npm ci
+npx wrangler login       # 首次登录；也可使用已配置的 API Token
+npm run deploy           # 构建并部署
+npm run cf:dev           # 本地启动 Workers 预览
+```
+
+部署成功后，Wrangler 会输出 `*.workers.dev` 地址。自定义域名在 Cloudflare 控制台的该 Worker 的 Settings > Domains & Routes 中绑定；域名 DNS 必须由 Cloudflare 管理。`wrangler.jsonc` 中的 Worker 名称是 `joesite`，首次部署会创建此 Worker。
+
+### 其他静态服务器
+
 1. 在分支上改内容，跑 `npm ci && npm run build && npm test`。
 2. 把 `dist/` 整目录替换到静态源站（**完整替换**，不要增量覆盖，否则撤下的文章会残留）。
 3. 静态服务器需要两条最小配置：

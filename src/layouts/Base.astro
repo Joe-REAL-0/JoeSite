@@ -42,6 +42,7 @@ const documentDescription = description || site.description;
     <script define:vars={{ themeStorageKey }}>
       // Apply the override before styles are loaded, independently of hydration.
       document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
       try {
         const theme = localStorage.getItem(themeStorageKey);
         if (theme === 'dark' || theme === 'light') document.documentElement.dataset.theme = theme;
@@ -98,10 +99,14 @@ const documentDescription = description || site.description;
         // A broken or stalled loader must never leave page content obscured.
         window.setTimeout(() => {
           const cover = document.getElementById('cover');
-          if (cover) {
-            cover.remove();
-            document.body.classList.add('character-revealed');
-          }
+          if (!cover) return;
+          cover.remove();
+          document.body.classList.add('character-revealed', 'home-ready');
+          document.getElementById('title_container')?.classList.add('resources-loaded');
+          document.querySelector('#title_container h1')?.classList.add('resources-loaded');
+          document.getElementById('loading_text')?.classList.add('resources-loaded');
+          document.getElementById('mobile_controls')?.classList.add('resources-loaded');
+          document.querySelectorAll('#global-home-btn, #global-home-btn-mobile').forEach((button) => button.classList.add('visible'));
         }, 12000);
         const fonts = [
           '/font/GunShi.otf', '/font/yuanti.ttf', '/font/ZhengQingKeLengKu.ttf',
