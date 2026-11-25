@@ -63,10 +63,10 @@ order: 1
 
 档案馆默认显示第一节，点击目录可切换正文。章节链接（如 `/oc_introduce/#oc-2`）可直接分享。
 
-友链只改 `src/_data/friends.json`，每条只需展示名、`http(s)` 网址和头像路径：
+友链在 `src/_data/friends.json` 维护，每条包含展示名、`http(s)` 网址和头像路径。本地头像放在 `static/images/avatars/`，并将对应文件加入 `astro.config.mjs` 的公开资源清单。
 
 ```json
-[{ "name": "Shadow", "url": "https://www.shadow.top", "avatar": "/images/avatars/shadow.jpg" }]
+[{ "name": "悦悦", "url": "https://furryhk.cn/", "avatar": "/images/avatars/github_107252731.jpg" }]
 ```
 
 ## 本地预览
@@ -124,9 +124,9 @@ node scripts/import-content.mjs --db <快照.db> --out <导出目录> --avatars 
 
 ## 当前内容状态
 
-- 档案馆 7 节：来自仓库历史提交 `32c8e3f` 的 `static/text/oc_introduce/*.txt`，正文逐字保留。
-- 友链 1 条：来自仓库历史快照的 `users` 表。
-- 博客：**尚未导入**。仓库内没有 `blogs` 数据，旧站域名也无法从构建环境访问；需要站主提供只读快照后运行上面的导入脚本。在此之前 `/blog/` 生成空列表页（不是 404），不显示任何假计数或占位文章。
+- 档案馆 7 节：与旧站 SQLite 快照一致，保留原 ID、顺序和正文。
+- 友链 9 条：链接来自旧站快照；城城、纳纳、炎天、Shadow 和 kzmillion 的头像由站主指定。再次导入时保留这些头像路径。
+- 博客 3 篇：从旧站快照导入已发布文章，保留原 ID、正文、时间和标签。
 - 日记 `/self_diary`：旧站模板历史上始终是空文件，确认无公开内容，退役为 404，导航、订阅与站点地图都不再引用。
 
 ## 已下线的内容

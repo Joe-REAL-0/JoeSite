@@ -136,10 +136,10 @@ const md = new MarkdownIt({
       try {
         inner = hljs.highlight(code, { language, ignoreIllegals: true }).value;
       } catch {
-        inner = escapeHtml(code);
+        inner = md.utils.escapeHtml(code);
       }
     } else {
-      inner = escapeHtml(code);
+      inner = md.utils.escapeHtml(code);
     }
     const codeClass = language ? `hljs language-${language}` : "hljs";
     // 返回完整 <pre>：markdown-it 见到 <pre 开头的返回值就不再套自己的外壳。

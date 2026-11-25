@@ -48,7 +48,13 @@ const publicFiles = [
   "images/link_image/itch-io.svg",
   "images/link_image/minecraft.svg",
   "images/avatars/default_avatar.png",
-  "images/avatars/shadow.jpg",
+  "images/avatars/github_107252731.jpg",
+  "images/avatars/github_116478171.png",
+  "images/avatars/38c78095_01.png.jpg",
+  "images/avatars/7a70fa80_index.png",
+  "images/avatars/9690811f_small.png",
+  "images/avatars/a9aa9111_Shadow.png",
+  "images/avatars/0c53aba0_kz_21.1.27.png",
 ];
 
 export default defineConfig({

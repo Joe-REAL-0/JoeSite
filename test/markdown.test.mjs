@@ -19,6 +19,13 @@ test("围栏代码：保留缩进与语言类名，内容不再被当正文解�
   assert.match(text, /\n  const b = 2;/);
 });
 
+test("围栏代码：没有语言或语言未知时，保留转义后的原文", () => {
+  for (const lang of ["", "unknown-language"]) {
+    const html = renderMarkdown(`\`\`\`${lang}\n<tag> & text\n\`\`\``);
+    assert.match(html, /<pre class="highlight"><code class="hljs">&lt;tag&gt; &amp; text\n<\/code><\/pre>/);
+  }
+});
+
 test("标题：生成锚点与可选目录条目", () => {
   const html = renderMarkdown("## 第一节\n\n正文\n\n### 细节\n\n更多");
   assert.match(html, /<h2 id="第一节"/);
