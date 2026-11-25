@@ -15,7 +15,7 @@ const ROOT = path.resolve(import.meta.dirname, "..");
 function makeFixtureProject(posts) {
   const dir = fs.mkdtempSync(path.join(ROOT, ".tmp-build-"));
 
-  fs.copyFileSync(path.join(ROOT, "eleventy.config.js"), path.join(dir, "eleventy.config.js"));
+  fs.copyFileSync(path.join(ROOT, "astro.config.mjs"), path.join(dir, "astro.config.mjs"));
   fs.copyFileSync(path.join(ROOT, "package.json"), path.join(dir, "package.json"));
   fs.cpSync(path.join(ROOT, "scripts"), path.join(dir, "scripts"), { recursive: true });
   fs.cpSync(path.join(ROOT, "src"), path.join(dir, "src"), { recursive: true });
@@ -43,7 +43,7 @@ function makeFixtureProject(posts) {
 }
 
 function build(projectDir) {
-  const result = spawnSync(process.execPath, [path.join(ROOT, "node_modules", "@11ty", "eleventy", "cmd.cjs")], {
+  const result = spawnSync(process.execPath, [path.join(ROOT, "node_modules", "astro", "bin", "astro.mjs"), "build"], {
     cwd: projectDir,
     encoding: "utf8",
   });

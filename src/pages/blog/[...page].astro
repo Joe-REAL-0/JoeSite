@@ -1,0 +1,70 @@
+---
+import Base from "../../layouts/Base.astro";
+import site from "../../_data/site.json";
+import { readBlog } from "../../lib/blog.js";
+
+export function getStaticPaths() {
+  return readBlog().pages.map((listing) => ({
+    params: { page: listing.number === 1 ? undefined : `page/${listing.number}` },
+    props: { listing },
+  }));
+}
+
+const { listing } = Astro.props;
+const suffix = listing.number > 1 ? `（第 ${listing.number} 页）` : "";
+---
+<Base
+  title={`Joe的个人小站 | 博客${suffix}`}
+  description="Joe的个人博客 - 技术分享、学习笔记与生活记录。探索编程、设计和创意的世界。"
+  keywords="Joe博客, 技术博客, 编程笔记, 学习分享, 个人网站"
+  canonical={site.url + listing.url}
+  ogType="blog"
+  pageTitle="Joe的博客"
+  styles={["/css/html-style/blog.css", "/css/animations/animation-blog.css", "/css/mobile-adaption.css"]}
+>
+  <link slot="head" rel="alternate" type="application/rss+xml" title="Joe的博客 RSS Feed" href={`${site.url}/rss.xml`} />
+  <div class="CenterContainer">
+    <div class="blog-header cyber-frame">
+      <p class="blog-count">共 {listing.totalCount} 篇文章</p>
+    </div>
+    <div class="blog-list-container">
+      {listing.posts.length ? listing.posts.map((post) => (
+        <div class="blog-item-wrapper">
+          <a href={post.url} class="blog-card-link">
+            <div class="blog-card cyber-frame">
+              <div class="blog-card-header"><h2 class="blog-title">{post.title}</h2></div>
+              {post.summary && <p class="blog-summary">{post.summary}</p>}
+              {post.tags.length > 0 && (
+                <div class="blog-tags">
+                  {post.tags.map((tag) => <span class="blog-tag">{tag}</span>)}
+                </div>
+              )}
+              <div class="blog-meta">
+                {post.updatedDate && post.updatedDate !== post.createdDate && (
+                  <span class="blog-updated">🔄 最后更新: {post.updatedTime}</span>
+                )}
+              </div>
+            </div>
+          </a>
+          <div class="timeline-section">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">{post.createdTime}</div>
+          </div>
+        </div>
+      )) : <div class="no-blogs cyber-frame"><p>暂无博客文章</p></div>}
+    </div>
+    {listing.totalPages > 1 && (
+      <div class="pagination cyber-frame">
+        {listing.prevUrl && <a href={listing.prevUrl} class="page-btn cyber-control">上一页</a>}
+        <span class="page-info">第 {listing.number} / {listing.totalPages} 页</span>
+        {listing.nextUrl && <a href={listing.nextUrl} class="page-btn cyber-control">下一页</a>}
+      </div>
+    )}
+  </div>
+  <script define:vars={{ totalPages: listing.totalPages }}>
+    const requested = Number(new URLSearchParams(window.location.search).get('page'));
+    if (Number.isInteger(requested) && requested >= 2 && requested <= totalPages) {
+      window.location.replace('/blog/page/' + requested + '/');
+    }
+  </script>
+</Base>

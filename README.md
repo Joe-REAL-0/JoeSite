@@ -1,8 +1,8 @@
 # Joe_Site
 
-Joe 的个人小站。**访客打开任何一个公开页面，静态服务器只需要返回文件**：站点由 Eleventy 在发布时构建成 `dist/`，没有任何应用进程、数据库或站内写接口。
+Joe 的个人小站。Astro 在发布时把页面生成到 `dist/`，访客可以直接通过静态服务器访问。
 
-- 技术栈：Eleventy（11ty）+ Nunjucks + 原生 CSS/JavaScript，构建期渲染 Markdown。
+- Astro 负责页面、分页和订阅文件，Svelte 负责主题切换等浏览器交互。Markdown 在构建时渲染。
 - 部署目录：`dist/`（HTML、CSS、JS、字体、图片、XML、TXT），可直接放到任意静态服务器。
 - 内容源：`src/posts/<原数字ID>.md`、`src/oc/<id>.md`、`src/_data/friends.json`。
 
@@ -10,18 +10,15 @@ Joe 的个人小站。**访客打开任何一个公开页面，静态服务器�
 
 ```
 .
-├── eleventy.config.js     # 构建配置：输入 src/，输出 dist/，按清单复制资源
+├── astro.config.mjs       # Astro、Svelte 与公开资源清单
 ├── src/
-│   ├── _includes/         # 公共布局与导航片段
-│   ├── _data/             # 站点配置、友链、文章与档案装载器
+│   ├── layouts/           # 共用页面布局
+│   ├── components/        # Astro 与 Svelte 组件
+│   ├── _data/             # 站点与友链配置
 │   ├── posts/             # 已发布文章，一篇文章一个文件
 │   ├── oc/                # 档案馆章节，一节一个文件
-│   ├── blog/              # 博客列表与详情模板
-│   ├── index.njk          # 首页
-│   ├── oc_introduce.njk   # 档案馆
-│   ├── friend_link.njk    # 友情链接
-│   ├── cloud.njk          # 网盘入口
-│   ├── sitemap.njk / robots.njk / rss.njk / feed.njk / 404.njk
+│   ├── pages/             # 页面路由、博客分页与详情、RSS、站点地图和 robots.txt
+│   └── lib/               # 博客数据与订阅生成
 ├── static/                # 样式、脚本、字体、图片（仅清单内的文件会进入 dist）
 ├── scripts/               # 内容装载、Markdown 渲染、旧站快照导出
 ├── test/                  # 构建与导出的自动化检查
@@ -64,6 +61,8 @@ order: 1
 正文段落之间空一行；段内换行会保留。
 ```
 
+档案馆默认显示第一节，点击目录可切换正文。章节链接（如 `/oc_introduce/#oc-2`）可直接分享。
+
 友链只改 `src/_data/friends.json`，每条只需展示名、`http(s)` 网址和头像路径：
 
 ```json
@@ -72,10 +71,13 @@ order: 1
 
 ## 本地预览
 
+需要 Node.js 22.23.4 或更高版本。
+
 ```bash
 npm ci
+npm run dev       # 启动本地开发服务器（也可用 npm run serve）
 npm run build     # 生成 dist/
-npm run serve     # 本地预览，改内容自动重建
+npm run preview   # 本地预览最近一次构建
 npm test          # 构建、渲染与导出的自动化检查
 ```
 

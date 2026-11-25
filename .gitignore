@@ -1,6 +1,7 @@
 # 依赖与构建产物（dist 由 CI/发布时生成，不入库）
 node_modules/
 dist/
+.astro/
 .tmp-build-*/
 .tmp-import-*/
 

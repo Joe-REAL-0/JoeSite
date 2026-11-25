@@ -137,7 +137,7 @@ test("导出：产物能被构建直接读取（front matter 合法）", (t) => 
   const projectDir = path.join(ROOT, `.tmp-import-${process.pid}-${Date.now()}`);
   t.after(() => fs.rmSync(projectDir, { recursive: true, force: true }));
   fs.mkdirSync(projectDir);
-  fs.copyFileSync(path.join(ROOT, "eleventy.config.js"), path.join(projectDir, "eleventy.config.js"));
+  fs.copyFileSync(path.join(ROOT, "astro.config.mjs"), path.join(projectDir, "astro.config.mjs"));
   fs.copyFileSync(path.join(ROOT, "package.json"), path.join(projectDir, "package.json"));
   fs.cpSync(path.join(ROOT, "scripts"), path.join(projectDir, "scripts"), { recursive: true });
   fs.cpSync(path.join(ROOT, "src"), path.join(projectDir, "src"), { recursive: true });
@@ -152,7 +152,7 @@ test("导出：产物能被构建直接读取（front matter 合法）", (t) => 
 
   const built = spawnSync(
     process.execPath,
-    [path.join(ROOT, "node_modules", "@11ty", "eleventy", "cmd.cjs")],
+    [path.join(ROOT, "node_modules", "astro", "bin", "astro.mjs"), "build"],
     { cwd: projectDir, encoding: "utf8" },
   );
   assert.equal(built.status, 0, built.stderr);
