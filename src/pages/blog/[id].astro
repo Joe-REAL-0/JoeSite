@@ -14,10 +14,11 @@ const { post } = Astro.props;
   canonical={site.url + post.url}
   ogType="article"
   pageTitle="博客详情"
-  styles={["/css/html-style/blog_detail.css", "/css/animations/animation-blog.css", "/css/mobile-adaption.css"]}
-  bodyScripts={["/js/blog_detail.js"]}
+  styles={["/css/html-style/blog_detail.css", "/css/html-style/interactions.css", "/css/animations/animation-blog.css", "/css/mobile-adaption.css"]}
+  bodyScripts={["/js/blog_detail.js", "/js/blog_interactions.js"]}
 >
   <Fragment slot="head">
+    <script is:inline define:vars={{ postId: String(post.id) }}>window.blogPostId = postId;</script>
     <script is:inline>
       window.MathJax = {
         tex: {
@@ -61,9 +62,23 @@ const { post } = Astro.props;
       </nav>
     </div>
     <div class="action-buttons" data-mobile-rail>
+      <button class="sidebar-btn" id="likeBtn" type="button" title="点赞" aria-label="点赞" aria-pressed="false"><span aria-hidden="true">♥</span><span id="likeCount">0</span></button>
+      <button class="sidebar-btn" id="commentBtn" type="button" title="评论" aria-label="打开评论"><span aria-hidden="true">评论</span></button>
       <button class="sidebar-btn top-btn cyber-control" id="topBtn" title="回到顶部" aria-label="回到顶部">
         <span class="btn-icon icon-mask icon-arrow-up"></span>
       </button>
     </div>
+    <section class="interaction-panel cyber-frame" id="interactionPanel" aria-label="文章互动">
+      <div class="interaction-header"><h2>评论</h2><button type="button" id="closeComments" aria-label="关闭评论">×</button></div>
+      <div id="authControls"><button type="button" id="loginBtn">使用 GitHub 登录</button></div>
+      <p id="interactionStatus" role="status" aria-live="polite"></p>
+      <form id="commentForm" hidden>
+        <label for="commentInput">发表评论</label>
+        <textarea id="commentInput" name="content" maxlength="2000" required></textarea>
+        <button type="submit">发送</button>
+      </form>
+      <ol id="commentList"></ol>
+      <button type="button" id="loadMoreComments" hidden>加载更多评论</button>
+    </section>
   </aside>
 </Base>

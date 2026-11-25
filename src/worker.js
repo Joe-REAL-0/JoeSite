@@ -1,5 +1,15 @@
+import { createAuth } from "./lib/auth.js";
+import { handleInteractionRequest } from "./lib/interactions.js";
+
 export default {
-  fetch(request, env) {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    if (url.pathname.startsWith("/api/auth/")) {
+      return createAuth(env, request.url).handler(request);
+    }
+    if (url.pathname.startsWith("/api/posts/")) {
+      return handleInteractionRequest(request, env);
+    }
     return env.ASSETS.fetch(request);
   },
 };

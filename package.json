@@ -15,6 +15,11 @@
     "deploy": "npm run build && wrangler deploy",
     "cf:dev": "wrangler dev"
   },
+  "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.7.28",
+    "better-auth": "^1.7.28",
+    "drizzle-orm": "^0.45.4"
+  },
   "devDependencies": {
     "@astrojs/svelte": "^9.1.6",
     "astro": "^7.4.13",

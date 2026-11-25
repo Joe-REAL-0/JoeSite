@@ -91,7 +91,26 @@ npx serve dist        # 或 python -m http.server -d dist
 
 ### Cloudflare Workers
 
-首次部署前，在 Cloudflare 账号中登录并创建 Workers 项目。项目已配置 Workers Static Assets，构建后的 `dist/` 会作为静态资源部署，未命中的 URL 返回 `dist/404.html` 和 404 状态。
+首次部署前创建 Workers 项目、D1 数据库与 KV namespace，并把返回的资源 ID 填入 `wrangler.jsonc`（`joesite-auth` / `DB`、`INTERACTIONS`）。Worker 对 `/api/*` 先执行，其他路径仍由 Static Assets 返回。
+执行迁移并配置 GitHub OAuth App（回调地址必须是 `https://<站点域名>/api/auth/callback/github`，同时授权 `user:email`）：
+
+首次为本地 D1 创建迁移表：
+
+```bash
+npx wrangler d1 migrations apply DB --local
+```
+
+配置 GitHub OAuth App（回调地址必须是 `https://<站点域名>/api/auth/callback/github`，并授权 `user:email`），并设置 secrets：
+
+```bash
+npx wrangler d1 migrations apply DB --local
+npx wrangler secret put BETTER_AUTH_SECRET
+npx wrangler secret put GITHUB_CLIENT_ID
+npx wrangler secret put GITHUB_CLIENT_SECRET
+npx wrangler secret put BETTER_AUTH_URL
+```
+
+`BETTER_AUTH_URL` 设置为正式站点 origin；本地使用 `wrangler dev` 时，在 `.dev.vars` 配置同名变量。部署前执行 `npx wrangler d1 migrations apply DB --remote`。`BETTER_AUTH_SECRET` 使用至少 32 字符的高熵随机值。
 
 ```bash
 npm ci
@@ -144,6 +163,6 @@ node scripts/import-content.mjs --db <快照.db> --out <导出目录> --avatars 
 - 博客 3 篇：从旧站快照导入已发布文章，保留原 ID、正文、时间和标签。
 - 日记 `/self_diary`：旧站模板历史上始终是空文件，确认无公开内容，退役为 404，导航、订阅与站点地图都不再引用。
 
-## 已下线的内容
+## 互动功能
 
-登录、注册、找回密码、OAuth、邮箱绑定、个人资料与头像上传、留言、评论、点赞、阅读计数、后台管理与编辑页面、`/api/*`、`/find_text`、`/get_resources` 全部移除。站内没有写请求，页面不依赖会话，本地存储只记住主题偏好。
+GitHub OAuth 由 Better Auth 处理，用户、账号和会话保存在 D1；评论与每用户点赞状态保存在 Cloudflare KV。评论公开展示，提交和点赞需先登录。KV 最终一致，点赞总数按用户状态读取。当前仅支持 Cloudflare Workers 部署，普通静态服务器不提供认证及互动 API。
