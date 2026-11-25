@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('sidebar');
     const titleItems = Array.prototype.slice.call(document.querySelectorAll('.TextTitle'));
-    const sections = Array.prototype.slice.call(document.querySelectorAll('#output section'));
 
-    const setActive = (anchor) => {
+    const syncActive = () => {
+        const current = titleItems.find((item) => item.hash === window.location.hash) || titleItems[0];
         titleItems.forEach((item) => {
-            const active = item.dataset.anchor === anchor;
+            const active = item === current;
             item.classList.toggle('active', active);
             if (active) item.setAttribute('aria-current', 'true');
             else item.removeAttribute('aria-current');
@@ -32,8 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 点击目录后在移动端收起侧栏；锚点跳转由浏览器完成。
     titleItems.forEach((item) => {
         item.addEventListener('click', function () {
-            setActive(this.dataset.anchor);
-            if (isMobile && sidebar && sidebar.classList.contains('expanded')) {
+            if (window.matchMedia('(max-width: 768px)').matches && sidebar.classList.contains('expanded')) {
                 sidebar.classList.remove('expanded');
                 sidebarToggle.textContent = '☰';
                 sidebarToggle.setAttribute('aria-expanded', 'false');
@@ -41,18 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 滚动时把当前可见章节同步到目录。
-    if (sections.length) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) setActive(entry.target.id);
-            });
-        }, { root: document.getElementById('output'), rootMargin: '0px 0px -60% 0px' });
-
-        sections.forEach((section) => observer.observe(section));
-    }
-
-    const initialAnchor = window.location.hash.replace(/^#/, '');
-    if (initialAnchor) setActive(initialAnchor);
-    else if (titleItems.length) setActive(titleItems[0].dataset.anchor);
+    syncActive();
+    window.addEventListener('hashchange', syncActive);
 });
