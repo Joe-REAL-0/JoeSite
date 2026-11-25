@@ -117,7 +117,7 @@ export function loadPosts(dir) {
       throw new Error(`内容文件 ${name} 的 updated_time 无法解析：${data.updated_time}`);
     }
 
-    const body = content.trim();
+    const body = content;
     const html = renderMarkdown(body);
     const summary = typeof data.summary === "string" && data.summary.trim()
       ? data.summary.trim()

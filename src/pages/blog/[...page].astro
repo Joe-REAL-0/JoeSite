@@ -40,7 +40,7 @@ const suffix = listing.number > 1 ? `（第 ${listing.number} 页）` : "";
                 </div>
               )}
               <div class="blog-meta">
-                {post.updatedDate && post.updatedDate !== post.createdDate && (
+                {post.updatedTime && post.updatedTime !== post.createdTime && (
                   <span class="blog-updated">🔄 最后更新: {post.updatedTime}</span>
                 )}
               </div>

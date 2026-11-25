@@ -21,7 +21,7 @@ const sections = loadOc(path.join(process.cwd(), "src", "oc"));
       <nav id="sidebar" class="cyber-frame" aria-label="档案目录">
         <ul id="title-list">
           {sections.map((section) => (
-            <li><a class="TextTitle cyber-control" href={`#${section.anchor}`}>{section.title}</a></li>
+            <li><a class="TextTitle cyber-control" data-anchor={section.anchor} href={`#${section.anchor}`}>{section.title}</a></li>
           ))}
         </ul>
       </nav>
