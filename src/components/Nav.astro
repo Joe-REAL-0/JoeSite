@@ -1,0 +1,8 @@
+---
+import site from '../_data/site.json';
+---
+<nav class="home-nav" aria-label="站内导航">
+  {site.nav.map(({ url, label }) => (
+    <a href={url}><span>{label}</span><span aria-hidden="true">↗</span></a>
+  ))}
+</nav>

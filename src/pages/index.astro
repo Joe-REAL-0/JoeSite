@@ -1,0 +1,71 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import site from "../_data/site.json";
+
+const canonical = `${site.url}/`;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.title,
+  description: "Joe的个人网站 - 角色介绍、技术博客、笔记分享",
+  url: canonical,
+  author: { "@type": "Person", name: site.author },
+};
+---
+
+<Base
+  title="Joe的个人小站 | 主页"
+  description="欢迎来到Joe的个人网站！这里有角色介绍、技术博客、友情链接和网盘入口。探索Joe的创作世界。"
+  keywords="Joe, Furry, 个人网站, 博客, Blog, OC介绍, 技术分享, 友情链接"
+  canonical={canonical}
+  pageTitle="JoE's Site"
+  bodyClass="home-page"
+  hideHomeBtn
+  styles={["/css/html-style/index.css", "/css/animations/animation-index.css", "/css/mobile-adaption.css"]}
+  headScripts={["/js/index.js"]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")} />
+    <script is:inline>
+      window.pageResources = [window.matchMedia('(max-width: 768px)').matches
+        ? '/images/backgrounds/bkg-v.png'
+        : '/images/backgrounds/bkg-h.png'];
+    </script>
+  </Fragment>
+
+  <main class="home-poster" id="home_poster">
+    <aside class="home-directory" aria-label="探索小站">
+      <p class="home-eyebrow">EXPLORE / JOE</p>
+      <Nav />
+    </aside>
+
+    <section class="home-intro" aria-labelledby="welcome_message_2">
+      <div class="home-copy">
+        <span class="home-panel-surface panel-background" aria-hidden="true"></span>
+        <button type="button" class="home-menu-trigger cyber-control" id="home_menu_trigger"
+          aria-haspopup="dialog" aria-controls="home_menu" aria-expanded="false">探索小站 <span aria-hidden="true">↗</span></button>
+        <p class="home-welcome" id="welcome_message_1">你好，欢迎来到</p>
+        <h2 class="home-headline" id="welcome_message_2">我的世界</h2>
+        <p class="home-caption">角色 · 创作 · 生活</p>
+      </div>
+      <nav class="home-socials" id="link_column" aria-label="站外链接">
+        {site.socials.map((social) => (
+          <a class="home-social-link cyber-control" href={social.url} aria-label={social.label} title={social.label}>
+            <span class="home-social-icon" aria-hidden="true" style={`--social-icon: url('${social.icon}');`}></span>
+          </a>
+        ))}
+        <span class="home-panel-surface panel-background" aria-hidden="true"></span>
+      </nav>
+    </section>
+  </main>
+
+  <dialog class="home-menu cyber-frame" id="home_menu" aria-labelledby="home_menu_title">
+    <div class="home-menu-header">
+      <h2 id="home_menu_title">探索小站</h2>
+      <form method="dialog"><button class="home-menu-close cyber-control" aria-label="关闭导航">关闭 ×</button></form>
+    </div>
+    <Nav />
+  </dialog>
+  <script is:inline>initializeHomePage();</script>
+</Base>

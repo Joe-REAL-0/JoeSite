@@ -1,0 +1,37 @@
+---
+import ThemeToggle from './ThemeToggle.svelte';
+
+interface Props {
+  pageTitle: string;
+  hideHomeBtn: boolean;
+}
+
+const { pageTitle, hideHomeBtn } = Astro.props;
+---
+<div id="title_container">
+  <div id="top_column">
+    <div class="top-side left-side">
+      {!hideHomeBtn && (
+        <a id="global-home-btn" class="top-btn cyber-control" href="/" title="返回主页" aria-label="返回主页">
+          <span class="home-btn-icon"></span>
+        </a>
+      )}
+    </div>
+    <h1>
+      <span class="title-surface cyber-frame cyber-cut" aria-hidden="true"></span>
+      {pageTitle}
+    </h1>
+    <div class="top-side right-side">
+      <ThemeToggle id="theme-toggle" client:load />
+    </div>
+  </div>
+  <h2 id="loading_text">—— 正在加载资源 ——</h2>
+</div>
+<div id="mobile_controls">
+  {!hideHomeBtn && (
+    <a id="global-home-btn-mobile" class="top-btn cyber-control" href="/" title="返回主页" aria-label="返回主页">
+      <span class="home-btn-icon"></span>
+    </a>
+  )}
+  <ThemeToggle id="theme-toggle-mobile" client:load />
+</div>

@@ -1,0 +1,118 @@
+---
+import site from '../_data/site.json';
+import LoadingCover from '../components/LoadingCover.astro';
+import SiteControls from '../components/SiteControls.astro';
+import { themeStorageKey } from '../components/ThemeToggle.svelte';
+
+// 页面正文放默认 slot；JSON-LD、订阅入口等可放 head slot。
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogType?: string;
+  keywords?: string;
+  pageTitle?: string;
+  bodyClass?: string;
+  hideHomeBtn?: boolean;
+  noindex?: boolean;
+  styles?: string[];
+  headScripts?: string[];
+  bodyScripts?: string[];
+  /** Trusted static head markup from the page template only. */
+  inlineHead?: string;
+}
+
+const {
+  title, description, canonical, ogType = 'website', keywords,
+  pageTitle = "JoE's Site", bodyClass, hideHomeBtn = false, noindex = false,
+  styles = [], headScripts = [], bodyScripts = [], inlineHead,
+} = Astro.props;
+const documentTitle = title || site.title;
+const documentDescription = description || site.description;
+---
+<!doctype html>
+<html lang="zh-CN" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="msvalidate.01" content="9884C4626BA4E65D910C18E66CD449A7" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script define:vars={{ themeStorageKey }}>
+      // Apply the override before styles are loaded, independently of hydration.
+      document.documentElement.classList.remove('no-js');
+      try {
+        const theme = localStorage.getItem(themeStorageKey);
+        if (theme === 'dark' || theme === 'light') document.documentElement.dataset.theme = theme;
+      } catch {
+        // With restricted storage the CSS follows the system preference.
+      }
+    </script>
+
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="description" content={documentDescription} />
+    {keywords && <meta name="keywords" content={keywords} />}
+    <meta name="author" content={site.author} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={documentDescription} />
+    <meta property="og:type" content={ogType} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:site_name" content={site.title} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={documentTitle} />
+    <meta name="twitter:description" content={documentDescription} />
+    <title>{documentTitle}</title>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+
+    <link rel="preload" as="font" type="font/otf" href="/font/GunShi.otf" crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/ttf" href="/font/yuanti.ttf" crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/ttf" href="/font/ZhengQingKeLengKu.ttf" crossorigin="anonymous" />
+    {inlineHead && <Fragment set:html={inlineHead} />}
+    <slot name="head" />
+
+    <link rel="stylesheet" href="/css/font.css" />
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/animations/animation-global.css" />
+    {styles.map(href => <link rel="stylesheet" href={href} />)}
+    <link rel="stylesheet" href="/css/theme.css" />
+
+    <script is:inline src="/js/global.js"></script>
+    <script is:inline src="/js/mobile-rail.js" defer></script>
+    {headScripts.map(src => <script is:inline src={src}></script>)}
+  </head>
+  <body class:list={['themed-bg', bodyClass]}>
+    <script is:inline>
+      if (document.documentElement.dataset.theme) {
+        document.body.dataset.bodyTheme = document.documentElement.dataset.theme;
+      }
+    </script>
+    <div class="portrait-atmosphere" aria-hidden="true"><div class="portrait-particles"></div></div>
+    <LoadingCover />
+    <SiteControls {pageTitle} {hideHomeBtn} />
+    <slot />
+
+    <script is:inline>
+      (() => {
+        // A broken or stalled loader must never leave page content obscured.
+        window.setTimeout(() => {
+          const cover = document.getElementById('cover');
+          if (cover) {
+            cover.remove();
+            document.body.classList.add('character-revealed');
+          }
+        }, 12000);
+        const fonts = [
+          '/font/GunShi.otf', '/font/yuanti.ttf', '/font/ZhengQingKeLengKu.ttf',
+          '/font/valorax-lg25v.ttf', '/font/Technonomicon.ttf',
+        ];
+        const extra = Array.isArray(window.pageResources) ? window.pageResources : [];
+        if (window.globalLoader) window.globalLoader.start(fonts.concat(extra));
+        else document.documentElement.classList.add('no-js');
+      })();
+    </script>
+    <script is:inline src="/js/particles.js"></script>
+    {bodyScripts.map(src => <script is:inline src={src}></script>)}
+  </body>
+</html>
