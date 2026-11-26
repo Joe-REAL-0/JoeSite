@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'Technonomicon';
+    src: url('../fonts/Technonomicon.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'valorax';
+    src: url('../fonts/valorax-lg25v.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'LengKu';
+    src: url('../fonts/ZhengQingKeLengKu.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GunShi';
+    src: url('../fonts/GunShi.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YuanTi';
+    src: url('../fonts/yuanti.woff2') format('woff2');
+    font-display: swap;
+}

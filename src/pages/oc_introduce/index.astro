@@ -2,6 +2,10 @@
 import path from "node:path";
 import Base from "../../layouts/Base.astro";
 import { loadOc } from "../../../scripts/content.mjs";
+import "../../assets/css/html-style/oc_introduce.css";
+import "../../assets/css/animations/animation-oc_introduce.css";
+import "../../assets/css/mobile-adaption.css";
+import "../../assets/css/theme.css";
 
 const sections = loadOc(path.join(process.cwd(), "src", "oc"));
 ---
@@ -11,8 +15,6 @@ const sections = loadOc(path.join(process.cwd(), "src", "oc"));
   description="Joe 的角色档案馆：角色、势力、技术与世界设定。"
   canonical="https://furryjoe.site/oc_introduce/"
   pageTitle="档案馆"
-  styles={["/css/html-style/oc_introduce.css", "/css/animations/animation-oc_introduce.css", "/css/mobile-adaption.css"]}
-  headScripts={["/js/oc_introduce.js"]}
 >
   <div class="CenterContainer">
     <div class="page-header"></div>
@@ -39,4 +41,5 @@ const sections = loadOc(path.join(process.cwd(), "src", "oc"));
       </div>
     </div>
   </div>
+  <script src="../../assets/js/oc_introduce.js"></script>
 </Base>

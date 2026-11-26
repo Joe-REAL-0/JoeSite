@@ -1,5 +1,6 @@
-// 首页只在公共加载器完成后显现；公共标题、遮罩和角色显现逻辑保持不变。
-function initializeHomePage() {
+import { onDomReady } from './dom-ready.js';
+
+onDomReady(() => {
     const trigger = document.getElementById('home_menu_trigger');
     const menu = document.getElementById('home_menu');
     if (trigger && menu) {
@@ -24,6 +25,4 @@ function initializeHomePage() {
             if (!event.matches && menu.open) menu.close();
         });
     }
-    window.globalLoader.onReady(() => document.body.classList.add('home-ready'));
-}
-window.initializeHomePage = initializeHomePage;
+});

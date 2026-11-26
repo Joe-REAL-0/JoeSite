@@ -5,16 +5,18 @@ import path from "node:path";
 import fs from "node:fs";
 import os from "node:os";
 import { DatabaseSync } from "node:sqlite";
+import sharp from "sharp";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const IMPORTER = path.join(ROOT, "scripts", "import-content.mjs");
 
 /** 造一个与旧站 database.py 表结构一致的快照。 */
-function makeSnapshot(dir) {
+async function makeSnapshot(dir) {
   const dbPath = path.join(dir, "snapshot.db");
   const db = new DatabaseSync(dbPath);
   db.exec(`
     CREATE TABLE users (email TEXT, nickname TEXT, password TEXT, avatar TEXT DEFAULT 'default_avatar.png', friend_link TEXT DEFAULT '');
+    CREATE TABLE oauth_accounts (provider TEXT, email TEXT, profile_json TEXT);
     CREATE TABLE oc_introduces (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, order_id INTEGER, UNIQUE(title));
     CREATE TABLE blogs (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, summary TEXT, created_time TEXT NOT NULL, updated_time TEXT, author_email TEXT NOT NULL, is_published INTEGER DEFAULT 0, view_count INTEGER DEFAULT 0);
     CREATE TABLE blog_tags (id INTEGER PRIMARY KEY AUTOINCREMENT, tag_name TEXT NOT NULL UNIQUE, created_time TEXT NOT NULL);
@@ -36,11 +38,14 @@ function makeSnapshot(dir) {
   db.exec("INSERT INTO users (email, nickname, password, avatar, friend_link) VALUES ('a@example.com', 'Shadow', 'secret', 'shadow.jpg', 'https://www.shadow.top')");
   db.exec("INSERT INTO users (email, nickname, password, avatar, friend_link) VALUES ('b@example.com', '裸域名', 'secret2', 'default_avatar.png', 'example.com')");
   db.exec("INSERT INTO users (email, nickname, password, avatar, friend_link) VALUES ('c@example.com', '无友链', 'secret3', 'default_avatar.png', '')");
+  db.exec("INSERT INTO users (email, nickname, avatar, friend_link) VALUES ('d@example.com', 'Unconfirmed', 'art.jpg', 'https://art.test')");
+  db.prepare("INSERT INTO oauth_accounts VALUES ('github', ?, ?)").run("a@example.com", JSON.stringify({ login: "ShadowArtist" }));
   db.close();
 
   const avatars = path.join(dir, "avatars-source");
   fs.mkdirSync(avatars, { recursive: true });
-  fs.writeFileSync(path.join(avatars, "shadow.jpg"), "fake-image-bytes");
+  await sharp({ create: { width: 8, height: 6, channels: 3, background: "#468" } }).jpeg().toFile(path.join(avatars, "shadow.jpg"));
+  fs.copyFileSync(path.join(avatars, "shadow.jpg"), path.join(avatars, "art.jpg"));
   return { dbPath, avatars };
 }
 
@@ -48,14 +53,16 @@ function runImport(args) {
   return spawnSync(process.execPath, [IMPORTER, ...args], { encoding: "utf8" });
 }
 
-test("导出：只带出公开字段，草稿与非 http(s) 友链留账不出库", (t) => {
+test("导出：只带出公开字段，草稿与非 http(s) 友链留账不出库", async (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "import-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
 
-  const { dbPath, avatars } = makeSnapshot(dir);
+  const { dbPath, avatars } = await makeSnapshot(dir);
+  const snapshot = fs.readFileSync(dbPath);
   const out = path.join(dir, "out");
   const result = runImport(["--db", dbPath, "--out", out, "--avatars", avatars]);
   assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(fs.readFileSync(dbPath), snapshot);
 
   // 只导出已发布文章，保留原 ID；草稿不写文件
   assert.ok(fs.existsSync(path.join(out, "posts", "42.md")));
@@ -75,10 +82,13 @@ test("导出：只带出公开字段，草稿与非 http(s) 友链留账不出�
   assert.deepEqual(ocFiles, ["1.md", "3.md"]);
   assert.match(fs.readFileSync(path.join(out, "oc", "1.md"), "utf8"), /^order: 1$/m);
 
-  // 友链：只保留可公开的字段，头像文件随条目复制
+  // 友链只公开 CDN 文件名；未绑定账号的原图单独留存。
   const friends = JSON.parse(fs.readFileSync(path.join(out, "friends.json"), "utf8"));
-  assert.deepEqual(friends, [{ name: "Shadow", url: "https://www.shadow.top", avatar: "/images/avatars/shadow.jpg" }]);
-  assert.ok(fs.existsSync(path.join(out, "avatars", "shadow.jpg")));
+  assert.deepEqual(friends, [
+    { name: "Shadow", url: "https://www.shadow.top", avatar: "ShadowArtist.webp" },
+    { name: "Unconfirmed", url: "https://art.test", avatar: "default.avif" },
+  ]);
+  assert.deepEqual(fs.readdirSync(path.join(out, "avatars")).sort(), ["ShadowArtist.webp", "default.avif"]);
 
   const serialized = JSON.stringify(friends);
   for (const secret of ["secret", "example.com", "password"]) {
@@ -92,14 +102,16 @@ test("导出：只带出公开字段，草稿与非 http(s) 友链留账不出�
   assert.deepEqual(report.posts.ids, [42]);
   assert.equal(report.posts.hashes["42"], "729f5914236cfbe2eeb84f6f278218152373d5674a8bf1143a9fd9695129b27c");
   assert.deepEqual(report.friends.rejected.map((item) => item.name), ["裸域名"]);
+  assert.deepEqual(report.friends.reviewAvatars, [{ name: "Unconfirmed", url: "https://art.test", file: "avatars-review.private/art.jpg" }]);
+  assert.deepEqual(fs.readFileSync(path.join(out, report.friends.reviewAvatars[0].file)), fs.readFileSync(path.join(avatars, "art.jpg")));
   assert.deepEqual(report.urls, [{ old: "/blog/42", new: "/blog/42/" }]);
 });
 
-test("导出：目标目录非空时拒绝执行，避免覆盖已审核内容", (t) => {
+test("导出：目标目录非空时拒绝执行，避免覆盖已审核内容", async (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "import-nonempty-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
 
-  const { dbPath } = makeSnapshot(dir);
+  const { dbPath } = await makeSnapshot(dir);
   const out = path.join(dir, "out");
   fs.mkdirSync(out, { recursive: true });
   fs.writeFileSync(path.join(out, "existing.md"), "人工改过的内容");
@@ -110,27 +122,28 @@ test("导出：目标目录非空时拒绝执行，避免覆盖已审核内容",
   assert.equal(fs.readFileSync(path.join(out, "existing.md"), "utf8"), "人工改过的内容");
 });
 
-test("导出：缺头像回到默认图并留记录", (t) => {
+test("导出：缺头像回到默认图并留记录", async (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "import-missing-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
 
-  const { dbPath, avatars } = makeSnapshot(dir);
+  const { dbPath, avatars } = await makeSnapshot(dir);
   fs.rmSync(path.join(avatars, "shadow.jpg"));
 
   const out = path.join(dir, "out");
   assert.equal(runImport(["--db", dbPath, "--out", out, "--avatars", avatars]).status, 0);
 
   const friends = JSON.parse(fs.readFileSync(path.join(out, "friends.json"), "utf8"));
-  assert.equal(friends[0].avatar, "/images/avatars/default_avatar.png");
+  assert.equal(friends[0].avatar, "default.avif");
+  assert.deepEqual(fs.readdirSync(path.join(out, "avatars")), ["default.avif"]);
   const report = JSON.parse(fs.readFileSync(path.join(out, "reconciliation.private.json"), "utf8"));
   assert.deepEqual(report.friends.missingAvatars.map((item) => item.name), ["Shadow"]);
 });
 
-test("导出：产物能被构建直接读取（front matter 合法）", (t) => {
+test("导出：产物能被构建直接读取（front matter 合法）", async (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "import-build-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
 
-  const { dbPath, avatars } = makeSnapshot(dir);
+  const { dbPath, avatars } = await makeSnapshot(dir);
   const out = path.join(dir, "out");
   assert.equal(runImport(["--db", dbPath, "--out", out, "--avatars", avatars]).status, 0);
 
@@ -148,7 +161,7 @@ test("导出：产物能被构建直接读取（front matter 合法）", (t) => 
   for (const name of fs.readdirSync(path.join(out, "posts"))) {
     fs.copyFileSync(path.join(out, "posts", name), path.join(projectDir, "src", "posts", name));
   }
-  fs.symlinkSync(path.join(ROOT, "static"), path.join(projectDir, "static"), "junction");
+  fs.copyFileSync(path.join(out, "friends.json"), path.join(projectDir, "src/_data/friends.json"));
 
   const built = spawnSync(
     process.execPath,
@@ -161,4 +174,8 @@ test("导出：产物能被构建直接读取（front matter 合法）", (t) => 
   assert.match(detail, /已发布文章/);
   assert.match(detail, /第一段。/);
   assert.match(detail, /发布于: 2024-05-06 08:00:00/);
+
+  const friends = fs.readFileSync(path.join(projectDir, "dist/friend_link/index.html"), "utf8");
+  assert.match(friends, /src="https:\/\/img\.furryjoe\.site\/avatars\/ShadowArtist\.webp"/);
+  assert.match(friends, /src="https:\/\/img\.furryjoe\.site\/avatars\/default\.avif"/);
 });

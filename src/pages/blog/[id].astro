@@ -2,6 +2,11 @@
 import Base from "../../layouts/Base.astro";
 import site from "../../_data/site.json";
 import { readBlog } from "../../lib/blog.js";
+import "../../assets/css/html-style/blog_detail.css";
+import "../../assets/css/html-style/interactions.css";
+import "../../assets/css/animations/animation-blog.css";
+import "../../assets/css/mobile-adaption.css";
+import "../../assets/css/theme.css";
 
 export function getStaticPaths() {
   return readBlog().posts.map((post) => ({ params: { id: String(post.id) }, props: { post } }));
@@ -14,11 +19,8 @@ const { post } = Astro.props;
   canonical={site.url + post.url}
   ogType="article"
   pageTitle="博客详情"
-  styles={["/css/html-style/blog_detail.css", "/css/html-style/interactions.css", "/css/animations/animation-blog.css", "/css/mobile-adaption.css"]}
-  bodyScripts={["/js/blog_detail.js", "/js/blog_interactions.js"]}
 >
   <Fragment slot="head">
-    <script is:inline define:vars={{ postId: String(post.id) }}>window.blogPostId = postId;</script>
     <script is:inline>
       window.MathJax = {
         tex: {
@@ -68,7 +70,7 @@ const { post } = Astro.props;
         <span class="btn-icon icon-mask icon-arrow-up"></span>
       </button>
     </div>
-    <section class="interaction-panel cyber-frame" id="interactionPanel" aria-label="文章互动">
+    <section class="interaction-panel cyber-frame" id="interactionPanel" data-post-id={post.id} aria-label="文章互动">
       <div class="interaction-header"><h2>评论</h2><button type="button" id="closeComments" aria-label="关闭评论">×</button></div>
       <div id="authControls"><button type="button" id="loginBtn">使用 GitHub 登录</button></div>
       <p id="interactionStatus" role="status" aria-live="polite"></p>
@@ -81,4 +83,8 @@ const { post } = Astro.props;
       <button type="button" id="loadMoreComments" hidden>加载更多评论</button>
     </section>
   </aside>
+  <script>
+    import "../../assets/js/blog_detail.js";
+    import "../../assets/js/blog_interactions.js";
+  </script>
 </Base>

@@ -2,8 +2,16 @@
 import Base from "../layouts/Base.astro";
 import Nav from "../components/Nav.astro";
 import site from "../_data/site.json";
+import { imageUrl } from "../lib/images";
+import "../assets/css/html-style/index.css";
+import "../assets/css/animations/animation-index.css";
+import "../assets/css/mobile-adaption.css";
+import "../assets/css/theme.css";
 
 const canonical = `${site.url}/`;
+const socials = await Promise.all(site.socials.map(async (social) => ({
+  ...social, icon: await imageUrl(social.icon),
+})));
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -22,16 +30,9 @@ const structuredData = {
   pageTitle="JoE's Site"
   bodyClass="home-page"
   hideHomeBtn
-  styles={["/css/html-style/index.css", "/css/animations/animation-index.css", "/css/mobile-adaption.css"]}
-  headScripts={["/js/index.js"]}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")} />
-    <script is:inline>
-      window.pageResources = [window.matchMedia('(max-width: 768px)').matches
-        ? '/images/backgrounds/bkg-v.png'
-        : '/images/backgrounds/bkg-h.png'];
-    </script>
   </Fragment>
 
   <main class="home-poster" id="home_poster">
@@ -50,7 +51,7 @@ const structuredData = {
         <p class="home-caption">角色 · 创作 · 生活</p>
       </div>
       <nav class="home-socials" id="link_column" aria-label="站外链接">
-        {site.socials.map((social) => (
+        {socials.map((social) => (
           <a class="home-social-link cyber-control" href={social.url} aria-label={social.label} title={social.label}>
             <span class="home-social-icon" aria-hidden="true" style={`--social-icon: url('${social.icon}');`}></span>
           </a>
@@ -67,5 +68,5 @@ const structuredData = {
     </div>
     <Nav />
   </dialog>
-  <script is:inline>initializeHomePage();</script>
+  <script src="../assets/js/index.js"></script>
 </Base>

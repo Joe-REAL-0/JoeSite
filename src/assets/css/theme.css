@@ -97,7 +97,7 @@
    纯色底层与背景图片叠加
    =========================== */
 body.themed-bg {
-    --character-art: url('../images/backgrounds/bkg-h.png');
+    --character-art: var(--background-horizontal);
     background-image: none !important;
     background-color: var(--bg-body);
     position: relative;
@@ -106,7 +106,7 @@ body.themed-bg {
 
 @media screen and (max-width: 768px) {
     body.themed-bg {
-        --character-art: url('../images/backgrounds/bkg-v.png');
+        --character-art: var(--background-vertical);
     }
 }
 

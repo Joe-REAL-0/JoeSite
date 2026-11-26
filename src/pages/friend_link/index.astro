@@ -2,6 +2,10 @@
 import path from "node:path";
 import Base from "../../layouts/Base.astro";
 import { loadFriends } from "../../../scripts/content.mjs";
+import "../../assets/css/html-style/friend_link.css";
+import "../../assets/css/animations/animation-friend_link.css";
+import "../../assets/css/mobile-adaption.css";
+import "../../assets/css/theme.css";
 
 const friends = loadFriends(path.join(process.cwd(), "src", "_data", "friends.json"));
 ---
@@ -11,8 +15,6 @@ const friends = loadFriends(path.join(process.cwd(), "src", "_data", "friends.js
   description="Joe 的友情链接：站主的友邻站点与申请方式。"
   canonical="https://furryjoe.site/friend_link/"
   pageTitle="友情链接"
-  styles={["/css/html-style/friend_link.css", "/css/animations/animation-friend_link.css", "/css/mobile-adaption.css"]}
-  headScripts={["/js/friend_link.js"]}
 >
   <section class="page-section" id="friend_link_section">
     <div class="CenterContainer">
@@ -21,7 +23,7 @@ const friends = loadFriends(path.join(process.cwd(), "src", "_data", "friends.js
           <div id="friend_link_container">
             {friends.length ? friends.map((link) => (
               <div class="FriendLink cyber-frame">
-                <img src={link.avatar} alt={`${link.name}的头像`} />
+                <img src={link.avatar} width="64" height="64" alt={`${link.name}的头像`} />
                 <div class="info">
                   <p class="nickname">{link.name}</p>
                   <p class="link"><a href={link.url} target="_blank" rel="noopener noreferrer">{link.url}</a></p>
@@ -40,4 +42,5 @@ const friends = loadFriends(path.join(process.cwd(), "src", "_data", "friends.js
       </div>
     </div>
   </section>
+  <script src="../../assets/js/friend_link.js"></script>
 </Base>

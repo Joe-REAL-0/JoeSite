@@ -1,9 +1,11 @@
+import { onDomReady } from './dom-ready.js';
+
 /**
  * 博客详情：目录折叠、当前标题高亮、回到顶部。
  *
  * 目录由构建时生成，链接本身就是锚点；脚本只负责折叠与高亮，禁用后仍可跳转。
  */
-document.addEventListener('DOMContentLoaded', function () {
+onDomReady(() => {
     const tocToggle = document.getElementById('tocToggle');
     const tocSection = document.getElementById('tocSection');
     const tocContent = document.getElementById('tocContent');

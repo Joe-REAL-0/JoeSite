@@ -185,7 +185,7 @@ export function loadOc(dir) {
     .sort((a, b) => (a.order === b.order ? a.id - b.id : a.order - b.id));
 }
 
-/** 读取并校验友链条目：只保留展示名、HTTP(S) 网址和公开头像路径。 */
+/** 友链只存图床文件名，页面使用完整的 HTTPS 地址。 */
 export function loadFriends(file) {
   if (!fs.existsSync(file)) return [];
 
@@ -201,11 +201,14 @@ export function loadFriends(file) {
     if (!/^https?:\/\//i.test(url)) {
       throw new Error(`友链「${name}」的网址必须是 http(s)：${url}`);
     }
-    const avatar = String(entry.avatar ?? "").trim();
+    const avatar = String(entry.avatar ?? "").trim() || "default.avif";
+    if (!/^[a-z\d][a-z\d-]*\.(?:webp|avif)$/i.test(avatar)) {
+      throw new Error(`友链「${name}」的头像文件名无效：${avatar}`);
+    }
     return {
       name,
       url,
-      avatar: avatar || "/images/avatars/default_avatar.png",
+      avatar: `https://img.furryjoe.site/avatars/${avatar}`,
     };
   });
 }

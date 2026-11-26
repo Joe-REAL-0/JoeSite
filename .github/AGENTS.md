@@ -9,14 +9,14 @@
 This is a **static site**. There is no Flask app, no database, no server-side session. `dist/` is the only deployable artifact.
 
 ## Project map
-- `astro.config.mjs` configures the Svelte integration and public asset allowlist.
+- `astro.config.mjs` configures Astro, Svelte, and the Vite asset build.
 - `src/layouts/Base.astro` is the shared page layout. `src/components/` contains shared UI and hydrated Svelte components.
 - `src/pages/` defines HTML routes and the static XML and TXT endpoints.
 - `src/lib/blog.js` loads blog content and pagination. `src/_data/` holds site settings and friend links.
 - `scripts/markdown.mjs` — Markdown → sanitized HTML, math passthrough, heading anchors, TOC extraction.
 - `scripts/time.mjs` — times are **+08:00** everywhere; never let the build machine timezone shift a date.
 - `scripts/import-content.mjs` — read-only export from a legacy SQLite snapshot (private reconciliation report, never committed).
-- `static/` — sources for CSS/JS/fonts/images; only whitelisted paths are copied to `dist/`.
+- `src/assets/` holds bundled styles, scripts, images and WOFF2 fonts. `src/lib/images.ts` resolves local image keys and selects the output codec.
 
 ## Rules that keep the site static
 - No `fetch`/XHR to first-party endpoints; no forms that write. Adding an interactive feature means adding a write path — don't.

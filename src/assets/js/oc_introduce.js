@@ -1,9 +1,11 @@
+import { onDomReady } from './dom-ready.js';
+
 /**
  * 档案馆：移动端侧栏折叠 + 目录当前项高亮。
  *
  * 正文与目录都在构建时生成，禁用本脚本也能通过普通锚点跳转；这里只做增强。
  */
-document.addEventListener('DOMContentLoaded', function () {
+onDomReady(() => {
     const isMobile = window.innerWidth <= 768;
     if (isMobile) document.body.classList.add('mobile-device');
 

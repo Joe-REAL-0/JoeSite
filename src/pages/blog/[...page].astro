@@ -2,6 +2,10 @@
 import Base from "../../layouts/Base.astro";
 import site from "../../_data/site.json";
 import { readBlog } from "../../lib/blog.js";
+import "../../assets/css/html-style/blog.css";
+import "../../assets/css/animations/animation-blog.css";
+import "../../assets/css/mobile-adaption.css";
+import "../../assets/css/theme.css";
 
 export function getStaticPaths() {
   return readBlog().pages.map((listing) => ({
@@ -20,7 +24,6 @@ const suffix = listing.number > 1 ? `（第 ${listing.number} 页）` : "";
   canonical={site.url + listing.url}
   ogType="blog"
   pageTitle="Joe的博客"
-  styles={["/css/html-style/blog.css", "/css/animations/animation-blog.css", "/css/mobile-adaption.css"]}
 >
   <link slot="head" rel="alternate" type="application/rss+xml" title="Joe的博客 RSS Feed" href={`${site.url}/rss.xml`} />
   <div class="CenterContainer">

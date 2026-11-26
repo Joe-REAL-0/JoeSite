@@ -105,12 +105,12 @@ test("友链：只接受展示名与 http(s) 网址，缺头像回退默认图",
 
   fs.writeFileSync(file, JSON.stringify([
     { name: "Shadow", url: "https://www.shadow.top" },
-    { name: "某友", url: "http://example.com", avatar: "/images/avatars/x.png" },
+    { name: "某友", url: "http://example.com", avatar: "Some-Friend.webp" },
   ]));
   const friends = loadFriends(file);
   assert.equal(friends.length, 2);
-  assert.equal(friends[0].avatar, "/images/avatars/default_avatar.png");
-  assert.equal(friends[1].avatar, "/images/avatars/x.png");
+  assert.equal(friends[0].avatar, "https://img.furryjoe.site/avatars/default.avif");
+  assert.equal(friends[1].avatar, "https://img.furryjoe.site/avatars/Some-Friend.webp");
 
   fs.writeFileSync(file, JSON.stringify([{ name: "坏网址", url: "example.com" }]));
   assert.throws(() => loadFriends(file), /http\(s\)/);

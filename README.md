@@ -10,8 +10,9 @@ Joe 的个人小站。Astro 在发布时把页面生成到 `dist/`，访客可�
 
 ```
 .
-├── astro.config.mjs       # Astro、Svelte 与公开资源清单
+├── astro.config.mjs       # Astro、Svelte 与打包配置
 ├── src/
+│   ├── assets/            # CSS、浏览器脚本、图片源文件与 WOFF2 字体
 │   ├── layouts/           # 共用页面布局
 │   ├── components/        # Astro 与 Svelte 组件
 │   ├── _data/             # 站点与友链配置
@@ -19,7 +20,6 @@ Joe 的个人小站。Astro 在发布时把页面生成到 `dist/`，访客可�
 │   ├── oc/                # 档案馆章节，一节一个文件
 │   ├── pages/             # 页面路由、博客分页与详情、RSS、站点地图和 robots.txt
 │   └── lib/               # 博客数据与订阅生成
-├── static/                # 样式、脚本、字体、图片（仅清单内的文件会进入 dist）
 ├── scripts/               # 内容装载、Markdown 渲染、旧站快照导出
 ├── test/                  # 构建与导出的自动化检查
 └── dist/                  # 构建产物，唯一部署目录（不入库）
@@ -63,10 +63,12 @@ order: 1
 
 档案馆默认显示第一节，点击目录可切换正文。章节链接（如 `/oc_introduce/#oc-2`）可直接分享。
 
-友链在 `src/_data/friends.json` 维护，每条包含展示名、`http(s)` 网址和头像路径。本地头像放在 `static/images/avatars/`，并将对应文件加入 `astro.config.mjs` 的公开资源清单。
+友链在 `src/_data/friends.json` 维护。`avatar` 是 `img.furryjoe.site/avatars/` 目录中的文件名，优先使用 GitHub 登录名，也可沿用现有名称；没有自定义图的友邻共用 `default.avif`。
+
+将原图放入 `src/assets/images/avatars/`，使用 GitHub 登录名加原扩展名命名，例如 `furryyueyue.jpg`。运行 `npm run avatars`，会居中裁为正方形、最长边 256 像素（较小图片不放大），无 alpha 通道输出 WebP q75，有 alpha 通道输出 AVIF q80。把生成的 `upload/avatars/` 文件上传至 `https://img.furryjoe.site/avatars/`，再更新对应 `friends.json`。`npm run build` 不依赖本地头像或图床联网。
 
 ```json
-[{ "name": "悦悦", "url": "https://furryhk.cn/", "avatar": "/images/avatars/github_107252731.jpg" }]
+[{ "name": "悦悦", "url": "https://furryhk.cn/", "avatar": "furryyueyue.webp" }]
 ```
 
 ## 本地预览
@@ -152,9 +154,8 @@ node scripts/import-content.mjs --db <快照.db> --out <导出目录> --avatars 
 ```
 
 - 只导出 `is_published = 1` 的文章，保留原 ID、正文与时间；草稿、作者邮箱、账号、OAuth、评论与点赞者都不出库。
-- 友链只取昵称、网址、头像；网址不是 `http(s)` 的条目写进对账表等待人工确认，不自动猜测。
+- 将导出的文章、档案和 `friends.json` 分别复制到 `src/posts/`、`src/oc/` 和 `src/_data/`。导出的 `avatars/` 为待上传图床的处理后头像；`avatars-review.private/` 中的头像登录名尚未确认，人工核对后再上传、更新 `friends.json`。
 - 目标目录必须为空，保证可重复导出；每次生成 `reconciliation.private.json`（记录数量、排除项、逐篇正文 SHA-256 与新旧地址对照），**该文件属于私有证据，不入库**。
-- 导出结果按 `src/posts/`、`src/oc/`、`src/_data/friends.json` 的形状产出，复制进仓库后即可构建。
 
 ## 当前内容状态
 
