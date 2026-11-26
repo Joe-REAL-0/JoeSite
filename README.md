@@ -166,3 +166,22 @@ node scripts/import-content.mjs --db <快照.db> --out <导出目录> --avatars 
 ## 互动功能
 
 GitHub OAuth 由 Better Auth 处理，用户、账号和会话保存在 D1；评论与每用户点赞状态保存在 Cloudflare KV。评论公开展示，提交和点赞需先登录。KV 最终一致，点赞总数按用户状态读取。当前仅支持 Cloudflare Workers 部署，普通静态服务器不提供认证及互动 API。
+
+## 友链申请
+
+点击友链页的“申请友情链接”会检查本站 GitHub 会话。登录成功后进入 `/friend_link/apply/`，填写网站名称与 HTTP(S) 地址。可上传不超过 5 MiB、1600 万像素的 PNG、JPEG、WebP，拖动或用方向键调整位置，缩放后输出 256×256 PNG。未上传时使用已登录 GitHub 账号的头像。
+
+申请由 `/api/friend-links/applications` 校验会话和同源 Origin，保存在 D1 的 `friend_link_applications` 表。Cloudflare Email Service 的 `FRIEND_LINK_EMAIL` binding 发送审核邮件，包含站点资料、GitHub 身份、头像、完整 JSON 附件，以及链接留空的“同意”和“拒绝”按钮。
+
+部署时需要完成以下配置。
+
+1. 填写 `wrangler.jsonc` 中已有的真实 D1、KV ID，并执行 `npx wrangler d1 migrations apply DB --remote`，应用 `0002_friend_links.sql`。
+2. 在 Cloudflare Email Service 完成 `furryjoe.site` 发信域名设置，并按账户套餐要求验证收件地址。
+3. `FRIEND_LINK_MAIL_FROM` 默认设为 `friend-links@furryjoe.site`。`FRIEND_LINK_REVIEW_EMAIL` 沿用旧站管理员邮箱 `2018168257@qq.com`，可在 `wrangler.jsonc` 修改。若修改收件人，也要同步更新 binding 的 `allowed_destination_addresses`。
+4. 配好前文的 GitHub OAuth 和 Better Auth secrets，再执行 `npm run deploy`。
+
+本地执行 `npx wrangler d1 migrations apply DB --local`、`npm run build` 和 `npm run cf:dev`。`wrangler dev` 默认模拟邮件投递，终端输出邮件 HTML、正文与附件的位置。真实 GitHub 回调及邮箱收信需在配置完正式凭据和邮件域名后验证。
+
+邮件发送失败会保留申请并允许以相同申请编号重试。重复提交已发送的编号直接返回成功，同时提交相同编号只由一个请求发送邮件。发送进程中断后，原申请可在两分钟后重新提交。邮件投递与 D1 写入跨服务，极端中断可能产生重复邮件，可用申请编号识别。
+
+后续发布项目可使用 D1 记录或审核邮件 JSON 附件中的 `id`、`name`、`url`、`avatar` 和 GitHub ID。自定义头像在申请记录和附件中保存为 PNG data URL，默认头像保存为 GitHub HTTPS 地址。审核链接和自动发布将在后续项目接入。Cloudflare 接口配置见 [Email Sending Workers API](https://developers.cloudflare.com/email-service/api/send-emails/workers-api/)。

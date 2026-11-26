@@ -10,6 +10,14 @@
     "run_worker_first": ["/api/*"]
   },
   "compatibility_flags": ["nodejs_compat"],
+  "send_email": [{
+    "name": "FRIEND_LINK_EMAIL",
+    "allowed_destination_addresses": ["2018168257@qq.com"]
+  }],
+  "vars": {
+    "FRIEND_LINK_MAIL_FROM": "friend-links@furryjoe.site",
+    "FRIEND_LINK_REVIEW_EMAIL": "2018168257@qq.com"
+  },
   "d1_databases": [
     {
       "binding": "DB",

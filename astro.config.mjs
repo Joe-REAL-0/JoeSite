@@ -20,6 +20,7 @@ const publicFiles = [
   "css/html-style/interactions.css",
   "css/html-style/oc_introduce.css",
   "css/html-style/friend_link.css",
+  "css/html-style/friend_apply.css",
   "css/html-style/cloud_drive.css",
 
   "js/global.js",
@@ -29,6 +30,8 @@ const publicFiles = [
   "js/oc_introduce.js",
   "js/blog_detail.js",
   "js/blog_interactions.js",
+  "js/friend_link.js",
+  "js/friend_apply.js",
 
   "font/GunShi.otf",
   "font/Technonomicon.ttf",
