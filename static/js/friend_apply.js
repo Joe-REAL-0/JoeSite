@@ -24,7 +24,7 @@
 
   async function request(url, options = {}) {
     const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store', ...options });
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) {
       const error = new Error(data.error || '请求失败，请稍后重试');
       error.status = response.status;
@@ -159,16 +159,27 @@
     fields.disabled = true;
     result.textContent = '正在提交申请并发送审核邮件…';
     try {
-      const data = await request('/api/friend-links/applications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: applicationId,
-          name: byId('friend-name').value.trim(),
-          url: byId('friend-url').value.trim(),
-          avatar: image ? canvas.toDataURL('image/png') : null,
-        }),
-      });
+      const application = {
+        id: applicationId,
+        name: byId('friend-name').value.trim(),
+        url: byId('friend-url').value.trim(),
+        avatar: image ? canvas.toDataURL('image/png') : null,
+      };
+      let data;
+      try {
+        data = await request('/api/friend-links/applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(application),
+        });
+      } catch (error) {
+        if (error.status !== 404) throw error;
+        data = await request('/api/friend-links/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(application),
+        });
+      }
       form.hidden = true;
       result.textContent = `申请已提交，等待站主审核。申请编号 ${data.id}`;
     } catch (error) {
@@ -185,10 +196,18 @@
 
   (async () => {
     try {
-      const data = await request('/api/friend-links/session');
-      githubAvatar = data.user.image;
-      preview.src = githubAvatar;
-      byId('friend-name').value = data.user.name;
+      let data;
+      try {
+        data = await request('/api/friend-links/session');
+      } catch (error) {
+        if (error.status !== 404) throw error;
+        const auth = await request('/api/auth/get-session');
+        if (!auth?.user) throw Object.assign(new Error('请先使用 GitHub 登录'), { status: 401 });
+        data = { user: auth.user };
+      }
+      githubAvatar = data.user.image || '';
+      if (githubAvatar) preview.src = githubAvatar;
+      byId('friend-name').value = data.user.name || '';
       sessionStatus.textContent = `已使用 GitHub 登录 · ${data.user.name}`;
       form.hidden = false;
     } catch (error) {

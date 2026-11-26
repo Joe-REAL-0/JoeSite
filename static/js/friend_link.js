@@ -37,7 +37,10 @@
             applyLink.setAttribute('aria-busy', 'true');
             status.textContent = '正在检查 GitHub 登录状态…';
             try {
-                const session = await fetch('/api/friend-links/session', { credentials: 'same-origin', cache: 'no-store' });
+                let session = await fetch('/api/friend-links/session', { credentials: 'same-origin', cache: 'no-store' });
+                if (session.status === 404) {
+                    session = await fetch('/api/auth/get-session', { credentials: 'same-origin', cache: 'no-store' });
+                }
                 if (session.ok) {
                     location.assign(applyLink.href);
                     return;
