@@ -1,7 +1,6 @@
 ---
 import path from "node:path";
 import Base from "../../layouts/Base.astro";
-import site from "../../_data/site.json";
 import { loadFriends } from "../../../scripts/content.mjs";
 import "../../assets/css/html-style/friend_link.css";
 import "../../assets/css/animations/animation-friend_link.css";
@@ -37,8 +36,9 @@ const friends = loadFriends(path.join(process.cwd(), "src", "_data", "friends.js
         </div>
 
         <div id="add_link_container">
-          <a id="apply_friend_link" class="cyber-control" href={site.issueUrl} target="_blank" rel="noopener noreferrer">申请友链 ↗</a>
+          <a id="apply_friend_link" class="cyber-control" href="/friend_link/apply/">申请友情链接</a>
         </div>
+        <p id="friend_login_status" role="status" aria-live="polite"></p>
       </div>
     </div>
   </section>
