@@ -1,0 +1,47 @@
+---
+import Base from "../../layouts/Base.astro";
+---
+
+<Base
+  title="申请友情链接 | Joe的个人小站"
+  description="使用 GitHub 登录，提交你的站点和头像。"
+  pageTitle="申请友情链接"
+  noindex
+  styles={["/css/html-style/friend_apply.css", "/css/mobile-adaption.css"]}
+  bodyScripts={["/js/friend_apply.js"]}
+>
+  <main class="friend-apply-page">
+    <section class="friend-apply-panel cyber-frame" aria-labelledby="apply-heading">
+      <a href="/friend_link/">返回友情链接</a>
+      <h1 id="apply-heading">申请友情链接</h1>
+      <p id="apply-session-status" role="status" aria-live="polite">正在检查 GitHub 登录状态…</p>
+      <button id="apply-login" class="cyber-control" type="button" hidden>使用 GitHub 登录</button>
+      <noscript><p>申请表需要启用 JavaScript，以便登录、裁切头像和提交申请。</p></noscript>
+      <form id="friend-apply-form" hidden>
+        <fieldset id="apply-fields">
+          <label for="friend-name">网站名称</label>
+          <input id="friend-name" name="name" type="text" maxlength="80" autocomplete="organization" required />
+          <label for="friend-url">网站地址</label>
+          <input id="friend-url" name="url" type="url" maxlength="2048" placeholder="https://example.com/" required />
+          <div class="friend-avatar-row">
+            <img id="avatar-preview" width="96" height="96" alt="友链头像预览" />
+            <div>
+              <label for="friend-avatar">上传头像（可选）</label>
+              <input id="friend-avatar" name="avatar" type="file" accept="image/png,image/jpeg,image/webp" />
+              <p id="avatar-source">未上传时使用 GitHub 头像。支持 PNG、JPEG、WebP，最大 5 MiB。</p>
+              <button id="avatar-reset" class="cyber-control" type="button" hidden>使用 GitHub 头像</button>
+            </div>
+          </div>
+          <div id="avatar-editor" hidden>
+            <p>拖动图片调整位置，也可用方向键微调。裁切结果为正方形。</p>
+            <canvas id="avatar-crop" width="256" height="256" tabindex="0" role="img" aria-label="头像裁切区域，使用方向键调整图片位置"></canvas>
+            <label for="avatar-zoom">缩放</label>
+            <input id="avatar-zoom" name="zoom" type="range" min="1" max="4" step="0.01" value="1" />
+          </div>
+          <button id="apply-submit" class="cyber-control" type="submit">提交申请</button>
+        </fieldset>
+      </form>
+      <p id="apply-result" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+</Base>

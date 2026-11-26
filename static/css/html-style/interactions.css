@@ -1,0 +1,30 @@
+.action-buttons #likeBtn[aria-pressed="true"] { color: var(--accent); }
+
+.interaction-panel {
+    position: fixed;
+    z-index: 30;
+    right: var(--space-lg);
+    bottom: var(--space-lg);
+    width: min(420px, calc(100vw - 2 * var(--space-lg)));
+    max-height: min(70vh, 640px);
+    overflow: auto;
+    padding: var(--space-md);
+    background: var(--bg-card);
+}
+
+.interaction-panel[hidden] { display: none; }
+.interaction-header { display: flex; align-items: center; justify-content: space-between; }
+.interaction-header h2 { margin: 0; font-size: var(--font-size-lg); }
+.interaction-panel button, .interaction-panel textarea { font: inherit; }
+.interaction-panel button { cursor: pointer; }
+#commentForm { display: grid; gap: var(--space-xs); }
+#commentInput { min-height: 100px; resize: vertical; }
+#commentList { display: grid; gap: var(--space-sm); padding-left: 1.5rem; }
+#commentList li { border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-sm); overflow-wrap: anywhere; }
+#commentList p { white-space: pre-wrap; margin: var(--space-xs) 0; }
+#commentList time { color: var(--text-secondary); font-size: var(--font-size-xs); }
+#interactionStatus { min-height: 1.4em; color: var(--text-secondary); }
+
+@media (max-width: 768px) {
+    .interaction-panel { right: var(--space-sm); bottom: var(--space-sm); width: calc(100vw - 2 * var(--space-sm)); }
+}

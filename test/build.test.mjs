@@ -112,7 +112,7 @@ test("构建：没有文章时仍有 /blog/ 列表页，且不生成详情与分
   assert.equal((rss.match(/<item>/g) ?? []).length, 0);
 });
 
-test("构建：产物不含模板残留，也没有站内写接口调用", (t) => {
+test("构建：产物不含模板残留，互动 API 仅从文章详情调用", (t) => {
   const projectDir = makeFixtureProject(makePosts(1));
   t.after(() => fs.rmSync(projectDir, { recursive: true, force: true }));
 
@@ -133,8 +133,11 @@ test("构建：产物不含模板残留，也没有站内写接口调用", (t) =
     const content = fs.readFileSync(file, "utf8");
     assert.ok(!content.includes("{{"), `${file} 有未渲染的模板表达式`);
     assert.ok(!content.includes("{%"), `${file} 有未渲染的模板标签`);
-    for (const banned of ["/get_resources", "/find_text", "/api/", "/self_diary", "url_for"]) {
+    for (const banned of ["/get_resources", "/find_text", "/self_diary", "url_for"]) {
       assert.ok(!content.includes(banned), `${file} 仍引用 ${banned}`);
+    }
+    if (/\\blog\\\\\d+\\\\index\.html$/.test(file)) {
+      assert.ok(content.includes("/js/blog_interactions.js"), `${file} 缺少文章互动脚本`);
     }
   }
 });
