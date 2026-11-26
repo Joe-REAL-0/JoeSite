@@ -16,18 +16,38 @@
       "remote": true
     }
   ],
+  "previews": {
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "joe-site-db-preview",
+        "database_id": "9f45cdb0-535f-403f-a2ec-15653dbcf042"
+      }
+    ],
+    "kv_namespaces": [
+      {
+        "binding": "INTERACTIONS",
+        "id": "1d32931d9cab4c7b8dfab2697b952640"
+      }
+    ],
+    "send_email": [
+      {
+        "name": "EMAIL"
+      }
+    ]
+  },
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "joesite-auth",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_name": "joe-site-db",
+      "database_id": "af88bc16-7f6d-45c5-8d06-33b0658fb9f4",
       "migrations_dir": "migrations"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "INTERACTIONS",
-      "id": "REPLACE_WITH_KV_NAMESPACE_ID"
+      "id": "c0c0d580ade448c58c5a606816e6fe7a"
     }
   ]
 }
