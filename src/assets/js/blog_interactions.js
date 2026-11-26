@@ -1,8 +1,11 @@
-(() => {
-  const postId = window.blogPostId;
-  const api = `/api/posts/${encodeURIComponent(postId)}`;
+import { onDomReady } from './dom-ready.js';
+
+onDomReady(() => {
   const byId = (id) => document.getElementById(id);
   const panel = byId('interactionPanel');
+  const postId = panel?.dataset.postId;
+  if (!postId) return;
+  const api = `/api/posts/${encodeURIComponent(postId)}`;
   const status = byId('interactionStatus');
   const loginBtn = byId('loginBtn');
   const commentForm = byId('commentForm');
@@ -108,4 +111,4 @@
   Promise.all([refreshSession(), loadInteractions()]).catch((error) => {
     status.textContent = error.message;
   });
-})();
+});

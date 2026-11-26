@@ -3,6 +3,9 @@ import site from '../_data/site.json';
 import LoadingCover from '../components/LoadingCover.astro';
 import SiteControls from '../components/SiteControls.astro';
 import { themeStorageKey } from '../components/ThemeToggle.svelte';
+import baseStyles from '../assets/css/base.css?url';
+import favicon from '../assets/images/favicon.ico?url';
+import { imageUrl } from '../lib/images';
 
 // 页面正文放默认 slot；JSON-LD、订阅入口等可放 head slot。
 interface Props {
@@ -15,20 +18,17 @@ interface Props {
   bodyClass?: string;
   hideHomeBtn?: boolean;
   noindex?: boolean;
-  styles?: string[];
-  headScripts?: string[];
-  bodyScripts?: string[];
-  /** Trusted static head markup from the page template only. */
-  inlineHead?: string;
 }
 
 const {
   title, description, canonical, ogType = 'website', keywords,
   pageTitle = "JoE's Site", bodyClass, hideHomeBtn = false, noindex = false,
-  styles = [], headScripts = [], bodyScripts = [], inlineHead,
 } = Astro.props;
 const documentTitle = title || site.title;
 const documentDescription = description || site.description;
+const [horizontal, vertical] = await Promise.all([
+  imageUrl('backgrounds/bkg-h.png'), imageUrl('backgrounds/bkg-v.png'),
+]);
 ---
 <!doctype html>
 <html lang="zh-CN" class="no-js">
@@ -65,25 +65,14 @@ const documentDescription = description || site.description;
     <meta name="twitter:title" content={documentTitle} />
     <meta name="twitter:description" content={documentDescription} />
     <title>{documentTitle}</title>
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
-
-    <link rel="preload" as="font" type="font/otf" href="/font/GunShi.otf" crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/ttf" href="/font/yuanti.ttf" crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/ttf" href="/font/ZhengQingKeLengKu.ttf" crossorigin="anonymous" />
-    {inlineHead && <Fragment set:html={inlineHead} />}
+    <link rel="icon" href={favicon} type="image/x-icon" />
+    <link rel="stylesheet" href={baseStyles} />
     <slot name="head" />
-
-    <link rel="stylesheet" href="/css/font.css" />
-    <link rel="stylesheet" href="/css/global.css" />
-    <link rel="stylesheet" href="/css/animations/animation-global.css" />
-    {styles.map(href => <link rel="stylesheet" href={href} />)}
-    <link rel="stylesheet" href="/css/theme.css" />
-
-    <script is:inline src="/js/global.js"></script>
-    <script is:inline src="/js/mobile-rail.js" defer></script>
-    {headScripts.map(src => <script is:inline src={src}></script>)}
   </head>
-  <body class:list={['themed-bg', bodyClass]}>
+  <body class:list={['themed-bg', bodyClass]} style={{
+    '--background-horizontal': `url("${horizontal}")`,
+    '--background-vertical': `url("${vertical}")`,
+  }}>
     <script is:inline>
       if (document.documentElement.dataset.theme) {
         document.body.dataset.bodyTheme = document.documentElement.dataset.theme;
@@ -108,16 +97,12 @@ const documentDescription = description || site.description;
           document.getElementById('mobile_controls')?.classList.add('resources-loaded');
           document.querySelectorAll('#global-home-btn, #global-home-btn-mobile').forEach((button) => button.classList.add('visible'));
         }, 12000);
-        const fonts = [
-          '/font/GunShi.otf', '/font/yuanti.ttf', '/font/ZhengQingKeLengKu.ttf',
-          '/font/valorax-lg25v.ttf', '/font/Technonomicon.ttf',
-        ];
-        const extra = Array.isArray(window.pageResources) ? window.pageResources : [];
-        if (window.globalLoader) window.globalLoader.start(fonts.concat(extra));
-        else document.documentElement.classList.add('no-js');
       })();
     </script>
-    <script is:inline src="/js/particles.js"></script>
-    {bodyScripts.map(src => <script is:inline src={src}></script>)}
+    <script>
+      import '../assets/js/global.js';
+      import '../assets/js/mobile-rail.js';
+      import '../assets/js/particles.js';
+    </script>
   </body>
 </html>

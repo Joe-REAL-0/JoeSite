@@ -1,3 +1,5 @@
+import { onDomReady } from './dom-ready.js';
+
 /* ===========================================================
    移动端悬浮竖栏 (#mobile_controls)
    1. 滚动感知：向下阅读时整栏滑出屏幕，向上回看 / 到达首尾时复现，
@@ -5,9 +7,7 @@
    2. 页面级操作按钮（如博客详情的点赞 / 评论 / 回到顶部）并入同一条
       竖栏，仅移动端生效，桌面端还原到原位置。
    =========================================================== */
-(function () {
-    'use strict';
-
+onDomReady(() => {
     var MOBILE_QUERY = '(max-width: 768px)';
     var HIDE_AFTER = 8;          // 小于该位移视为抖动，不切换状态
     var TOP_SAFE_ZONE = 120;     // 顶部区域始终可见
@@ -128,4 +128,4 @@
 
     syncLayout();
     if (window.scrollY > TOP_SAFE_ZONE) setHidden(true);
-})();
+});

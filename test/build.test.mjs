@@ -8,9 +8,7 @@ import os from "node:os";
 const ROOT = path.resolve(import.meta.dirname, "..");
 
 /**
- * 在临时目录里复制一份可构建的工程骨架（配置、内容装载脚本、src 目录），
- * static 用 junction 指回原仓库，避免复制几 MB 资源。
- * 这样测的就是真实构建，不是模拟。
+ * 在临时目录里复制配置、脚本及完整 src，以真实构建检查发布结果。
  */
 function makeFixtureProject(posts) {
   const dir = fs.mkdtempSync(path.join(ROOT, ".tmp-build-"));
@@ -38,7 +36,6 @@ function makeFixtureProject(posts) {
     fs.writeFileSync(path.join(dir, "src", "posts", `${post.id}.md`), body, "utf8");
   }
 
-  fs.symlinkSync(path.join(ROOT, "static"), path.join(dir, "static"), "junction");
   return dir;
 }
 
@@ -136,8 +133,16 @@ test("构建：产物不含模板残留，互动 API 仅从文章详情调用", 
     for (const banned of ["/get_resources", "/find_text", "/self_diary", "url_for"]) {
       assert.ok(!content.includes(banned), `${file} 仍引用 ${banned}`);
     }
-    if (/\\blog\\\\\d+\\\\index\.html$/.test(file)) {
-      assert.ok(content.includes("/js/blog_interactions.js"), `${file} 缺少文章互动脚本`);
+    assert.doesNotMatch(content, /["'(`=]\/(?:css|js|font|images)\//, `${file} 仍使用旧资源地址`);
+    for (const [, asset] of content.matchAll(/(\/_astro\/[\w.-]+)/g)) {
+      assert.ok(exists(dist, asset), `${file} 引用了缺失的 ${asset}`);
+    }
+    if (file.endsWith(".html")) {
+      const relative = path.relative(dist, file).split(path.sep).join("/");
+      const modules = [...content.matchAll(/<script\b[^>]*\bsrc="(\/_astro\/[^"?#]+\.js)"[^>]*><\/script>/g)]
+        .map(([, src]) => read(dist, src));
+      assert.equal(modules.some(code => code.includes("/api/posts/")) || content.includes("/api/posts/"),
+        /^blog\/\d+\/index\.html$/.test(relative), `${relative} 互动脚本加载范围错误`);
     }
   }
 });
@@ -183,8 +188,9 @@ test("构建：禁用 JS 的退路样式与真链接都在产物里", (t) => {
   assert.match(home, /href="\/friend_link\/"/);
   assert.match(home, /href="\/cloud\/"/);
 
-  const css = read(dist, "css/global.css");
-  assert.match(css, /html\.no-js #cover \{ display: none; \}/);
+  const css = [home, ...[...home.matchAll(/href="(\/_astro\/[^"?#]+\.css)"/g)]
+    .map(([, href]) => read(dist, href))].join("\n");
+  assert.match(css, /html\.no-js #cover\s*(?:,[^{]+)?\{\s*display:\s*none\b/);
 
   const oc = read(dist, "oc_introduce/index.html");
   assert.match(oc, /href="#oc-1"/, "档案目录是无 JS 也能用的锚点链接");

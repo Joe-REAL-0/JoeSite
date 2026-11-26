@@ -1,9 +1,11 @@
+import { onDomReady } from './dom-ready.js';
+
 /**
  * 背景光点生成器
  * 位置、大小、透明度、速度、延迟全部随机；数值来自 global.css 的 --particle-* 变量。
  * 粒子只在画面右侧生成，并统一漂向右上角的渐隐区，因此循环时不会看到瞬移。
  */
-(() => {
+onDomReady(() => {
     const LAYER_SELECTOR = '.portrait-particles';
     // 起点占视口的横向比例区间，控制"集中在右侧"的浓度。
     const START_X_MIN = 0.45;
@@ -67,24 +69,13 @@
         layer.replaceChildren(fragment);
     };
 
-    const init = () => {
-        const layer = document.querySelector(LAYER_SELECTOR);
-        if (!layer) {
-            return;
-        }
+    const layer = document.querySelector(LAYER_SELECTOR);
+    if (!layer) return;
 
-        build(layer);
-
-        let frame = 0;
-        window.addEventListener('resize', () => {
-            cancelAnimationFrame(frame);
-            frame = requestAnimationFrame(() => build(layer));
-        }, { passive: true });
-    };
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init, { once: true });
-    } else {
-        init();
-    }
-})();
+    build(layer);
+    let frame = 0;
+    window.addEventListener('resize', () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => build(layer));
+    }, { passive: true });
+});

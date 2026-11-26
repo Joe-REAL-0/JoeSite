@@ -17,6 +17,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { parseArgs } from "node:util";
 import { DatabaseSync } from "node:sqlite";
+import { prepareAvatar } from "./avatars.mjs";
 
 const DEFAULT_AVATAR = "default_avatar.png";
 
@@ -137,13 +138,21 @@ function exportOc(db, outDir, report) {
   });
 }
 
-function exportFriends(db, avatarsDir, report, publicAvatarDir) {
+async function exportFriends(db, avatarsDir, report, out) {
+  const outputAvatarDir = path.join(out, "avatars");
+  const reviewDir = path.join(out, "avatars-review.private");
+  const hasOAuth = db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'oauth_accounts'").get();
+  const lookup = hasOAuth && db.prepare(`
+    SELECT CASE WHEN json_valid(profile_json) THEN json_extract(profile_json, '$.login') END AS login
+    FROM oauth_accounts WHERE provider = 'github' AND email = ?
+  `);
   const rows = db.prepare(
-    "SELECT nickname, friend_link, avatar FROM users WHERE friend_link IS NOT NULL AND friend_link != '' ORDER BY nickname",
+    "SELECT email, nickname, friend_link, avatar FROM users WHERE friend_link IS NOT NULL AND friend_link != '' ORDER BY nickname",
   ).all();
 
   const friends = [];
-  report.friends = { candidates: rows.length, exported: 0, missingAvatars: [], rejected: [] };
+  report.friends = { candidates: rows.length, exported: 0, missingAvatars: [], reviewAvatars: [], rejected: [] };
+  let defaultFilename;
 
   for (const row of rows) {
     const url = String(row.friend_link ?? "").trim();
@@ -153,29 +162,39 @@ function exportFriends(db, avatarsDir, report, publicAvatarDir) {
       continue;
     }
 
-    let avatar = String(row.avatar ?? "").trim();
-    let publishedPath = `/images/avatars/${DEFAULT_AVATAR}`;
+    const avatar = String(row.avatar ?? "").trim();
+    let avatarKey;
 
-    if (avatar && avatar !== DEFAULT_AVATAR && avatarsDir) {
-      const source = path.join(avatarsDir, avatar);
-      if (fs.existsSync(source)) {
-        const target = path.join(publicAvatarDir, avatar);
-        fs.mkdirSync(path.dirname(target), { recursive: true });
-        fs.copyFileSync(source, target);
-        publishedPath = `/images/avatars/${avatar}`;
+    if (avatar && avatar !== DEFAULT_AVATAR) {
+      const source = avatarsDir && path.join(avatarsDir, avatar);
+      if (source && path.win32.basename(avatar) === avatar && fs.lstatSync(source, { throwIfNoEntry: false })?.isFile()) {
+        const accounts = lookup?.all(row.email) ?? [];
+        const login = accounts.length === 1 ? accounts[0].login : null;
+        if (typeof login === "string" && /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/i.test(login) && !login.includes("--") && login.toLowerCase() !== "default") {
+          avatarKey = await prepareAvatar(source, outputAvatarDir, login);
+        } else {
+          fs.mkdirSync(reviewDir, { recursive: true });
+          fs.copyFileSync(source, path.join(reviewDir, avatar));
+          report.friends.reviewAvatars.push({ name: row.nickname, url, file: `avatars-review.private/${avatar}` });
+        }
       } else {
         report.friends.missingAvatars.push({ name: row.nickname, avatar });
       }
     }
+    if (!avatarKey) {
+      const source = path.resolve(import.meta.dirname, "../src/assets/images/avatars", DEFAULT_AVATAR);
+      defaultFilename ??= await prepareAvatar(source, outputAvatarDir, "default");
+      avatarKey = defaultFilename;
+    }
 
-    friends.push({ name: String(row.nickname ?? "").trim(), url, avatar: publishedPath });
+    friends.push({ name: String(row.nickname ?? "").trim(), url, avatar: avatarKey });
     report.friends.exported += 1;
   }
 
   return friends;
 }
 
-function main() {
+async function main() {
   const { db: dbPath, out, avatars } = parseCli();
   if (!fs.existsSync(dbPath)) fail(`快照不存在：${dbPath}`);
 
@@ -195,9 +214,7 @@ function main() {
   exportPosts(db, postsDir, report);
   exportOc(db, ocDir, report);
 
-  const publicAvatarDir = path.join(out, "avatars");
-  fs.mkdirSync(publicAvatarDir, { recursive: true });
-  const friends = exportFriends(db, avatars, report, publicAvatarDir);
+  const friends = await exportFriends(db, avatars, report, out);
   fs.writeFileSync(path.join(out, "friends.json"), `${JSON.stringify(friends, null, 2)}\n`, "utf8");
   db.close();
 
@@ -212,4 +229,4 @@ function main() {
   console.log(`私有对账表：${path.join(out, "reconciliation.private.json")}`);
 }
 
-main();
+await main();

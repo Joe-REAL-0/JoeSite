@@ -5,7 +5,6 @@ body {
     --friend-row-space: var(--space-sm);
     --friend-gap: var(--space-xs);
     --friend-avatar: var(--circle-size-md);
-    --friend-avatar-radius: calc(var(--friend-avatar) / 2);
     --friend-control-height: var(--circle-size-sm);
     --friend-control-padding: 0 var(--space-sm);
     --friend-radius: var(--ui-radius);
@@ -66,7 +65,6 @@ body {
     flex: none;
     width: var(--friend-avatar);
     height: var(--friend-avatar);
-    border-radius: var(--friend-avatar-radius);
     object-fit: cover;
 }
 

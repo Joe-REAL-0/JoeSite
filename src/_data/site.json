@@ -14,27 +14,27 @@
   "socials": [
     {
       "label": "QQ 群",
-      "icon": "/images/link_image/QQ.svg",
+      "icon": "link_image/QQ.svg",
       "url": "http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uJ38E4GkbTa3_kY96VUvYSKoUWkIjnSw&authKey=iwzFcli%2BQa5aZuhxn6C1ivGGI21qHU%2B2PxX4G9BE2sALmgAUyKozSF0ldzI9uhQ6&noverify=0&group_code=314998105"
     },
     {
       "label": "Bilibili",
-      "icon": "/images/link_image/bilibili.svg",
+      "icon": "link_image/bilibili.svg",
       "url": "https://space.bilibili.com/259414449?spm_id_from=333.1007.0.0"
     },
     {
       "label": "GitHub",
-      "icon": "/images/link_image/github.svg",
+      "icon": "link_image/github.svg",
       "url": "https://github.com/Joe-REAL-0/"
     },
     {
       "label": "Minecraft",
-      "icon": "/images/link_image/minecraft.svg",
+      "icon": "link_image/minecraft.svg",
       "url": "https://play.mcmod.cn/sv20187377.html"
     },
     {
       "label": "itch.io",
-      "icon": "/images/link_image/itch-io.svg",
+      "icon": "link_image/itch-io.svg",
       "url": "https://joe-real-0.itch.io/"
     }
   ]
