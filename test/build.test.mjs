@@ -109,8 +109,8 @@ test("构建：没有文章时仍有 /blog/ 列表页，且不生成详情与分
   assert.equal((rss.match(/<item>/g) ?? []).length, 0);
 });
 
-test("构建：产物不含模板残留，互动 API 仅从文章详情调用", (t) => {
-  const projectDir = makeFixtureProject(makePosts(1));
+test("构建：产物不含模板残留，互动 API 仅从博客页面调用", (t) => {
+  const projectDir = makeFixtureProject(makePosts(11));
   t.after(() => fs.rmSync(projectDir, { recursive: true, force: true }));
 
   const dist = path.join(projectDir, "dist");
@@ -142,7 +142,7 @@ test("构建：产物不含模板残留，互动 API 仅从文章详情调用", 
       const modules = [...content.matchAll(/<script\b[^>]*\bsrc="(\/_astro\/[^"?#]+\.js)"[^>]*><\/script>/g)]
         .map(([, src]) => read(dist, src));
       assert.equal(modules.some(code => code.includes("/api/posts/")) || content.includes("/api/posts/"),
-        /^blog\/\d+\/index\.html$/.test(relative), `${relative} 互动脚本加载范围错误`);
+        /^blog\/(?:(?:\d+|page\/\d+)\/)?index\.html$/.test(relative), `${relative} 互动脚本加载范围错误`);
     }
   }
 });

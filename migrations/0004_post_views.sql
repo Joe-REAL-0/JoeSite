@@ -1,0 +1,4 @@
+CREATE TABLE post_views (
+  post_id TEXT NOT NULL PRIMARY KEY,
+  views INTEGER NOT NULL
+);

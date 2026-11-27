@@ -38,6 +38,7 @@ const { post } = Astro.props;
     <article class="blog-detail-container cyber-frame">
       <div class="blog-header">
         <h1 class="blog-title">{post.title}</h1>
+        <a href="/blog/" class="back-btn cyber-control">← 返回博客列表</a>
         <div class="blog-meta">
           <span class="blog-date">发布于: {post.createdTime}</span>
           {post.updatedTime && post.updatedTime !== post.createdTime && (
@@ -46,9 +47,22 @@ const { post } = Astro.props;
         </div>
       </div>
       <div class="blog-content markdown-body" set:html={post.html}></div>
-      <div class="blog-footer">
-        <a href="/blog/" class="back-btn cyber-control">← 返回博客列表</a>
-      </div>
+      <section class="interaction-panel" id="interactionPanel" data-post-id={post.id} aria-labelledby="commentsTitle" tabindex="-1">
+        <form id="commentForm">
+          <label for="commentInput">发表评论</label>
+          <textarea id="commentInput" name="content" maxlength="2000" placeholder="通过 GitHub 登录后发表评论" required disabled></textarea>
+          <div class="comment-actions">
+            <div class="comment-user" id="commentUser" hidden>
+              <img id="commentAvatar" alt="" hidden />
+              <span id="commentUserName"></span>
+            </div>
+            <button class="cyber-control" type="submit" disabled>通过GitHub登录</button>
+          </div>
+        </form>
+        <h2 id="commentsTitle">评论</h2>
+        <ul id="commentList" role="list"></ul>
+        <button type="button" id="loadMoreComments" hidden>加载更多评论</button>
+      </section>
     </article>
   </div>
   <aside class="right-sidebar" id="rightSidebar">
@@ -64,24 +78,18 @@ const { post } = Astro.props;
       </nav>
     </div>
     <div class="action-buttons" data-mobile-rail>
-      <button class="sidebar-btn" id="likeBtn" type="button" title="点赞" aria-label="点赞" aria-pressed="false"><span aria-hidden="true">♥</span><span id="likeCount">0</span></button>
-      <button class="sidebar-btn" id="commentBtn" type="button" title="评论" aria-label="打开评论"><span aria-hidden="true">评论</span></button>
+      <button class="sidebar-btn interaction-btn cyber-control" id="likeBtn" type="button" title="点赞" aria-label="点赞" aria-pressed="false">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1 7.8 7.8 7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+        <span class="interaction-count" id="likeCount" aria-hidden="true"></span>
+      </button>
+      <button class="sidebar-btn interaction-btn cyber-control" id="commentBtn" type="button" title="跳转到评论" aria-label="跳转到评论" aria-controls="interactionPanel">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H11l-6 2 1.7-4.2A8.5 8.5 0 0 1 12 3h.5a8.5 8.5 0 0 1 8.5 8.5Z" /></svg>
+        <span class="interaction-count" id="commentCount" aria-hidden="true"></span>
+      </button>
       <button class="sidebar-btn top-btn cyber-control" id="topBtn" title="回到顶部" aria-label="回到顶部">
         <span class="btn-icon icon-mask icon-arrow-up"></span>
       </button>
     </div>
-    <section class="interaction-panel cyber-frame" id="interactionPanel" data-post-id={post.id} aria-label="文章互动">
-      <div class="interaction-header"><h2>评论</h2><button type="button" id="closeComments" aria-label="关闭评论">×</button></div>
-      <div id="authControls"><button type="button" id="loginBtn">使用 GitHub 登录</button></div>
-      <p id="interactionStatus" role="status" aria-live="polite"></p>
-      <form id="commentForm" hidden>
-        <label for="commentInput">发表评论</label>
-        <textarea id="commentInput" name="content" maxlength="2000" required></textarea>
-        <button type="submit">发送</button>
-      </form>
-      <ol id="commentList"></ol>
-      <button type="button" id="loadMoreComments" hidden>加载更多评论</button>
-    </section>
   </aside>
   <script>
     import "../../assets/js/blog_detail.js";
