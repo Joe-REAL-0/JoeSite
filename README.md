@@ -96,7 +96,7 @@ npx serve dist        # 或 python -m http.server -d dist
 首次部署前创建 Workers 项目、D1 数据库与 KV namespace，并把返回的资源 ID 填入 `wrangler.jsonc`（`joesite-auth` / `DB`、`INTERACTIONS`）。Worker 对 `/api/*` 先执行，其他路径仍由 Static Assets 返回。
 执行迁移并配置 GitHub OAuth App（回调地址必须是 `https://<站点域名>/api/auth/callback/github`，同时授权 `user:email`）：
 
-首次为本地 D1 创建迁移表：
+首次启动本地 Worker，或拉取包含新迁移的更新后，先更新本地 D1：
 
 ```bash
 npx wrangler d1 migrations apply DB --local
@@ -105,7 +105,6 @@ npx wrangler d1 migrations apply DB --local
 配置 GitHub OAuth App（回调地址必须是 `https://<站点域名>/api/auth/callback/github`，并授权 `user:email`），并设置 secrets：
 
 ```bash
-npx wrangler d1 migrations apply DB --local
 npx wrangler secret put BETTER_AUTH_SECRET
 npx wrangler secret put GITHUB_CLIENT_ID
 npx wrangler secret put GITHUB_CLIENT_SECRET
@@ -166,7 +165,13 @@ node scripts/import-content.mjs --db <快照.db> --out <导出目录> --avatars 
 
 ## 互动功能
 
-GitHub OAuth 由 Better Auth 处理，用户、账号和会话保存在 D1；评论与每用户点赞状态保存在 Cloudflare KV。评论公开展示，提交和点赞需先登录。KV 最终一致，点赞总数按用户状态读取。当前仅支持 Cloudflare Workers 部署，普通静态服务器不提供认证及互动 API。
+GitHub OAuth 由 Better Auth 处理。D1 保存用户、账号、会话、评论点赞和文章阅读次数。文章点赞、评论与回复保存在 Cloudflare KV。加入阅读统计后，先应用 D1 迁移 `0004_post_views.sql`。普通静态服务器不提供认证及互动 API。
+
+博客列表的每张文章卡片显示阅读次数和点赞数。列表每页发一次请求读取两种计数。启用 JavaScript 时，每次打开或刷新文章详情页计为一次阅读，无需登录，也无需记录访客身份。阅读次数从功能上线后开始累计。
+
+文章右侧的方形爱心和气泡分别显示点赞数和评论总数。点击气泡会跳到正文下方的评论区。评论表单下方显示“评论”标题和无序号的评论列表。未登录时，输入框右下角显示“通过GitHub登录”。授权后返回当前文章的评论区，操作行左侧显示 GitHub 头像和昵称，右侧按钮切换为“发送”。
+
+评论与回复均显示作者头像。登录后点击评论下的“回复”，回复框会出现在该评论下方。同一条主评论下的所有追评平级显示，按发布时间从早到晚排列，昵称右侧从 `#1` 开始编号。回复对象以小号文字 `>>> 昵称` 显示；回复追评时显示 `>>> 昵称 #编号`。默认显示最早两条，超过两条时可点击展开或收起。每个账号对每条评论可点一次爱心，再次点击即可取消。站长评论会显示“站长”标记。
 
 ## 友链申请
 

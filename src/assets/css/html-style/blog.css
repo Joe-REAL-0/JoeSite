@@ -236,9 +236,9 @@ body {
     padding-top: var(--blog-rule-padding);
 }
 
-.blog-views,
+.blog-views:not([hidden]),
 .blog-updated,
-.blog-likes-count,
+.blog-likes-count:not([hidden]),
 .blog-comments-count {
     display: inline-block;
 }

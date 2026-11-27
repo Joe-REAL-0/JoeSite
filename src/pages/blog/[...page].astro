@@ -42,7 +42,9 @@ const suffix = listing.number > 1 ? `（第 ${listing.number} 页）` : "";
                   {post.tags.map((tag) => <span class="blog-tag">{tag}</span>)}
                 </div>
               )}
-              <div class="blog-meta">
+              <div class="blog-meta" data-post-stats={post.id}>
+                <span class="blog-views" hidden></span>
+                <span class="blog-likes-count" hidden></span>
                 {post.updatedTime && post.updatedTime !== post.createdTime && (
                   <span class="blog-updated">🔄 最后更新: {post.updatedTime}</span>
                 )}
@@ -64,6 +66,34 @@ const suffix = listing.number > 1 ? `（第 ${listing.number} 页）` : "";
       </div>
     )}
   </div>
+  <script>
+    import { onDomReady } from "../../assets/js/dom-ready.js";
+
+    onDomReady(async () => {
+      const cards = [...document.querySelectorAll<HTMLElement>("[data-post-stats]")];
+      if (!cards.length) return;
+
+      const params = new URLSearchParams({ ids: cards.map((card) => card.dataset.postStats).join(",") });
+      try {
+        const response = await fetch(`/api/posts/stats?${params}`, { credentials: "omit" });
+        if (!response.ok) return;
+        const { views, likes } = await response.json();
+        for (const card of cards) {
+          const id = card.dataset.postStats!;
+          showCount(card.querySelector<HTMLElement>(".blog-views"), "阅读", views?.[id]);
+          showCount(card.querySelector<HTMLElement>(".blog-likes-count"), "点赞", likes?.[id]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    function showCount(element: HTMLElement | null, label: string, total: number) {
+      if (!element || !Number.isSafeInteger(total) || total < 0) return;
+      element.textContent = `${label} ${total}`;
+      element.hidden = false;
+    }
+  </script>
   <script define:vars={{ totalPages: listing.totalPages }}>
     const requested = Number(new URLSearchParams(window.location.search).get('page'));
     if (Number.isInteger(requested) && requested >= 2 && requested <= totalPages) {

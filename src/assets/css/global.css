@@ -127,7 +127,9 @@ body {
     --cover-cut-height: var(--border-width-sm);
     --cover-cut-gap: var(--space-2xs);
     --title-loading-top: calc(var(--cover-half) - var(--space-md));
-    --top-column-padding: var(--space-md) var(--space-base);
+    --top-column-block-padding: var(--space-md);
+    --top-column-title-height: var(--title-height);
+    --top-column-padding: var(--top-column-block-padding) var(--space-base);
     --title-surface-inset: calc(-1 * var(--border-width-sm));
 }
 
@@ -345,7 +347,8 @@ body {
    =========================== */
 @media screen and (max-width: 768px) {
     body {
-        --top-column-padding: var(--space-sm) var(--space-base);
+        --top-column-block-padding: var(--space-sm);
+        --top-column-title-height: var(--title-height-mobile);
         /* 941 × 1670 竖图：刀身经过 (470.5, 853)，向右上倾斜约 38°。 */
         --blade-offset: max(calc(100vw * 18 / 941), calc(100dvh * 18 / 1670));
         --title-loading-top: calc(50% + var(--blade-offset) - min(30vw, 120px, 24dvh));
